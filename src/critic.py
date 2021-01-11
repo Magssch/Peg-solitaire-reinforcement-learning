@@ -1,4 +1,5 @@
 
+
 class Critic:
 
     def __init__(
@@ -7,7 +8,7 @@ class Critic:
         trace_decay,
         discount_factor,
         simple,
-        dimensions,
+        ann_dimensions,
     ):
         self.learning_rate = learning_rate  # alpha
         self.trace_decay = trace_decay  # lambda
@@ -16,7 +17,7 @@ class Critic:
         self.values = {}  # V
         self.eligibilities = {}
         self.simple = simple
-        self.dimensions = dimensions
+        self.dimensions = ann_dimensions
 
     def td_error(self, current_state, successor_state):
         r = 0  # TODO: add reward

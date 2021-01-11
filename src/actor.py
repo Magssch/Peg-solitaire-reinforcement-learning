@@ -1,5 +1,7 @@
-import numpy as np
 import random
+
+import numpy as np
+
 
 class Actor:
 
@@ -29,13 +31,11 @@ class Actor:
         return p / q
 
     def choose_greedy(self, state):
-        return 'Greedy'
         actions = []  # TODO: add get_actions(state) here
         utilities = {action: self.policy[state][action] for action in actions}
         return max(utilities, key=utilities.get)
 
     def choose_random(self, state):
-        return 'Random'
         actions = []  # TODO: add get_actions(state) here
         return random.choice(actions)
 

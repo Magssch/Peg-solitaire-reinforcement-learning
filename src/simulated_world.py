@@ -8,6 +8,7 @@
 #  domain.
 # - Recognizes final (winning, losing and neutral) states
 from enum import Enum
+
 import numpy as np
 
 
