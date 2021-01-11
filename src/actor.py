@@ -1,5 +1,5 @@
 import numpy as np
-
+import random
 
 class Actor:
 
@@ -27,3 +27,19 @@ class Actor:
         p = np.e ** self.policy[state][action]
         q = sum([np.e ** self.policy[state][action_i] for action_i in []])  # TODO: add get_actions(state) here
         return p / q
+
+    def choose_greedy(self, state):
+        return 'Greedy'
+        actions = []  # TODO: add get_actions(state) here
+        utilities = {action: self.policy[state][action] for action in actions}
+        return max(utilities, key=utilities.get)
+
+    def choose_random(self, state):
+        return 'Random'
+        actions = []  # TODO: add get_actions(state) here
+        return random.choice(actions)
+
+    def choose_mixed(self, state):
+        if random.random() < self.epsilon:
+            return self.choose_random(state)
+        return self.choose_greedy(state)
