@@ -1,3 +1,5 @@
+import numpy as np
+
 
 class Actor:
 
@@ -20,3 +22,8 @@ class Actor:
 
     def update_eligibility(self, state, action):
         self.eligibilities[state][action] *= self.discount_factor * self.trace_decay
+
+    def boltzmann_scale(self, state, action):
+        p = np.e ** self.policy[state][action]
+        q = sum([np.e ** self.policy[state][action_i] for action_i in []])  # TODO: add get_actions(state) here
+        return p / q
