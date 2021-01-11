@@ -13,7 +13,10 @@ class Actor:
         self.discount_factor = discount_factor  # gamma
 
         self.epsilon = initial_epsilon
-        self.policies = {}
+        self.policy = {}  # Pi
 
-    def get_utility(self, s, a):
-        return self.policies[s][a]
+    def update_value(self, state, action, delta):
+        self.policy[state][action] += self.learning_rate * delta * self.eligibilities[state][action]
+
+    def update_eligibility(self, state, action):
+        self.eligibilities[state][action] *= self.discount_factor * self.trace_decay
