@@ -26,11 +26,11 @@ class SimulatedWorld:
         if shape == Shape.Triangle:
             self.board = np.triu(np.full((size, size), None), 1)
 
-    def produce_initial_state(self):
+    def produce_initial_state(self) -> None:
         pass
 
-    def generate_child_states(self):
+    def generate_child_states(self) -> None:
         pass
 
-    def is_final_state(self):
+    def is_final_state(self) -> bool:
         return (self.board == 1).sum() == 1

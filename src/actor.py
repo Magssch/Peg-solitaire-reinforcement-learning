@@ -19,16 +19,16 @@ class Actor:
         self.epsilon = epsilon
         self.policy = {}  # Pi
 
-    def update_policy(self, state, action, delta):
-        self.policy[state][action] += self.learning_rate * delta * self.eligibilities[state][action]
+    def update_policy(self, state, action, td_error) -> None:
+        self.policy[state][action] += self.learning_rate * td_error * self.eligibilities[state][action]
 
-    def reset_traces(self):
+    def reset_traces(self) -> None:
         self.eligibilities = {}
 
-    def replace_trace(self, state, action):
+    def replace_trace(self, state, action) -> None:
         self.eligibilities[state][action] = 1
 
-    def update_trace(self, state, action):
+    def update_trace(self, state, action) -> None:
         self.eligibilities[state][action] *= self.discount_factor * self.trace_decay
 
     def boltzmann_scale(self, state, action):

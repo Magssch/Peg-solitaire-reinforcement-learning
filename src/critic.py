@@ -19,17 +19,17 @@ class Critic:
         self.value_function = value_function
         self.dimensions = ANN_dimentions
 
-    def td_error(self, current_state, successor_state, reward):
+    def td_error(self, current_state, successor_state, reward) -> float:
         return reward + self.discount_factor * self.values[successor_state] - self.values[current_state]
 
-    def update_value(self, state, td_error):
+    def update_value(self, state, td_error) -> None:
         self.values[state] += self.learning_rate * td_error * self.eligibilities[state]
 
-    def reset_traces(self):
+    def reset_traces(self) -> None:
         self.eligibilities = {}
 
-    def replace_trace(self, state):
+    def replace_trace(self, state) -> None:
         self.eligibilities[state] = 1
 
-    def update_trace(self, state):
+    def update_trace(self, state) -> None:
         self.eligibilities[state] *= self.discount_factor * self.trace_decay

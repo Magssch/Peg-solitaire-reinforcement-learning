@@ -23,7 +23,7 @@ class ReinforcementLearner:
         self.simulated_world = SimulatedWorld(Shape.Diamond, 4)
         self.episodes = env.episodes
 
-    def run(self):
+    def run(self) -> None:
         episode = 0
         while episode < self.episodes:
 
