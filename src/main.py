@@ -1,23 +1,29 @@
-from simulated_world import Shape
+from reinforcement_learner import ReinforcementLearner
+from simulated_world import Shape, SimulatedWorld
+from environment import Environment
 
 if __name__ == "__main__":
     # Pivotal paramters / env
-    board_type = Shape.Diamond
-    size = 4
-    holes = []
+    env = Environment()
+    env.board_type = Shape.Diamond
+    env.size = 4
+    env.holes = []
 
-    episodes = 500
-    value_function = 'neural_network'
-    ANN_dimentions = (15, 20, 30, 5, 1)
+    env.episodes = 500
+    env.value_function = 'neural_network'
+    env.ANN_dimentions = (15, 20, 30, 5, 1)
 
-    actor_learning_rate = 0.4
-    actor_trace_decay = 0.9
-    actor_discount_factor = 0.9
-    actor_epsilon = 0.5
-    actor_epsilon_decay_rate = 0.5
+    env.actor_learning_rate = 0.4
+    env.actor_trace_decay = 0.9
+    env.actor_discount_factor = 0.9
+    env.actor_epsilon = 0.5
+    env.actor_epsilon_decay_rate = 0.5
 
-    critic_learning_rate = 0.1
-    critic_trace_decay = 0.9
-    critic_discount_factor = 0.9
+    env.critic_learning_rate = 0.1
+    env.critic_trace_decay = 0.9
+    env.critic_discount_factor = 0.9
 
-    visualize_games = False
+    env.visualize_games = False
+
+    world = SimulatedWorld(env.board_type, env.size)
+    agent = ReinforcementLearner(env)

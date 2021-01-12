@@ -19,7 +19,7 @@ class Shape(Enum):
 
 class SimulatedWorld:
 
-    def __init__(self, shape, size):
+    def __init__(self, shape: Shape, size: int):
         self.shape = shape
         self.size = size
         self.board = np.zeros((size, size))
@@ -34,10 +34,3 @@ class SimulatedWorld:
 
     def is_final_state(self):
         return (self.board == 1).sum() == 1
-
-
-if __name__ == "__main__":
-    world = SimulatedWorld(Shape.Triangle, 4)
-    world.board[1, 0] = 1
-    print(world.board)
-    print(world.is_final_state())

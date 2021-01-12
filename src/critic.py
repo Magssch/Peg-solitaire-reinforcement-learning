@@ -4,11 +4,11 @@ class Critic:
 
     def __init__(
         self,
-        learning_rate,
-        trace_decay,
-        discount_factor,
-        simple,
-        ann_dimensions,
+        learning_rate: float,
+        trace_decay: float,
+        discount_factor: float,
+        value_function: str,
+        ANN_dimentions: tuple,
     ):
         self.learning_rate = learning_rate  # alpha
         self.trace_decay = trace_decay  # lambda
@@ -16,11 +16,11 @@ class Critic:
 
         self.values = {}  # V
         self.eligibilities = {}
-        self.simple = simple
-        self.dimensions = ann_dimensions
+        self.value_function = value_function
+        self.dimensions = ANN_dimentions
 
     def td_error(self, current_state, successor_state, reward):
-        return reward + self.gamma * self.values[successor_state] - self.values[current_state]
+        return reward + self.discount_factor * self.values[successor_state] - self.values[current_state]
 
     def update_value(self, state, td_error):
         self.values[state] += self.learning_rate * td_error * self.eligibilities[state]
