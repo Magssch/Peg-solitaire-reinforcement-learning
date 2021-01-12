@@ -19,10 +19,16 @@ class Actor:
         self.epsilon = initial_epsilon
         self.policy = {}  # Pi
 
-    def update_value(self, state, action, delta):
+    def update_policy(self, state, action, delta):
         self.policy[state][action] += self.learning_rate * delta * self.eligibilities[state][action]
 
-    def update_eligibility(self, state, action):
+    def reset_traces(self):
+        self.eligibilities = {}
+
+    def replace_trace(self, state, action):
+        self.eligibilities[state][action] = 1
+
+    def update_trace(self, state, action):
         self.eligibilities[state][action] *= self.discount_factor * self.trace_decay
 
     def boltzmann_scale(self, state, action):
