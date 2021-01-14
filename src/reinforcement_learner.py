@@ -36,14 +36,14 @@ class ReinforcementLearner:
             while not self.simulated_world.is_final_state():
 
                 next_state, reward = self.simulated_world.do_action(action)
-                next_action = self.actor.choose_mixed(state)
+                next_action = self.actor.choose_mixed(next_state)
 
                 self.actor.replace_trace(state, action)
                 self.critic.replace_trace(state)
 
                 td_error = self.critic.td_error(state, next_state, reward)
 
-                # for (s, a) in episode: ??
+                # for (s, a) in episode:
                 self.actor.update_policy(state, action, td_error)
                 self.actor.update_trace(state, action)
                 self.critic.update_value(state, td_error)
