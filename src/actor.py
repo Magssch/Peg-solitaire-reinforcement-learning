@@ -1,6 +1,10 @@
 import random
 
 import numpy as np
+from keras import backend as K
+from keras.layers import Dense, Input
+from keras.optimizers import Adam
+from tensorflow.python.keras.models import Model
 
 
 class Actor:
@@ -18,6 +22,26 @@ class Actor:
 
         self.epsilon = epsilon
         self.policy = {}  # Pi
+
+    def __build_actor_network(
+        self,
+        input_dim: int,
+        dense_1_dim: int,
+        dense_2_dim: int,
+        n_actions: int,
+    ) -> Model:
+        input = Input(shape=(input_dim,))
+        td_error = Input(shape=[1])
+        dense_1 = Dense(dense_1_dim, activation='relu')(input)
+        dense_2 = Dense(dense_2_dim, activation='relu')(dense_1)
+        probabilities = Dense(n_actions, activation='softmax')(dense_2)
+
+        model = Model(input=[input, td_error], output=[probabilities])
+        model.compile(optimizer=Adam(
+            learning_rate=self.learning_rate),
+            loss='mean_squared_error'
+        )
+        return model
 
     def update_policy(self, state, action, td_error) -> None:
         self.policy[state][action] += self.learning_rate * td_error * self.eligibilities[state][action]
