@@ -49,3 +49,8 @@ class Actor:
         if random.random() < self.epsilon:
             return self.choose_random(state)
         return self.choose_greedy(state)
+
+    def choose_action(self, state):
+        actions = []  # TODO: add get_actions(state) here
+        probabilities = self.boltzmann_scale(state, actions)
+        return np.random.choice(actions, p=probabilities)
