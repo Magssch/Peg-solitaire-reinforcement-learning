@@ -1,6 +1,6 @@
+from environment import Environment
 from reinforcement_learner import ReinforcementLearner
 from simulated_world import Shape, SimulatedWorld
-from environment import Environment
 
 if __name__ == "__main__":
     # Pivotal paramters / env
@@ -10,7 +10,6 @@ if __name__ == "__main__":
     env.holes = []
 
     env.episodes = 500
-    env.value_function = 'neural_network'
     env.ANN_dimentions = (15, 20, 30, 5, 1)
 
     env.actor_learning_rate = 0.4

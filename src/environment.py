@@ -1,12 +1,12 @@
 from simulated_world import Shape
 
+
 class Environment:
     board_type: Shape
     size: int
     holes: list
 
     episodes: int
-    value_function: str
     ANN_dimentions: tuple
 
     actor_learning_rate: float

@@ -1,7 +1,7 @@
 from actor import Actor
 from critic import Critic
-from simulated_world import Shape, SimulatedWorld
 from main import Environment
+from simulated_world import Shape, SimulatedWorld
 
 
 class ReinforcementLearner:
@@ -17,7 +17,6 @@ class ReinforcementLearner:
             env.critic_learning_rate,
             env.critic_trace_decay,
             env.critic_discount_factor,
-            env.value_function,
             env.ANN_dimentions,
         )
         self.simulated_world = SimulatedWorld(Shape.Diamond, 4)
