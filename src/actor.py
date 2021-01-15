@@ -38,8 +38,8 @@ class Actor:
 
     def choose_greedy(self, state):
         actions = []  # TODO: add get_actions(state) here
-        utilities = {action: self.policy[state][action] for action in actions}
-        return max(utilities, key=utilities.get)
+        preferences = [self.policy[state][action] for action in actions]
+        return actions[np.argmax(preferences)]
 
     def choose_random(self, state):
         actions = []  # TODO: add get_actions(state) here
