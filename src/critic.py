@@ -11,7 +11,7 @@ class Critic:
         learning_rate: float,
         trace_decay: float,
         discount_factor: float,
-        ANN_dimensions: tuple,
+        ANN_dimensions: tuple = None,
     ):
         self.learning_rate = learning_rate  # alpha
         self.trace_decay = trace_decay  # lambda
@@ -21,7 +21,7 @@ class Critic:
         self.eligibilities = {}
         self.dimensions = ANN_dimensions
 
-        if bool(ANN_dimensions):
+        if ANN_dimensions is not None:
             self.__build_critic_network(ANN_dimensions)
 
     def __build_critic_network(self, dimensions: tuple) -> None:

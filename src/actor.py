@@ -1,6 +1,7 @@
 import random
 
 import numpy as np
+import tensorflow as tf
 from keras import backend as K
 from keras.layers import Dense, Input
 from keras.optimizers import Adam
@@ -22,26 +23,24 @@ class Actor:
 
         self.epsilon = epsilon
         self.policy = {}  # Pi
+        self.__build_actor_network()
 
     def __build_actor_network(
         self,
-        input_dim: int,
-        dense_1_dim: int,
-        dense_2_dim: int,
-        n_actions: int,
-    ) -> Model:
+        input_dim: int = 25,
+        hidden_dim: int = 512,
+        n_actions: int = 6,
+    ) -> None:
         input = Input(shape=(input_dim,))
-        td_error = Input(shape=[1])
-        dense_1 = Dense(dense_1_dim, activation='relu')(input)
-        dense_2 = Dense(dense_2_dim, activation='relu')(dense_1)
-        probabilities = Dense(n_actions, activation='softmax')(dense_2)
+        dense = Dense(hidden_dim, activation='relu')(input)
+        probabilities = Dense(n_actions, activation='softmax')(dense)
 
-        model = Model(input=[input, td_error], output=[probabilities])
+        model = Model(inputs=[input], outputs=[probabilities])
         model.compile(optimizer=Adam(
             learning_rate=self.learning_rate),
-            loss='mean_squared_error'
+            loss='huber_loss'
         )
-        return model
+        self.pi = model
 
     def update_policy(self, state, action, td_error) -> None:
         self.policy[state][action] += self.learning_rate * td_error * self.eligibilities[state][action]
@@ -77,4 +76,17 @@ class Actor:
     def choose_action(self, state):
         actions = []  # TODO: add get_actions(state) here
         probabilities = self.boltzmann_scale(state, actions)
+        # probabilities = np.squeeze(self.pi(state))
         return np.random.choice(actions, p=probabilities)
+
+    def update_pi(self, state, action, td_error):
+        with tf.GradientTape() as tape:
+            probabilities = np.squeeze(self.pi(state))
+            log_probability = tf.math.log(probabilities[action])
+            loss = -tf.squeeze(log_probability) * td_error
+        gradient = tape.gradient(loss, self.pi.trainable_variables)
+        self.pi.optimizer.apply_gradients(zip(gradient, self.pi.trainable_variables))
+
+
+if __name__ == "__main__":
+    actor = Actor(0.01, 0.9, 0.01, 0.5)
