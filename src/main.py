@@ -1,6 +1,6 @@
 from environment import Environment
 import json
-#from reinforcement_learner import ReinforcementLearner
+from reinforcement_learner import ReinforcementLearner
 from simulated_world import Shape, SimulatedWorld
 
 if __name__ == "__main__":
@@ -15,5 +15,5 @@ if __name__ == "__main__":
             env.board_type = Shape.Triangle
     print(env.board_type)
 
-   world = SimulatedWorld(env.board_type, env.size)
-   agent = ReinforcementLearner(env)
+    world = SimulatedWorld(env.board_type, env.size)
+    agent = ReinforcementLearner(env)

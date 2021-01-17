@@ -12,8 +12,7 @@ from enum import Enum
 import networkx as nx
 import numpy as np
 
-from configparser import ConfigParser
-config = ConfigParser()
+from environment import Environment
 
 class Shape(Enum):
     Diamond = 1
