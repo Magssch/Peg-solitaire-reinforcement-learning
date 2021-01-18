@@ -1,9 +1,9 @@
 {
+  "episodes": 500,
+  "visualize_games": false,
   "board_type": 1,
   "size": 4,
   "holes": [],
-  "episodes": 500,
-  "ANN_dimentions": [5, 20, 30, 5, 1],
   "actor_learning_rate": 0.4,
   "actor_trace_decay": 0.9,
   "actor_discount_factor": 0.9,
@@ -12,5 +12,5 @@
   "critic_learning_rate": 0.1,
   "critic_trace_decay": 0.9,
   "critic_discount_factor": 0.9,
-  "visualize_games": false
+  "critic_nn_dimentions": [5, 20, 30, 5, 1]
 }

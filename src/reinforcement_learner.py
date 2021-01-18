@@ -17,7 +17,7 @@ class ReinforcementLearner:
             env.critic_learning_rate,
             env.critic_trace_decay,
             env.critic_discount_factor,
-            env.ANN_dimentions,
+            env.critic_nn_dimentions,
         )
         self.simulated_world = SimulatedWorld(Shape.Diamond, 4)
         self.episodes = env.episodes
