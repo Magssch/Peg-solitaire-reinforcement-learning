@@ -2,7 +2,7 @@ from keras import backend as K
 from keras.layers import Dense, Input
 from keras.models import Sequential
 from keras.optimizers import Adam
-
+import numpy as np
 
 class Critic:
 
@@ -19,13 +19,15 @@ class Critic:
 
         self.values = {}  # V
         self.eligibilities = {}
-        self.dimensions = nn_dimentions
+        self.nn_dimensions = nn_dimentions
 
         if nn_dimentions is not None:
-            self._build_critic_network(nn_dimentions)
+            self.model = self._build_critic_network(nn_dimentions)
 
-    def _build_critic_network(self, dimensions: tuple) -> None:
-        input_dim, *hidden_dims, output_dim = dimensions
+    def _build_critic_network(self, nn_dimensions: tuple) -> Sequential:
+        input_dim, *hidden_dims, output_dim = nn_dimensions
+
+        assert output_dim == 1
 
         model = Sequential()
         model.add(Input(shape=(input_dim,)))
@@ -33,16 +35,21 @@ class Critic:
         for dimension in hidden_dims:
             model.add(Dense(dimension, activation='relu'))
 
-        model.add(Dense(output_dim, activation='linear'))
+        model.add(Dense(units=1, activation='linear'))
 
         model.compile(
             optimizer=Adam(learning_rate=self.learning_rate),
             loss='mean_squared_error'
         )
-        self.value = model
+        return model
+
+    def get_values(self, state) -> float:
+        if self.nn_dimensions is not None:
+            return np.squeeze(self.model(state))
+        return self.values[state]
 
     def td_error(self, current_state, successor_state, reward) -> float:
-        return reward + self.discount_factor * self.values[successor_state] - self.values[current_state]
+        return reward + self.discount_factor * self.get_values(successor_state) - self.get_values(current_state)
 
     def update_value(self, state, td_error) -> None:
         self.values[state] += self.learning_rate * td_error * self.eligibilities[state]
