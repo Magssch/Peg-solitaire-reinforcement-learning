@@ -9,7 +9,10 @@
 # - Recognizes final (winning, losing and neutral) states
 from enum import Enum
 
+import networkx as nx
 import numpy as np
+
+from environment import Environment
 
 
 class Shape(Enum):
@@ -20,11 +23,19 @@ class Shape(Enum):
 class SimulatedWorld:
 
     def __init__(self, shape: Shape, size: int):
-        self.shape = shape
-        self.size = size
-        self.board = np.zeros((size, size))
+        self.__shape = shape
+        self.__size = size
+        self.__board = np.zeros((size, size))
+        self.__adjacent_cells = (
+            (0, -1),
+            (1, -1),
+            (1, 0),
+            (0, 1),
+            (-1, 1),
+            (0, -1),
+        )
         if shape == Shape.Triangle:
-            self.board = np.triu(np.full((size, size), None), 1)
+            self.__board = np.triu(np.full((size, size), None), 1)
 
     def produce_initial_state(self) -> None:
         pass
@@ -33,4 +44,14 @@ class SimulatedWorld:
         pass
 
     def is_final_state(self) -> bool:
-        return (self.board == 1).sum() == 1
+        pass
+        # return (self.__board == 1).sum() == 1
+
+    def draw_board(self) -> None:
+        pass
+
+    def __is_legal_move(self) -> bool:
+        pass
+
+    def __is_adjacent(self, x: int, y: int) -> bool:
+        return (x, y) in self.__adjacent_cells
