@@ -23,9 +23,9 @@ class Actor:
 
         self.epsilon = epsilon
         self.policy = {}  # Pi
-        self.__build_actor_network()
+        self._build_actor_network()
 
-    def __build_actor_network(
+    def _build_actor_network(
         self,
         input_dim: int = 25,
         hidden_dim: int = 512,
