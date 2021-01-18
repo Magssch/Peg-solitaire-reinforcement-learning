@@ -14,6 +14,7 @@ import numpy as np
 
 from environment import Environment
 
+
 class Shape(Enum):
     Diamond = 1
     Triangle = 2
@@ -44,7 +45,7 @@ class SimulatedWorld:
 
     def is_final_state(self) -> bool:
         pass
-        #return (self.__board == 1).sum() == 1
+        # return (self.__board == 1).sum() == 1
 
     def draw_board(self) -> None:
         pass
@@ -54,4 +55,3 @@ class SimulatedWorld:
 
     def __is_adjacent(self, x: int, y: int) -> bool:
         return (x, y) in self.__adjacent_cells
-
