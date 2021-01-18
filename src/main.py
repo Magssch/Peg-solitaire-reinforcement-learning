@@ -1,5 +1,6 @@
-from environment import Environment
 import json
+
+from environment import Environment
 from reinforcement_learner import ReinforcementLearner
 from simulated_world import Shape, SimulatedWorld
 

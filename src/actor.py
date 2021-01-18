@@ -1,12 +1,12 @@
 import random
+from collections import defaultdict
 
 import numpy as np
 import tensorflow as tf
 from keras import backend as K
 from keras.layers import Dense, Input
-from keras.optimizers import Adam
 from keras.models import Sequential
-from collections import defaultdict
+from keras.optimizers import Adam
 
 
 class Actor:

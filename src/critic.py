@@ -1,9 +1,10 @@
+from collections import defaultdict
+
+import numpy as np
 from keras import backend as K
 from keras.layers import Dense, Input
 from keras.models import Sequential
 from keras.optimizers import Adam
-from collections import defaultdict
-import numpy as np
 
 
 class Critic:
