@@ -45,7 +45,7 @@ class SplitGD():
                     feaset,tarset = gen_random_minibatch(train_ins,train_targs,mbs=mbs)
                     loss = self.gen_loss(feaset,tarset,avg=False)
                     gradients = tape.gradient(loss,params)
-                    gradients = self.modify_gradients(gradients)
+                    gradients = self.modify_gradients(gradients) # matrise med alle grad w
                     self.model.optimizer.apply_gradients(zip(gradients,params))
             if verbosity > 0:
                 self.end_of_epoch_action(train_ins,train_targs,val_ins,val_targs,epoch,

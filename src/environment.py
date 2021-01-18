@@ -17,9 +17,10 @@ class Environment:
     actor_discount_factor: float
     actor_epsilon: float
     actor_epsilon_decay_rate: float
+    actor_nn_dimensions: tuple
 
     # Critic
     critic_learning_rate: float
     critic_trace_decay: float
     critic_discount_factor: float
-    critic_nn_dimentions: tuple
+    critic_nn_dimensions: tuple

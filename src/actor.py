@@ -5,7 +5,8 @@ import tensorflow as tf
 from keras import backend as K
 from keras.layers import Dense, Input
 from keras.optimizers import Adam
-from tensorflow.python.keras.models import Model
+from keras.models import Sequential
+from collections import defaultdict
 
 
 class Actor:
@@ -16,6 +17,7 @@ class Actor:
         trace_decay: float,
         discount_factor: float,
         epsilon: float,
+        nn_dimensions: tuple = None,
     ):
         self.learning_rate = learning_rate  # alpha
         self.trace_decay = trace_decay  # lambda
@@ -23,30 +25,40 @@ class Actor:
 
         self.epsilon = epsilon
         self.policy = {}  # Pi
-        self._build_actor_network()
+        self.reset_eligibilities()
+        self.nn_dimensions = nn_dimensions
 
-    def _build_actor_network(
-        self,
-        input_dim: int = 25,
-        hidden_dim: int = 512,
-        n_actions: int = 6,
-    ) -> None:
-        input = Input(shape=(input_dim,))
-        dense = Dense(hidden_dim, activation='relu')(input)
-        probabilities = Dense(n_actions, activation='softmax')(dense)
+        if nn_dimensions is not None:
+            self._build_actor_network(nn_dimensions)
 
-        model = Model(inputs=[input], outputs=[probabilities])
-        model.compile(optimizer=Adam(
-            learning_rate=self.learning_rate),
-            loss='huber_loss'
+    def _build_actor_network(self, nn_dimensions: tuple) -> Sequential:
+        input_dim, *hidden_dims, output_dim = nn_dimensions
+
+        model = Sequential()
+        model.add(Input(shape=(input_dim,)))
+
+        for dimension in hidden_dims:
+            model.add(Dense(dimension, activation='relu'))
+
+        model.add(Dense(output_dim, activation='softmax'))
+
+        model.compile(
+            optimizer=Adam(learning_rate=self.learning_rate),
+            loss='categorical_crossentropy'
         )
-        self.pi = model
+        model.summary()
+        return model
 
     def update_policy(self, state, action, td_error) -> None:
         self.policy[state][action] += self.learning_rate * td_error * self.eligibilities[state][action]
 
-    def reset_traces(self) -> None:
-        self.eligibilities = {}
+    def reset_eligibilities(self) -> None:
+        if self.nn_dimensions is not None:
+            input_dim, *hidden_dims, _ = self.nn_dimensions
+            self.eligibilities = [np.zeros(input_dim)]
+            for dimension in hidden_dims:
+                self.eligibilities.append(np.zeros(dimension))
+        self.eligibilities = defaultdict(lambda: defaultdict(float))
 
     def replace_trace(self, state, action) -> None:
         self.eligibilities[state][action] = 1
@@ -83,6 +95,8 @@ class Actor:
         with tf.GradientTape() as tape:
             probabilities = np.squeeze(self.pi(state))
             log_probability = tf.math.log(probabilities[action])
+            # td_error = val - pred
+            # 1/2*delta *
             loss = -tf.squeeze(log_probability) * td_error
         gradient = tape.gradient(loss, self.pi.trainable_variables)
         self.pi.optimizer.apply_gradients(zip(gradient, self.pi.trainable_variables))

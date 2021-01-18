@@ -9,8 +9,9 @@
   "actor_discount_factor": 0.9,
   "actor_epsilon": 0.5,
   "actor_epsilon_decay_rate": 0.5,
+  "actor_nn_dimensions": [25, 6],
   "critic_learning_rate": 0.1,
   "critic_trace_decay": 0.9,
   "critic_discount_factor": 0.9,
-  "critic_nn_dimentions": [5, 20, 30, 5, 1]
+  "critic_nn_dimensions": [5, 20, 30, 5, 1]
 }

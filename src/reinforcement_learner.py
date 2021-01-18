@@ -12,12 +12,13 @@ class ReinforcementLearner:
             env.actor_trace_decay,
             env.actor_discount_factor,
             env.actor_epsilon,
+            env.actor_nn_dimensions,
         )
         self.critic = Critic(
             env.critic_learning_rate,
             env.critic_trace_decay,
             env.critic_discount_factor,
-            env.critic_nn_dimentions,
+            env.critic_nn_dimensions,
         )
         self.simulated_world = SimulatedWorld(Shape.Diamond, 4)
         self.episodes = env.episodes
@@ -26,8 +27,8 @@ class ReinforcementLearner:
         episode = 0
         while episode < self.episodes:
 
-            self.actor.reset_traces()
-            self.critic.reset_traces()
+            self.actor.reset_eligibilities()
+            self.critic.reset_eligibilities()
 
             state = self.simulated_world.produce_initial_state()
             action = self.actor.choose_mixed(state)
