@@ -62,10 +62,10 @@ class Actor:
         else:
             self.eligibilities = defaultdict(lambda: defaultdict(float))
 
-    def replace_trace(self, state, action) -> None:
+    def replace_eligibilities(self, state, action) -> None:
         self.eligibilities[state][action] = 1
 
-    def update_trace(self, state, action) -> None:
+    def update_eligibilities(self, state, action) -> None:
         self.eligibilities[state][action] *= self.__discount_factor * self.__trace_decay
 
     def boltzmann_scale(self, state, action):

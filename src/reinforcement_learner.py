@@ -1,7 +1,7 @@
 from actor import Actor
-from critic import Critic, CriticFactory
-from main import Environment
-from simulated_world import Shape, SimulatedWorld
+from critic.critic_factory import CriticFactory
+from environment import Environment
+from simulated_world import SimulatedWorld
 
 
 class ReinforcementLearner:
@@ -14,9 +14,14 @@ class ReinforcementLearner:
             env.actor_epsilon,
             env.actor_nn_dimensions,
         )
-        self.critic = CriticFactory.get_critic(env)
+        self.critic = CriticFactory.get_critic(
+            env.critic_learning_rate,
+            env.critic_trace_decay,
+            env.critic_discount_factor,
+            env.critic_nn_dimensions,
+        )
 
-        self.simulated_world = SimulatedWorld(Shape.Diamond, 4)
+        self.simulated_world = SimulatedWorld(env.board_type, env.size)
         self.episodes = env.episodes
 
     def run(self) -> None:

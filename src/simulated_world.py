@@ -12,8 +12,6 @@ from enum import Enum
 import networkx as nx
 import numpy as np
 
-from environment import Environment
-
 
 class Shape(Enum):
     Diamond = 1
@@ -22,8 +20,8 @@ class Shape(Enum):
 
 class SimulatedWorld:
 
-    def __init__(self, shape: Shape, size: int):
-        self.__shape = shape
+    def __init__(self, board_type: Shape, size: int):
+        self.__board_type = board_type
         self.__size = size
         self.__board = np.zeros((size, size))
         self.__adjacent_cells = (
@@ -34,7 +32,7 @@ class SimulatedWorld:
             (-1, 1),
             (0, -1),
         )
-        if shape == Shape.Triangle:
+        if self.__board_type == Shape.Triangle:
             self.__board = np.triu(np.full((size, size), None), 1)
 
     def produce_initial_state(self) -> None:
