@@ -17,6 +17,7 @@ class TableCritic(Critic):
             discount_factor,
         )
         self.__values = defaultdict(lambda: random.random() * 0.2)
+        self.reset_eligibilities()
 
     def get_value(self, state) -> float:
         return self.__values[state]

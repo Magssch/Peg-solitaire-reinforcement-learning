@@ -16,17 +16,15 @@ class Actor:
         learning_rate: float,
         trace_decay: float,
         discount_factor: float,
-        epsilon: float,
         nn_dimensions: tuple = None,
     ):
         self.__learning_rate = learning_rate  # alpha
         self.__trace_decay = trace_decay  # lambda
         self.__discount_factor = discount_factor  # gamma
 
-        self.__epsilon = epsilon
         self.__nn_dimensions = nn_dimensions
 
-        self.policy = {}  # Pi
+        self.policy = defaultdict(lambda: defaultdict(float))  # Pi
         self.reset_eligibilities()
 
         if nn_dimensions is not None:
@@ -69,23 +67,7 @@ class Actor:
         self.eligibilities[state][action] *= self.__discount_factor * self.__trace_decay
 
     def boltzmann_scale(self, state, action):
-        p = np.e ** self.policy[state][action]
-        q = sum([np.e ** self.policy[state][action_i] for action_i in []])  # TODO: add get_actions(state) here
-        return p / q
-
-    def choose_greedy(self, state):
-        actions = []  # TODO: add get_actions(state) here
-        preferences = [self.policy[state][action] for action in actions]
-        return actions[np.argmax(preferences)]
-
-    def choose_random(self, state):
-        actions = []  # TODO: add get_actions(state) here
-        return random.choice(actions)
-
-    def choose_mixed(self, state):
-        if random.random() < self.__epsilon:
-            return self.choose_random(state)
-        return self.choose_greedy(state)
+        pass  # TODO: implement
 
     def choose_action(self, state):
         actions = []  # TODO: add get_actions(state) here
@@ -93,24 +75,11 @@ class Actor:
         # probabilities = np.squeeze(self.pi(state))
         return np.random.choice(actions, p=probabilities)
 
-    def update_pi(self, state, action, td_error):
-        with tf.GradientTape(persistent=True) as tape:
-            actions = np.ones(6)
-            probs = np.zeros(6)
-            probs[1] = 1
+    # def update_policy(self, state, action, td_error):
+    #     with tf.GradientTape(persistent=True) as tape:
+    #         x0 = tf.Variable(0.2, name='x')
+    #         print(self.model.trainable_variables)
 
-            probabilities = np.squeeze(probs)
-            log_prob = np.random.choice(actions, p=probabilities)
-            actor_loss = -log_prob * td_error
-
-            x0 = tf.Variable(0.2, name='x0')
-            print(self.model.trainable_variables)
-
-        gradient = tape.gradient(x0, self.model.trainable_variables)
-        print(gradient)
-        self.model.optimizer.apply_gradients(zip(gradient, self.model.trainable_variables))
-
-
-if __name__ == "__main__":
-    actor = Actor(0.01, 0.9, 0.01, 0.5, (25, 6))
-    actor.update_pi(None, None, 0.1)
+    #     gradient = tape.gradient(x0, self.model.trainable_variables)
+    #     print(gradient)
+    #     self.model.optimizer.apply_gradients(zip(gradient, self.model.trainable_variables))
