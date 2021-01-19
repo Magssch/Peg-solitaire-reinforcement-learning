@@ -19,19 +19,20 @@ class Actor:
         epsilon: float,
         nn_dimensions: tuple = None,
     ):
-        self.learning_rate = learning_rate  # alpha
-        self.trace_decay = trace_decay  # lambda
-        self.discount_factor = discount_factor  # gamma
+        self.__learning_rate = learning_rate  # alpha
+        self.__trace_decay = trace_decay  # lambda
+        self.__discount_factor = discount_factor  # gamma
 
-        self.epsilon = epsilon
+        self.__epsilon = epsilon
+        self.__nn_dimensions = nn_dimensions
+
         self.policy = {}  # Pi
         self.reset_eligibilities()
-        self.nn_dimensions = nn_dimensions
 
         if nn_dimensions is not None:
-            self._build_actor_network(nn_dimensions)
+            self.model = self.__build_actor_network(nn_dimensions)
 
-    def _build_actor_network(self, nn_dimensions: tuple) -> Sequential:
+    def __build_actor_network(self, nn_dimensions: tuple) -> Sequential:
         input_dim, *hidden_dims, output_dim = nn_dimensions
 
         model = Sequential()
@@ -43,28 +44,29 @@ class Actor:
         model.add(Dense(output_dim, activation='softmax'))
 
         model.compile(
-            optimizer=Adam(learning_rate=self.learning_rate),
+            optimizer=Adam(learning_rate=self.__learning_rate),
             loss='categorical_crossentropy'
         )
         model.summary()
         return model
 
     def update_policy(self, state, action, td_error) -> None:
-        self.policy[state][action] += self.learning_rate * td_error * self.eligibilities[state][action]
+        self.policy[state][action] += self.__learning_rate * td_error * self.eligibilities[state][action]
 
     def reset_eligibilities(self) -> None:
-        if self.nn_dimensions is not None:
-            input_dim, *hidden_dims, _ = self.nn_dimensions
+        if self.__nn_dimensions is not None:
+            input_dim, *hidden_dims, _ = self.__nn_dimensions
             self.eligibilities = [np.zeros(input_dim)]
             for dimension in hidden_dims:
                 self.eligibilities.append(np.zeros(dimension))
-        self.eligibilities = defaultdict(lambda: defaultdict(float))
+        else:
+            self.eligibilities = defaultdict(lambda: defaultdict(float))
 
     def replace_trace(self, state, action) -> None:
         self.eligibilities[state][action] = 1
 
     def update_trace(self, state, action) -> None:
-        self.eligibilities[state][action] *= self.discount_factor * self.trace_decay
+        self.eligibilities[state][action] *= self.__discount_factor * self.__trace_decay
 
     def boltzmann_scale(self, state, action):
         p = np.e ** self.policy[state][action]
@@ -81,7 +83,7 @@ class Actor:
         return random.choice(actions)
 
     def choose_mixed(self, state):
-        if random.random() < self.epsilon:
+        if random.random() < self.__epsilon:
             return self.choose_random(state)
         return self.choose_greedy(state)
 
@@ -92,15 +94,23 @@ class Actor:
         return np.random.choice(actions, p=probabilities)
 
     def update_pi(self, state, action, td_error):
-        with tf.GradientTape() as tape:
-            probabilities = np.squeeze(self.pi(state))
-            log_probability = tf.math.log(probabilities[action])
-            # td_error = val - pred
-            # 1/2*delta *
-            loss = -tf.squeeze(log_probability) * td_error
-        gradient = tape.gradient(loss, self.pi.trainable_variables)
-        self.pi.optimizer.apply_gradients(zip(gradient, self.pi.trainable_variables))
+        with tf.GradientTape(persistent=True) as tape:
+            actions = np.ones(6)
+            probs = np.zeros(6)
+            probs[1] = 1
+
+            probabilities = np.squeeze(probs)
+            log_prob = np.random.choice(actions, p=probabilities)
+            actor_loss = -log_prob * td_error
+
+            x0 = tf.Variable(0.2, name='x0')
+            print(self.model.trainable_variables)
+
+        gradient = tape.gradient(x0, self.model.trainable_variables)
+        print(gradient)
+        self.model.optimizer.apply_gradients(zip(gradient, self.model.trainable_variables))
 
 
 if __name__ == "__main__":
-    actor = Actor(0.01, 0.9, 0.01, 0.5)
+    actor = Actor(0.01, 0.9, 0.01, 0.5, (25, 6))
+    actor.update_pi(None, None, 0.1)
