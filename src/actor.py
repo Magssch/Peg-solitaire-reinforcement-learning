@@ -55,13 +55,7 @@ class Actor:
         self.__policy[state][action] += self.__learning_rate * td_error * self.__eligibilities[state][action]
 
     def reset_eligibilities(self) -> None:
-        if self.__nn_dimensions is not None:
-            input_dim, *hidden_dims, _ = self.__nn_dimensions
-            self.__eligibilities = [np.zeros(input_dim)]
-            for dimension in hidden_dims:
-                self.__eligibilities.append(np.zeros(dimension))
-        else:
-            self.__eligibilities = defaultdict(lambda: defaultdict(float))
+        self.__eligibilities = defaultdict(lambda: defaultdict(float))
 
     def replace_eligibilities(self, state, action) -> None:
         self.__eligibilities[state][action] = 1

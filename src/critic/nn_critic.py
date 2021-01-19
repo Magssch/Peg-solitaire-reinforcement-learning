@@ -1,4 +1,5 @@
 import numpy as np
+import tensorflow as tf
 from keras import backend as K
 from keras.layers import Dense, Input
 from keras.models import Sequential
@@ -24,6 +25,7 @@ class NNCritic(Critic):
         assert nn_dimensions is not None
         self.__nn_dimensions = nn_dimensions
         self.__values = self.__build_critic_network(nn_dimensions)  # V(s)
+        self.reset_eligibilities()
 
     def __build_critic_network(self, nn_dimensions: tuple) -> Sequential:
         input_dim, *hidden_dims, output_dim = nn_dimensions
@@ -55,16 +57,13 @@ class NNCritic(Critic):
         pass
 
     def reset_eligibilities(self) -> None:
-        input_dim, *hidden_dims, _ = self.__nn_dimensions
-        self.eligibilities = [np.zeros(input_dim)]
-        for dimension in hidden_dims:
-            self.eligibilities.append(np.zeros(dimension))
-        print(self.eligibilities)
-        for params in self.__values.trainable_weights:
-            print(params)
+        self.__eligibilities = []
+        for weights in self.__values.trainable_weights:
+            self.__eligibilities.append(tf.ones(weights.shape))
 
+    # Not used by NNCritic
     def replace_eligibilities(self, state) -> None:
         pass
 
     def update_eligibilities(self, state) -> None:
-        pass
+        self.__eligibilities = [self._discount_factor * self._trace_decay * e for e in self.__eligibilities]
