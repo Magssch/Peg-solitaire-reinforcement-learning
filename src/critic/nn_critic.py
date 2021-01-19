@@ -50,9 +50,6 @@ class NNCritic(Critic):
     def get_value(self, state) -> float:
         return np.squeeze(self.__values(state))
 
-    def td_error(self, current_state, successor_state, reward) -> float:
-        return reward + self._discount_factor * self.get_value(successor_state) - self.get_value(current_state)
-
     def update_value(self, state, td_error) -> None:
         pass
 
