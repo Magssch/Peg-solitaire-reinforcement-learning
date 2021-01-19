@@ -1,7 +1,8 @@
 # flake8: noqa
 import math
-import tensorflow as tf
+
 import numpy as np
+import tensorflow as tf
 
 # ************** Split Gradient Descent (SplitGD) **********************************
 # This "exposes" the gradients during gradient descent by breaking the call to "fit" into two calls: tape.gradient

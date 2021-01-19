@@ -1,3 +1,5 @@
+import random
+from abc import ABC, abstractmethod
 from collections import defaultdict
 
 import numpy as np
@@ -5,10 +7,8 @@ from keras import backend as K
 from keras.layers import Dense, Input
 from keras.models import Sequential
 from keras.optimizers import Adam
-from environment import Environment
-import random
 
-from abc import ABC, abstractmethod
+from environment import Environment
 
 
 class CriticFactory:
