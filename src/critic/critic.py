@@ -6,32 +6,32 @@ class Critic(ABC):
     def __init__(
         self,
         learning_rate: float,
-        trace_decay: float,
         discount_factor: float,
+        trace_decay: float,
     ):
-        self.learning_rate = learning_rate  # alpha
-        self.trace_decay = trace_decay  # lambda
-        self.discount_factor = discount_factor  # gamma
+        self._learning_rate = learning_rate  # alpha
+        self._discount_factor = discount_factor  # gamma
+        self._trace_decay = trace_decay  # lambda
 
     def td_error(self, current_state, successor_state, reward) -> float:
-        return reward + self.discount_factor * self.get_value(successor_state) - self.get_value(current_state)
+        return reward + self._discount_factor * self.get_value(successor_state) - self.get_value(current_state)
 
     @abstractmethod
     def get_value(self, state) -> float:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def update_value(self, state, td_error) -> None:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def reset_eligibilities(self) -> None:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def replace_eligibilities(self, state) -> None:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def update_eligibilities(self, state) -> None:
-        pass
+        raise NotImplementedError

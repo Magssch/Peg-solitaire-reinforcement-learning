@@ -5,11 +5,11 @@
   "size": 4,
   "holes": [],
   "actor_learning_rate": 0.4,
-  "actor_trace_decay": 0.9,
   "actor_discount_factor": 0.9,
+  "actor_trace_decay": 0.9,
   "actor_nn_dimensions": [25, 6],
   "critic_learning_rate": 0.1,
-  "critic_trace_decay": 0.9,
   "critic_discount_factor": 0.9,
+  "critic_trace_decay": 0.9,
   "critic_nn_dimensions": [5, 20, 30, 5, 1]
 }

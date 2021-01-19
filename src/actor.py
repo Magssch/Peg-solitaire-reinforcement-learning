@@ -14,17 +14,17 @@ class Actor:
     def __init__(
         self,
         learning_rate: float,
-        trace_decay: float,
         discount_factor: float,
+        trace_decay: float,
         nn_dimensions: tuple = None,
     ):
         self.__learning_rate = learning_rate  # alpha
-        self.__trace_decay = trace_decay  # lambda
         self.__discount_factor = discount_factor  # gamma
+        self.__trace_decay = trace_decay  # lambda
 
         self.__nn_dimensions = nn_dimensions
 
-        self.policy = defaultdict(lambda: defaultdict(float))  # Pi
+        self.__policy = defaultdict(lambda: defaultdict(float))  # Pi(s, a)
         self.reset_eligibilities()
 
         if nn_dimensions is not None:
@@ -48,30 +48,30 @@ class Actor:
         model.summary()
         return model
 
+    def __boltzmann_scale(self, state, action):
+        pass  # TODO: implement
+
     def update_policy(self, state, action, td_error) -> None:
-        self.policy[state][action] += self.__learning_rate * td_error * self.eligibilities[state][action]
+        self.__policy[state][action] += self.__learning_rate * td_error * self.__eligibilities[state][action]
 
     def reset_eligibilities(self) -> None:
         if self.__nn_dimensions is not None:
             input_dim, *hidden_dims, _ = self.__nn_dimensions
-            self.eligibilities = [np.zeros(input_dim)]
+            self.__eligibilities = [np.zeros(input_dim)]
             for dimension in hidden_dims:
-                self.eligibilities.append(np.zeros(dimension))
+                self.__eligibilities.append(np.zeros(dimension))
         else:
-            self.eligibilities = defaultdict(lambda: defaultdict(float))
+            self.__eligibilities = defaultdict(lambda: defaultdict(float))
 
     def replace_eligibilities(self, state, action) -> None:
-        self.eligibilities[state][action] = 1
+        self.__eligibilities[state][action] = 1
 
     def update_eligibilities(self, state, action) -> None:
-        self.eligibilities[state][action] *= self.__discount_factor * self.__trace_decay
-
-    def boltzmann_scale(self, state, action):
-        pass  # TODO: implement
+        self.__eligibilities[state][action] *= self.__discount_factor * self.__trace_decay
 
     def choose_action(self, state):
         actions = []  # TODO: add get_actions(state) here
-        probabilities = self.boltzmann_scale(state, actions)
+        probabilities = self.__boltzmann_scale(state, actions)
         # probabilities = np.squeeze(self.pi(state))
         return np.random.choice(actions, p=probabilities)
 

@@ -9,14 +9,14 @@ class ReinforcementLearner:
     def __init__(self, env: Environment):
         self.actor = Actor(
             env.actor_learning_rate,
-            env.actor_trace_decay,
             env.actor_discount_factor,
+            env.actor_trace_decay,
             env.critic_nn_dimensions,
         )
         self.critic = CriticFactory.get_critic(
             env.critic_learning_rate,
-            env.critic_trace_decay,
             env.critic_discount_factor,
+            env.critic_trace_decay,
             env.critic_nn_dimensions,
         )
 

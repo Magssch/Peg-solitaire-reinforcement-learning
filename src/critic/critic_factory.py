@@ -1,5 +1,5 @@
-from .table_critic import TableCritic
 from .nn_critic import NNCritic
+from .table_critic import TableCritic
 
 
 class CriticFactory:
@@ -8,20 +8,20 @@ class CriticFactory:
     def get_critic(
         cls,
         critic_learning_rate: float,
-        critic_trace_decay: float,
         critic_discount_factor: float,
+        critic_trace_decay: float,
         critic_nn_dimensions: tuple = None,
     ):
         if critic_nn_dimensions is None:
             return TableCritic(
                 critic_learning_rate,
-                critic_trace_decay,
                 critic_discount_factor,
+                critic_trace_decay,
             )
         else:
             return NNCritic(
                 critic_learning_rate,
-                critic_trace_decay,
                 critic_discount_factor,
+                critic_trace_decay,
                 critic_nn_dimensions,
             )
