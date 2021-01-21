@@ -11,7 +11,7 @@ class ReinforcementLearner:
             env.actor_learning_rate,
             env.actor_discount_factor,
             env.actor_trace_decay,
-            env.critic_nn_dimensions,
+            env.actor_nn_dimensions,
         )
         self.critic = CriticFactory.get_critic(
             env.critic_learning_rate,
