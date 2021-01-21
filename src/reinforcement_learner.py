@@ -6,22 +6,22 @@ from simulated_world import SimulatedWorld
 
 class ReinforcementLearner:
 
-    def __init__(self, paramters: Parameters):
+    def __init__(self, parameters: Parameters):
         self.actor = Actor(
-            paramters.actor_learning_rate,
-            paramters.actor_discount_factor,
-            paramters.actor_trace_decay,
-            paramters.actor_nn_dimensions,
+            parameters.actor_learning_rate,
+            parameters.actor_discount_factor,
+            parameters.actor_trace_decay,
+            parameters.actor_nn_dimensions,
         )
         self.critic = CriticFactory.get_critic(
-            paramters.critic_learning_rate,
-            paramters.critic_discount_factor,
-            paramters.critic_trace_decay,
-            paramters.critic_nn_dimensions,
+            parameters.critic_learning_rate,
+            parameters.critic_discount_factor,
+            parameters.critic_trace_decay,
+            parameters.critic_nn_dimensions,
         )
 
-        self.simulated_world = SimulatedWorld(paramters.board_type, paramters.size)
-        self.episodes = paramters.episodes
+        self.simulated_world = SimulatedWorld(parameters.board_type, parameters.size)
+        self.episodes = parameters.episodes
 
     def run(self) -> None:
         episode = 0

@@ -1,4 +1,19 @@
+import json
+
 from simulated_world import Shape
+
+
+def get_parameters():
+    parameters = Parameters()
+    with open('src/pivotal_parameters.json', 'r') as f:
+        pivotal_parameters = json.load(f)
+        for attr, value in pivotal_parameters.items():
+            setattr(parameters, attr, value)
+        if parameters.board_type == 1:
+            parameters.board_type = Shape.Diamond
+        else:
+            parameters.board_type = Shape.Triangle
+    return parameters
 
 
 class Parameters:
