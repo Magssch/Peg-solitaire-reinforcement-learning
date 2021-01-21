@@ -44,13 +44,19 @@ class SimulatedWorld:
         # reset to
 
     def step(self, action: tuple(int, int)) -> tuple(int):
-        start_index, end_index = action
+        start_index, direction_index = action
         start_coordinates = self.__coordinates_from_index(start_index)
-        end_coordinates = self.__coordinates_from_index(end_index)
-        if self.__is_legal_move(start_coordinates, end_coordinates):
+        direction_vector = self.__board(direction_index)
+        if self.__is_legal_move(start_coordinates, direction_vector):
             self.__board[start_index] = 0
-            self.__board[start_index] = 0
-            self.__board[end_index] = 1
+            removed_peg_coordinates = self.__get_next_node(
+                start_coordinates, direction_vector)
+            self.__board[self.__index_from_coordinates(
+                removed_peg_coordinates)] = 0
+            landing_cell_coordinates = self.__get_next_node(
+                removed_peg_coordinates, direction_vector)
+            self.__board[self.__index_from_coordinates(
+                landing_cell_coordinates)] = 1
 
     def draw_board(self) -> None:
         pass
@@ -84,6 +90,9 @@ class SimulatedWorld:
         """
         row = cell_position[0] * self.__size
         return row, row + cell_position[1]
+
+    def __get_next_node(self, start_coordinates: tuple(int, int), direction_vector: tuple(int, int)) -> int:
+        return start_coordinates[0] + direction_vector[0], start_coordinates[1] + direction_vector[1]
 
     def __direction_index_from_vector(self, direction_vector: tuple(int, int)) -> int:
         """
