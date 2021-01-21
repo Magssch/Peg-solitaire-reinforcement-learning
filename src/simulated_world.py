@@ -51,8 +51,8 @@ class SimulatedWorld:
         pass
         # return (self.__board == 1).sum() == 1
 
-    def __is_legal_move(self) -> bool:
-        pass
+    def __is_legal_move(self, coordinates: tuple(int, int), move: tuple(int, int)) -> bool:
+        return self.__move_is_inside_board(coordinates, move) and self.__cell_contains_peg((coordinates[0]+move[0], coordinates[1]+move[1])) and self.__move_is_inside_board(coordinates, (move[0]*2, move[1]*2)) and not self.__cell_contains_peg((coordinates[0]+(move[0]*2), coordinates[1]+(move[1]*2)))
 
     def __is_adjacent(self, x: int, y: int) -> bool:
         return (x, y) in self.__adjacent_cells
@@ -81,12 +81,14 @@ class SimulatedWorld:
         coordinates = self.__get_coordinates_for_position(position)
 
         for move in self.__adjacent_cells:
-            if self.__move_is_inside_board(coordinates, move) and self.__cell_contains_peg((coordinates[0]+move[0], coordinates[1]+move[1])) and self.__move_is_inside_board(coordinates, (move[0]*2, move[1]*2)) and not self.__cell_contains_peg((coordinates[0]+(move[0]*2), coordinates[1]+(move[1]*2))):
+            if self.__is_legal_move(coordinates, move):
                         legal_moves.append(self.__get_coordinates_for_position((coordinates[0]+(move[0]*2), coordinates[1]+(move[1]*2))))
 
         return tuple(legal_moves)
                     
-
     def get_all_legal_actions(self) -> tuple(tuple):
-        for cell in self.__board:
-            pass
+        legal_moves = []
+        i = 0
+        for position in self.__board:
+            legal_moves[i] = self.__get_legal_moves_for_position(position)
+        return tuple(legal_moves)
