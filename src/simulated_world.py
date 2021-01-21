@@ -57,8 +57,8 @@ class SimulatedWorld:
     def __is_adjacent(self, x: int, y: int) -> bool:
         return (x, y) in self.__adjacent_cells
 
-    def __position_contains_peg(self, position: int) -> bool:
-        return self.__board[position] == 1
+    def __cell_contains_peg(self, cell_position: tuple(int, int)) -> bool:
+        return self.__board[self.__get_index_by_coordinates(cell_position)] == 1
 
     def __move_is_inside_board(self, cell_position: tuple(int, int), move: tuple(int, int)) -> bool:
         return (cell_position[0] + move[0] > 0 and cell_position[0] + move[0] < self.__size) and (cell_position[1] + move[1] > 0 and cell_position[1] + move[1] < self.__size)
@@ -69,18 +69,20 @@ class SimulatedWorld:
         """
         return position // self.__size, position % self.__size
 
-    def __get_legal_actions_for_position(self, position: int) -> tuple(int, int):
+    def __get_index_by_coordinates(self, cell_position: tuple(int, int)) -> int:
+        """
+        Converts 2D-coordinates to an 1D-index position
+        """
+        row = cell_position[0]*self.__size
+        return row, row + cell_position[1]
+
+    def __get_legal_moves_for_position(self, position: int) -> tuple(int, int):
         legal_moves = []
         coordinates = self.__get_coordinates_for_position(position)
 
-        for jumping_move in self.__adjacent_cells:
-            if self.__move_is_inside_board(coordinates, jumping_move) and self.__position_contains_peg(position):
-                # TODO: CHECK IF THERE IS A PEG TO JUMP OVER
-                # Generate cell position tuples for cells beyond pegs
-                landing_moves = [tuple((a*2, b*2) for a, b in adjacent_cell) for adjacent_cell in self.__adjacent_cells]
-                for landing_move in landing_moves:
-                    if self.__move_is_inside_board(coordinates, landing_move) and not self.__position_contains_peg(position):
-                        legal_moves.append(landing_move)
+        for move in self.__adjacent_cells:
+            if self.__move_is_inside_board(coordinates, move) and self.__cell_contains_peg((coordinates[0]+move[0], coordinates[1]+move[1])) and self.__move_is_inside_board(coordinates, (move[0]*2, move[1]*2)) and not self.__cell_contains_peg((coordinates[0]+(move[0]*2), coordinates[1]+(move[1]*2))):
+                        legal_moves.append(self.__get_coordinates_for_position((coordinates[0]+(move[0]*2), coordinates[1]+(move[1]*2))))
 
         return tuple(legal_moves)
                     
