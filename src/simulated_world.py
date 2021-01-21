@@ -48,20 +48,20 @@ class SimulatedWorld:
         pass
     
     def is_final_state(self) -> bool:
-        pass
-        # return (self.__board == 1).sum() == 1
+        return (self.__board == 1).sum() == 1
 
     def __is_legal_move(self, coordinates: tuple(int, int), move: tuple(int, int)) -> bool:
-        return self.__move_is_inside_board(coordinates, move) and self.__cell_contains_peg((coordinates[0]+move[0], coordinates[1]+move[1])) and self.__move_is_inside_board(coordinates, (move[0]*2, move[1]*2)) and not self.__cell_contains_peg((coordinates[0]+(move[0]*2), coordinates[1]+(move[1]*2)))
-
-    def __is_adjacent(self, x: int, y: int) -> bool:
-        return (x, y) in self.__adjacent_cells
+        return self.__move_is_inside_board(coordinates, move) and \
+                self.__cell_contains_peg((coordinates[0]+move[0], coordinates[1]+move[1])) and \
+                self.__move_is_inside_board(coordinates, (move[0]*2, move[1]*2)) and \
+                not self.__cell_contains_peg((coordinates[0]+(move[0]*2), coordinates[1]+(move[1]*2)))
 
     def __cell_contains_peg(self, cell_position: tuple(int, int)) -> bool:
         return self.__board[self.__get_index_by_coordinates(cell_position)] == 1
 
     def __move_is_inside_board(self, cell_position: tuple(int, int), move: tuple(int, int)) -> bool:
-        return (cell_position[0] + move[0] > 0 and cell_position[0] + move[0] < self.__size) and (cell_position[1] + move[1] > 0 and cell_position[1] + move[1] < self.__size)
+        return (cell_position[0] + move[0] > 0 and cell_position[0] + move[0] < self.__size) \
+                and (cell_position[1] + move[1] > 0 and cell_position[1] + move[1] < self.__size)
 
     def __get_coordinates_for_position(self, position: int) -> tuple(int, int):
         """
