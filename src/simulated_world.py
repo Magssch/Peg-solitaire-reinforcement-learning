@@ -44,7 +44,6 @@ class SimulatedWorld:
         # Go to next state
 
     def draw_board(self) -> None:
-        # return (self.__board, #poeng, self.is_final_state())
         pass
 
     def is_final_state(self) -> bool:
@@ -76,19 +75,19 @@ class SimulatedWorld:
         row = cell_position[0]*self.__size
         return row, row + cell_position[1]
 
-    def __get_legal_moves_for_position(self, position: int) -> tuple(int, int):
+    def __get_legal_moves_for_position(self, position: int) -> tuple(int):
         legal_moves = []
         coordinates = self.__get_coordinates_for_position(position)
 
         for move in self.__adjacent_cells:
             if self.__is_legal_move(coordinates, move):
-                        legal_moves.append(self.__get_coordinates_for_position((coordinates[0]+(move[0]*2), coordinates[1]+(move[1]*2))))
+                legal_moves.append(self.__get_index_by_coordinates((coordinates[0]+(move[0]*2), coordinates[1]+(move[1]*2))))
 
         return tuple(legal_moves)
 
-    def get_all_legal_actions(self) -> tuple(tuple):
+    def get_all_legal_actions(self) -> tuple(tuple(int, int)):
         legal_moves = []
         i = 0
         for position in self.__board:
-            legal_moves[i] = self.__get_legal_moves_for_position(position)
+            legal_moves[i] = (position, self.__get_legal_moves_for_position(position))
         return tuple(legal_moves)
