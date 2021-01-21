@@ -1,20 +1,20 @@
 import json
 
-from environment import Environment
+from parameters import Parameters
 from reinforcement_learner import ReinforcementLearner
 from simulated_world import Shape
 
 if __name__ == "__main__":
-    env = Environment()
+    paramters = Parameters()
     with open('src/pivotal_parameters.json', 'r') as f:
         pivotal_parameters = json.load(f)
         for attr, value in pivotal_parameters.items():
-            setattr(env, attr, value)
-        if env.board_type == 1:
-            env.board_type = Shape.Diamond
+            setattr(paramters, attr, value)
+        if paramters.board_type == 1:
+            paramters.board_type = Shape.Diamond
         else:
-            env.board_type = Shape.Triangle
-    print(env.board_type)
+            paramters.board_type = Shape.Triangle
+    print(paramters.board_type)
 
-    agent = ReinforcementLearner(env)
+    agent = ReinforcementLearner(paramters)
     agent.run()

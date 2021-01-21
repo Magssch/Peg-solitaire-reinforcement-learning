@@ -1,27 +1,27 @@
 from actor import Actor
 from critic.critic_factory import CriticFactory
-from environment import Environment
+from parameters import Parameters
 from simulated_world import SimulatedWorld
 
 
 class ReinforcementLearner:
 
-    def __init__(self, env: Environment):
+    def __init__(self, paramters: Parameters):
         self.actor = Actor(
-            env.actor_learning_rate,
-            env.actor_discount_factor,
-            env.actor_trace_decay,
-            env.actor_nn_dimensions,
+            paramters.actor_learning_rate,
+            paramters.actor_discount_factor,
+            paramters.actor_trace_decay,
+            paramters.actor_nn_dimensions,
         )
         self.critic = CriticFactory.get_critic(
-            env.critic_learning_rate,
-            env.critic_discount_factor,
-            env.critic_trace_decay,
-            env.critic_nn_dimensions,
+            paramters.critic_learning_rate,
+            paramters.critic_discount_factor,
+            paramters.critic_trace_decay,
+            paramters.critic_nn_dimensions,
         )
 
-        self.simulated_world = SimulatedWorld(env.board_type, env.size)
-        self.episodes = env.episodes
+        self.simulated_world = SimulatedWorld(paramters.board_type, paramters.size)
+        self.episodes = paramters.episodes
 
     def run(self) -> None:
         episode = 0
@@ -30,7 +30,7 @@ class ReinforcementLearner:
             self.actor.reset_eligibilities()
             self.critic.reset_eligibilities()
 
-            state = self.simulated_world.produce_initial_state()
+            state = self.simulated_world.reset()
             action = self.actor.choose_action(state)
 
             done = False

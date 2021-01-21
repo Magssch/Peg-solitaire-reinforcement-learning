@@ -1,7 +1,7 @@
 from simulated_world import Shape
 
 
-class Environment:
+class Parameters:
 
     episodes: int
     visualize_games: bool

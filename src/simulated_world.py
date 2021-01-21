@@ -37,16 +37,16 @@ class SimulatedWorld:
 
     def reset(self) -> None:
         pass
-        # reset to 
+        # reset to
 
-    def step(self) -> tuple:
+    def step(self, state) -> tuple:
         pass
         # Go to next state
 
     def draw_board(self) -> None:
         # return (self.__board, #poeng, self.is_final_state())
         pass
-    
+
     def is_final_state(self) -> bool:
         return (self.__board == 1).sum() == 1
 
@@ -85,7 +85,7 @@ class SimulatedWorld:
                         legal_moves.append(self.__get_coordinates_for_position((coordinates[0]+(move[0]*2), coordinates[1]+(move[1]*2))))
 
         return tuple(legal_moves)
-                    
+
     def get_all_legal_actions(self) -> tuple(tuple):
         legal_moves = []
         i = 0
