@@ -27,7 +27,8 @@ class SimulatedWorld:
     def __init__(self, board_type: Shape, size: int):
         self.__board_type = board_type
         self.__size = size
-        self.__board = np.zeros(size**2)
+        self.__board = None
+        self.__set_initial_state()
         self.__edges = (
             (0, -1),
             (1, -1),
@@ -36,12 +37,14 @@ class SimulatedWorld:
             (-1, 1),
             (-1, 0),
         )
+
+    def __set_initial_state(self) -> None:
+        self.__board = np.zeros(self.__size**2)
         if self.__board_type == Shape.Triangle:
-            self.__board = np.triu(np.full((size, size), None), 1)
+            self.__board = np.triu(np.full((self.__size, self.__size), None), 1)
 
     def reset(self) -> None:
-        pass
-        # reset to
+        self.__set_initial_state()
 
     def step(self, action: tuple(int, int)) -> tuple(int):
         start_index, direction_index = action
