@@ -50,7 +50,7 @@ class NNCritic(Critic):
     def get_value(self, state) -> float:
         return np.squeeze(self.__values(np.array([state, ])))
 
-    def update_value(self, current_state, successor_state, reward) -> None:
+    def update_values(self, current_state, successor_state, reward) -> None:
         successor_state = tf.convert_to_tensor([successor_state], dtype=tf.float32)
         current_state = tf.convert_to_tensor([current_state], dtype=tf.float32)
         reward = tf.convert_to_tensor(reward, dtype=tf.float32)
@@ -79,5 +79,5 @@ class NNCritic(Critic):
     def replace_eligibilities(self, _) -> None:
         pass
 
-    def update_eligibilities(self, state) -> None:
+    def update_eligibilities(self) -> None:
         self.__eligibilities = [self._discount_factor * self._trace_decay * e for e in self.__eligibilities]

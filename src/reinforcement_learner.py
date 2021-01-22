@@ -45,12 +45,11 @@ class ReinforcementLearner:
 
                 td_error = self.critic.td_error(state, next_state, reward)
 
-                # for (s, a) in episode:
-                self.critic.update_eligibilities(state)
-                self.actor.update_eligibilities(state, action)
+                self.critic.update_values(state, next_state, reward)
+                self.critic.update_eligibilities()
 
-                self.critic.update_value(state, next_state, reward)
                 self.actor.update_policy(state, action, td_error)
+                self.actor.update_eligibilities(state, action)
 
                 state, action = next_state, next_action
 

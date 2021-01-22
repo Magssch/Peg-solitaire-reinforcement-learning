@@ -23,9 +23,10 @@ class TableCritic(Critic):
     def get_value(self, state) -> float:
         return self.__values[state]
 
-    def update_value(self, current_state, successor_state, reward) -> None:
+    def update_values(self, current_state, successor_state, reward) -> None:
         td_error = self.td_error(current_state, successor_state, reward)
-        self.__values[current_state] += self._learning_rate * td_error * self.__eligibilities[current_state]
+        for state, eligibility in self.__eligibilities.items():
+            self.__values[state] += self._learning_rate * td_error * eligibility
 
     def reset_eligibilities(self) -> None:
         self.__eligibilities = defaultdict(float)
@@ -33,5 +34,6 @@ class TableCritic(Critic):
     def replace_eligibilities(self, state) -> None:
         self.__eligibilities[state] = 1
 
-    def update_eligibilities(self, state) -> None:
-        self.__eligibilities[state] *= self._discount_factor * self._trace_decay
+    def update_eligibilities(self) -> None:
+        for state in self.__eligibilities:
+            self.__eligibilities[state] *= self._discount_factor * self._trace_decay
