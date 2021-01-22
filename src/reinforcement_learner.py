@@ -47,8 +47,8 @@ class ReinforcementLearner:
                 self.critic.update_values(state, next_state, reward)
                 self.critic.update_eligibilities()
 
-                self.actor.update_policy(state, action, td_error)
-                self.actor.update_eligibilities(state, action)
+                self.actor.update_policy(td_error)
+                self.actor.update_eligibilities()
 
                 state, action = next_state, next_action
 

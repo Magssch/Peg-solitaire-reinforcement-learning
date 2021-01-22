@@ -1,5 +1,6 @@
 from collections import defaultdict
 
+
 class Actor:
 
     def __init__(
@@ -15,11 +16,13 @@ class Actor:
         self.__policy = defaultdict(lambda: defaultdict(float))  # Pi(s, a)
         self.reset_eligibilities()
 
-    def __boltzmann_scale(self, state, action):
-        pass  # TODO: implement
+    def choose_action(self, state):
+        return (3, 1)
 
-    def update_policy(self, state, action, td_error) -> None:
-        self.__policy[state][action] += self.__learning_rate * td_error * self.__eligibilities[state][action]
+    def update_policy(self, td_error) -> None:
+        for state in self.__eligibilities:
+            for action, eligibility in self.__eligibilities[state].items():
+                self.__policy[state][action] += self.__learning_rate * td_error * eligibility
 
     def reset_eligibilities(self) -> None:
         self.__eligibilities = defaultdict(lambda: defaultdict(float))
@@ -27,8 +30,7 @@ class Actor:
     def replace_eligibilities(self, state, action) -> None:
         self.__eligibilities[state][action] = 1
 
-    def update_eligibilities(self, state, action) -> None:
-        self.__eligibilities[state][action] *= self.__discount_factor * self.__trace_decay
-
-    def choose_action(self, state):
-        return (3, 1)
+    def update_eligibilities(self) -> None:
+        for state in self.__eligibilities:
+            for action in self.__eligibilities[state]:
+                self.__eligibilities[state][action] *= self.__discount_factor * self.__trace_decay
