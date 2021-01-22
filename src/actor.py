@@ -64,16 +64,8 @@ class Actor:
         self.__eligibilities[state][action] *= self.__discount_factor * self.__trace_decay
 
     def choose_action(self, state):
-        actions = []  # TODO: add get_actions(state) here
-        probabilities = self.__boltzmann_scale(state, actions)
+        # actions = []  # TODO: add get_actions(state) here
+        # probabilities = self.__boltzmann_scale(state, actions)
         # probabilities = np.squeeze(self.pi(state))
-        return np.random.choice(actions, p=probabilities)
-
-    # def update_policy(self, state, action, td_error):
-    #     with tf.GradientTape(persistent=True) as tape:
-    #         x0 = tf.Variable(0.2, name='x')
-    #         print(self.model.trainable_variables)
-
-    #     gradient = tape.gradient(x0, self.model.trainable_variables)
-    #     print(gradient)
-    #     self.model.optimizer.apply_gradients(zip(gradient, self.model.trainable_variables))
+        # return np.random.choice(actions, p=probabilities)
+        return (3, 1)

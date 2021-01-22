@@ -21,7 +21,7 @@ class Critic(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def update_value(self, state, td_error) -> None:
+    def update_value(self, current_state, successor_state, reward) -> None:
         raise NotImplementedError
 
     @abstractmethod

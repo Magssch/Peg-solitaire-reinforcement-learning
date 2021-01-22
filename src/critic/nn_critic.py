@@ -48,10 +48,27 @@ class NNCritic(Critic):
         return model
 
     def get_value(self, state) -> float:
-        return np.squeeze(self.__values(state))
+        return np.squeeze(self.__values(np.array([state, ])))
 
-    def update_value(self, state, td_error) -> None:
-        pass
+    def update_value(self, current_state, successor_state, reward) -> None:
+        successor_state = tf.convert_to_tensor([successor_state], dtype=tf.float32)
+        current_state = tf.convert_to_tensor([current_state], dtype=tf.float32)
+        reward = tf.convert_to_tensor(reward, dtype=tf.float32)
+
+        with tf.GradientTape(persistent=True) as tape:
+            target = tf.add(reward, tf.multiply(self._discount_factor, self.__values(successor_state)))
+            prediction = tf.convert_to_tensor([self.__values(current_state)])
+            loss = self.__values.compiled_loss(target, prediction)
+            td_error = tf.subtract(target, prediction)
+
+        gradients = tape.gradient(loss, self.__values.trainable_weights)
+        gradients = self.__modify_gradients(gradients, td_error)
+        self.__values.optimizer.apply_gradients(zip(gradients, self.__values.trainable_weights))
+
+    def __modify_gradients(self, gradients, td_error):
+        for gradient, eligibility in zip(gradients, self.__eligibilities):
+            gradient = tf.multiply(td_error, tf.add(eligibility, gradient))
+        return gradients
 
     def reset_eligibilities(self) -> None:
         self.__eligibilities = []
@@ -59,7 +76,7 @@ class NNCritic(Critic):
             self.__eligibilities.append(tf.ones(weights.shape))
 
     # Not used by NNCritic
-    def replace_eligibilities(self, state) -> None:
+    def replace_eligibilities(self, _) -> None:
         pass
 
     def update_eligibilities(self, state) -> None:
