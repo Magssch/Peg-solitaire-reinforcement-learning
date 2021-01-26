@@ -18,9 +18,15 @@ class Shape(Enum):
     Diamond = 1
     Triangle = 2
 
-# move = (coordinates for)
-# action = (starting_index_position, ending_index_position)
-# move = ()
+
+class Action:
+
+    def __init__(self, start_coordinates: Tuple[int, int], direction_vector: Tuple[int, int]):
+        self.start_coordinates = start_coordinates
+        self.direction_vector = direction_vector
+
+    def __hash__(self):
+        return hash(self.start_coordinates) ^ hash(self.direction_vector)
 
 
 class SimulatedWorld:
@@ -111,16 +117,16 @@ class SimulatedWorld:
     def get_coordinates_for_adjacent_cell(start_coordinates: Tuple[int, int], direction_vector: Tuple[int, int]) -> Tuple[int, int]:
         return start_coordinates[0] + direction_vector[0], start_coordinates[1] + direction_vector[1]
 
-    def __get_legal_moves_for_position(self, coordinates: Tuple[int, int]) -> Tuple[int]:
+    def __get_legal_moves_for_position(self, coordinates: Tuple[int, int]) -> Tuple[int, int]:
         legal_moves = []
         for move in self.__edges:
             if self.__is_legal_move(coordinates, move):
                 legal_moves.append(move)
         return tuple(legal_moves)
 
-    def __get_all_legal_actions(self) -> Tuple[Tuple[int, int]]:
+    def __get_all_legal_actions(self) -> Tuple(Action):
         legal_moves = []
         for i in self.__board:
             for j in self.__board:
-                legal_moves.append(((i, j), self.__get_legal_moves_for_position((i, j))))
+                legal_moves.append(Action((i, j), self.__get_legal_moves_for_position((i, j))))
         return tuple(legal_moves)
