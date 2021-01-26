@@ -2,16 +2,20 @@
   "episodes": 500,
   "visualize_games": false,
   "frame_delay": 0.3,
+
   "board_type": 1,
   "size": 5,
   "holes": [],
+
   "actor_learning_rate": 0.1,
   "actor_discount_factor": 0.9,
   "actor_trace_decay": 0.8,
   "actor_epsilon": 0.5,
   "actor_epsilon_decay": 0.9,
+
+  "use_table_critic": true,
   "critic_learning_rate": 0.001,
   "critic_discount_factor": 0.9,
   "critic_trace_decay": 0.8,
-  "critic_nn_dimensions": [25, 20, 30, 5, 1]
+  "critic_nn_dimensions": [15, 20, 30, 5, 1]
 }

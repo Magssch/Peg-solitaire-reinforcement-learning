@@ -9,6 +9,7 @@ def get_parameters():
         pivotal_parameters = json.load(f)
         for attr, value in pivotal_parameters.items():
             setattr(parameters, attr, value)
+
         if parameters.board_type == 1:
             parameters.board_type = Shape.Diamond
         else:
@@ -29,13 +30,14 @@ class Parameters:
 
     # Actor
     actor_learning_rate: float
-    actor_trace_decay: float
     actor_discount_factor: float
+    actor_trace_decay: float
     actor_epsilon: float
     actor_epsilon_decay: float
 
     # Critic
+    use_table_critic: bool
     critic_learning_rate: float
-    critic_trace_decay: float
     critic_discount_factor: float
+    critic_trace_decay: float
     critic_nn_dimensions: tuple

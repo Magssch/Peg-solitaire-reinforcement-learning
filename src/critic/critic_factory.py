@@ -8,12 +8,13 @@ class CriticFactory:
     @classmethod
     def get_critic(
         cls,
+        use_table_critic: bool,
         critic_learning_rate: float,
         critic_discount_factor: float,
         critic_trace_decay: float,
-        critic_nn_dimensions: tuple = None,
+        critic_nn_dimensions: tuple,
     ) -> Critic:
-        if critic_nn_dimensions is None:
+        if use_table_critic:
             return TableCritic(
                 critic_learning_rate,
                 critic_discount_factor,

@@ -15,6 +15,7 @@ class ReinforcementLearner:
             parameters.actor_epsilon_decay,
         )
         self.critic = CriticFactory.get_critic(
+            parameters.use_table_critic,
             parameters.critic_learning_rate,
             parameters.critic_discount_factor,
             parameters.critic_trace_decay,
