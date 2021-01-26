@@ -17,7 +17,7 @@ class Actor:
         self.__trace_decay = trace_decay  # lambda
 
         self.__epsilon = epsilon
-        self.__epsilon_decay = epsilon
+        self.__epsilon_decay = epsilon_decay
 
         self.__policy = defaultdict(lambda: defaultdict(float))  # Pi(s, a)
         self.reset_eligibilities()
