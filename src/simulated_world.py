@@ -67,16 +67,27 @@ class SimulatedWorld:
             landing_cell_coordinates = self.__get_next_node(
                 removed_peg_coordinates, direction_vector)
             self.__board[landing_cell_coordinates] = 1
-        return self.__board, 0, False
+        return self.__grid_to_vector(), self.__calculate_reward(), self.__is_final_state(), self.__get_all_legal_actions()
 
-    def draw_board(self) -> None:
+    def __draw_board(self) -> None:
         pass
 
-    def pegs_remaining(self) -> int:
+    def __pegs_remaining(self) -> int:
         return (self.__board == 1).sum()
 
-    def is_final_state(self) -> bool:
-        return self.pegs_remaining() == 1
+    def __game_over(self) -> bool:
+        return len(self.__get_all_legal_actions()) < 1
+
+    def __is_final_state(self) -> bool:
+        return self.pegs_remaining() == 1 or self.__game_over()
+
+    def __calculate_reward(self) -> int:
+        if self.__game_over():
+            return -1
+        elif self.pegs_remaining() == 1:
+            return 1
+        else:
+            return 0
 
     def __is_legal_move(self, coordinates: Tuple[int, int], move: Tuple[int, int]) -> bool:
         return self.__move_is_inside_board(coordinates, move) and \
@@ -93,8 +104,8 @@ class SimulatedWorld:
         return (adjacent_node[0] > 0 and adjacent_node[0] < self.__size and not self.__board(adjacent_node) is None) \
             and (adjacent_node[1] > 0 and adjacent_node[1] < self.__size and not self.__board(adjacent_node) is None)
 
-    def grid_to_vector(self):
-        return [cell for vector in self.__board for cell in vector]
+    def __grid_to_vector(self):
+        return tuple([cell for vector in self.__board for cell in vector])
 
     @staticmethod
     def get_coordinates_for_adjacent_cell(start_coordinates: Tuple[int, int], direction_vector: Tuple[int, int]) -> Tuple[int, int]:
@@ -107,7 +118,7 @@ class SimulatedWorld:
                 legal_moves.append(move)
         return tuple(legal_moves)
 
-    def get_all_legal_actions(self) -> Tuple[Tuple[int, int]]:
+    def __get_all_legal_actions(self) -> Tuple[Tuple[int, int]]:
         legal_moves = []
         for i in self.__board:
             for j in self.__board:
