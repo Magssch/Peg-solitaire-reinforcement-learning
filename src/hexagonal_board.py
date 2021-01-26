@@ -32,10 +32,10 @@ class HexagonalBoard(ABC):
         if self.__board_type == Shape.Triangle:
             self.__board = np.triu(np.full((self.__size, self.__size), None), 1)
 
-    def reset(self) -> None:
+    def reset_game(self) -> None:
         self.__set_initial_state()
 
-    def step(self, action: Tuple[Tuple[int, int], Tuple[int, int]]) -> Tuple[int]:
+    def make_move(self, action: Action) -> None:
         start_coordinates, direction_vector = action
         if self.__is_legal_move(start_coordinates, direction_vector):
             self.__board[start_coordinates] = 0
@@ -45,27 +45,15 @@ class HexagonalBoard(ABC):
             landing_cell_coordinates = self.__get_next_node(
                 removed_peg_coordinates, direction_vector)
             self.__board[landing_cell_coordinates] = 1
-        return self.__grid_to_vector(), self.__calculate_reward(), self.__is_final_state(), self.__get_all_legal_actions()
 
-    def __draw_board(self) -> None:
+    def draw_board(self) -> None:
         pass
 
-    def __pegs_remaining(self) -> int:
+    def pegs_remaining(self) -> int:
         return (self.__board == 1).sum()
 
-    def __game_over(self) -> bool:
+    def game_over(self) -> bool:
         return len(self.__get_all_legal_actions()) < 1
-
-    def __is_final_state(self) -> bool:
-        return self.pegs_remaining() == 1 or self.__game_over()
-
-    def __calculate_reward(self) -> int:
-        if self.__game_over():
-            return -1
-        elif self.pegs_remaining() == 1:
-            return 1
-        else:
-            return 0
 
     def __is_legal_move(self, coordinates: Tuple[int, int], move: Tuple[int, int]) -> bool:
         return self.__move_is_inside_board(coordinates, move) and \
@@ -82,9 +70,6 @@ class HexagonalBoard(ABC):
         return (adjacent_node[0] > 0 and adjacent_node[0] < self.__size and not self.__board(adjacent_node) is None) \
             and (adjacent_node[1] > 0 and adjacent_node[1] < self.__size and not self.__board(adjacent_node) is None)
 
-    def __grid_to_vector(self):
-        return tuple([cell for vector in self.__board for cell in vector])
-
     @staticmethod
     def get_coordinates_for_adjacent_cell(start_coordinates: Tuple[int, int], direction_vector: Tuple[int, int]) -> Tuple[int, int]:
         return start_coordinates[0] + direction_vector[0], start_coordinates[1] + direction_vector[1]
@@ -96,7 +81,7 @@ class HexagonalBoard(ABC):
                 legal_moves.append(move)
         return tuple(legal_moves)
 
-    def __get_all_legal_actions(self) -> Tuple(Action):
+    def get_all_legal_actions(self) -> Tuple(Action):
         legal_moves = []
         for i in self.__board:
             for j in self.__board:
