@@ -63,12 +63,10 @@ class SimulatedWorld:
             self.__board[start_coordinates] = 0
             removed_peg_coordinates = self.__get_next_node(
                 start_coordinates, direction_vector)
-            self.__board[self.__index_from_coordinates(
-                removed_peg_coordinates)] = 0
+            self.__board[removed_peg_coordinates] = 0
             landing_cell_coordinates = self.__get_next_node(
                 removed_peg_coordinates, direction_vector)
-            self.__board[self.__index_from_coordinates(
-                landing_cell_coordinates)] = 1
+            self.__board[landing_cell_coordinates] = 1
         return self.__board, 0, False
 
     def draw_board(self) -> None:
