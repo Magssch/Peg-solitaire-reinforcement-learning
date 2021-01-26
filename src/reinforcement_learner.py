@@ -47,8 +47,7 @@ class ReinforcementLearner:
 
                 td_error = self.critic.td_error(state, next_state, reward)
 
-                self.critic.update_values(state, next_state, reward)
-                self.critic.update_eligibilities()
+                self.critic.update(state, next_state, reward)
 
                 self.actor.update_policy(td_error)
                 self.actor.update_eligibilities()

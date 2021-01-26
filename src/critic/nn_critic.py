@@ -50,16 +50,16 @@ class NNCritic(Critic):
     def get_value(self, state) -> float:
         return np.squeeze(self.__values(np.array([state, ])))
 
-    def update_values(self, current_state, successor_state, reward) -> None:
+    def update(self, current_state, successor_state, reward) -> None:
         successor_state = tf.convert_to_tensor([successor_state], dtype=tf.float32)
         current_state = tf.convert_to_tensor([current_state], dtype=tf.float32)
         reward = tf.convert_to_tensor(reward, dtype=tf.float32)
 
         with tf.GradientTape(persistent=True) as tape:
-            target = tf.add(reward, tf.multiply(self._discount_factor, self.__values(successor_state)))
+            target = reward + tf.multiply(self._discount_factor, self.__values(successor_state))
             prediction = tf.convert_to_tensor([self.__values(current_state)])
             loss = self.__values.compiled_loss(target, prediction)
-            td_error = tf.subtract(target, prediction)
+            td_error = target - prediction
 
         gradients = tape.gradient(loss, self.__values.trainable_weights)
         gradients = self.__modify_gradients(gradients, td_error)
@@ -67,7 +67,8 @@ class NNCritic(Critic):
 
     def __modify_gradients(self, gradients, td_error):
         for gradient, eligibility in zip(gradients, self.__eligibilities):
-            gradient = tf.multiply(td_error, tf.add(eligibility, gradient))
+            eligibility = self._discount_factor * self._trace_decay * eligibility + gradient
+            gradient += td_error * eligibility
         return gradients
 
     def reset_eligibilities(self) -> None:
@@ -78,6 +79,3 @@ class NNCritic(Critic):
     # Not used by NNCritic
     def replace_eligibilities(self, _) -> None:
         pass
-
-    def update_eligibilities(self) -> None:
-        self.__eligibilities = [self._discount_factor * self._trace_decay * e for e in self.__eligibilities]
