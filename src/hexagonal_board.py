@@ -21,7 +21,7 @@ class Shape(enum):
 
 class HexagonalBoard(ABC):
 
-    def __init__(self, board_type: Shape, size: int, edges: Tuple[Tuple[int, int]], holes: list[int]):
+    def __init__(self, board_type: Shape, size: int, holes: Tuple[int]):
         self.__board_type = board_type
         self.__size = size
         self.__board = None
@@ -36,14 +36,11 @@ class HexagonalBoard(ABC):
         self.__set_initial_state()
 
     def make_move(self, action: Action) -> None:
-        start_coordinates, direction_vector = action
-        if self.__is_legal_move(start_coordinates, direction_vector):
-            self.__board[start_coordinates] = 0
-            removed_peg_coordinates = self.__get_next_node(
-                start_coordinates, direction_vector)
+        if self.__is_legal_action(action):
+            self.__board[action.start_coordinates] = 0
+            removed_peg_coordinates = HexagonalBoard.get_coordinates_for_adjacent_cell(action)
             self.__board[removed_peg_coordinates] = 0
-            landing_cell_coordinates = self.__get_next_node(
-                removed_peg_coordinates, direction_vector)
+            landing_cell_coordinates = HexagonalBoard.get_coordinates_for_adjacent_cell(Action(removed_peg_coordinates, action.direction_vector))
             self.__board[landing_cell_coordinates] = 1
 
     def draw_board(self) -> None:
@@ -55,37 +52,37 @@ class HexagonalBoard(ABC):
     def game_over(self) -> bool:
         return len(self.__get_all_legal_actions()) < 1
 
-    def __is_legal_move(self, coordinates: Tuple[int, int], move: Tuple[int, int]) -> bool:
-        return self.__move_is_inside_board(coordinates, move) and \
-            self.__cell_contains_peg((coordinates[0] + move[0], coordinates[1] + move[1])) and \
-            self.__move_is_inside_board(coordinates, (move[0] * 2, move[1] * 2)) and \
+    def __is_legal_action(self, action: Action) -> bool:
+        return self.__action_is_inside_board(action) and \
+            self.__cell_contains_peg((action.start_coordinates[0] + action.direction_vector[0], action.start_coordinates[1] + action.direction_vector[1])) and \
+            self.__action_is_inside_board(Action(action.start_coordinates, (action.direction_vector[0] * 2, action.direction_vector[1] * 2))) and \
             not self.__cell_contains_peg(
-                (coordinates[0] + (move[0] * 2), coordinates[1] + (move[1] * 2)))
+                (action.start_coordinates[0] + (action.direction_vector[0] * 2), action.start_coordinates[1] + (action.direction_vector[1] * 2)))
 
     def __cell_contains_peg(self, coordinates: Tuple[int, int]) -> bool:
         return self.__board[coordinates] == 1
 
-    def __move_is_inside_board(self, coordinates: Tuple[int, int], move: Tuple[int, int]) -> bool:
-        adjacent_node = HexagonalBoard.get_coordinates_for_adjacent_cell(coordinates, move)
+    def __action_is_inside_board(self, action: Action) -> bool:
+        adjacent_node = HexagonalBoard.get_coordinates_for_adjacent_cell(action)
         return (adjacent_node[0] > 0 and adjacent_node[0] < self.__size and not self.__board(adjacent_node) is None) \
             and (adjacent_node[1] > 0 and adjacent_node[1] < self.__size and not self.__board(adjacent_node) is None)
 
     @staticmethod
-    def get_coordinates_for_adjacent_cell(start_coordinates: Tuple[int, int], direction_vector: Tuple[int, int]) -> Tuple[int, int]:
-        return start_coordinates[0] + direction_vector[0], start_coordinates[1] + direction_vector[1]
+    def get_coordinates_for_adjacent_cell(action: Action) -> Tuple[int, int]:
+        return action.start_coordinates[0] + action.direction_vector[0], action.start_coordinates[1] + action.direction_vector[1]
 
-    def __get_legal_moves_for_position(self, coordinates: Tuple[int, int]) -> Tuple[int, int]:
-        legal_moves = []
-        for move in self.__edges:
-            if self.__is_legal_move(coordinates, move):
-                legal_moves.append(move)
-        return tuple(legal_moves)
+    def __get_legal_actions_for_coordinates(self, coordinates: Tuple[int, int]) -> Action:
+        legal_actions = []
+        for direction_vector in self.__edges:
+            if self.__is_legal_action(coordinates, direction_vector):
+                legal_actions.append(Action(coordinates, direction_vector))
+        return tuple(legal_actions)
 
     def get_all_legal_actions(self) -> Tuple(Action):
         legal_moves = []
         for i in self.__board:
             for j in self.__board:
-                legal_moves.append(Action((i, j), self.__get_legal_moves_for_position((i, j))))
+                legal_moves.append(self.__get_legal_actions_for_coordinates((i, j)))
         return tuple(legal_moves)
 
 
