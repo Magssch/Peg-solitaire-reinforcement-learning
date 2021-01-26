@@ -5,16 +5,29 @@ from simulated_world import SimulatedWorld
 
 
 class ReinforcementLearner:
+    """
+    Reinforcement Learner agent using the Actor-Critic architecture
+
+    ...
+
+    Attributes
+    ----------
+
+    Methods
+    -------
+    run():
+        Runs all episodes with pivotal parameters
+    """
 
     def __init__(self, parameters: Parameters):
-        self.actor = Actor(
+        self.__actor = Actor(
             parameters.actor_learning_rate,
             parameters.actor_discount_factor,
             parameters.actor_trace_decay,
             parameters.actor_epsilon,
             parameters.actor_epsilon_decay,
         )
-        self.critic = CriticFactory.get_critic(
+        self.__critic = CriticFactory.get_critic(
             parameters.use_table_critic,
             parameters.critic_learning_rate,
             parameters.critic_discount_factor,
@@ -26,29 +39,30 @@ class ReinforcementLearner:
         self.episodes = parameters.episodes
 
     def run(self) -> None:
+        """Runs all episodes with pivotal parameters"""
         episode = 0
         while episode < self.episodes:
 
-            self.actor.reset_eligibilities()
-            self.critic.reset_eligibilities()
+            self.__actor.reset_eligibilities()
+            self.__critic.reset_eligibilities()
 
             state, possible_actions = self.simulated_world.reset()
-            action = self.actor.choose_action(state, possible_actions)
+            action = self.__actor.choose_action(state, possible_actions)
 
             done = False
 
             while not done:
 
                 next_state, reward, done, possible_actions = self.simulated_world.step(action)
-                next_action = self.actor.choose_action(next_state, possible_actions)
+                next_action = self.__actor.choose_action(next_state, possible_actions)
 
-                self.actor.replace_eligibilities(state, action)
-                self.critic.replace_eligibilities(state)
+                self.__actor.replace_eligibilities(state, action)
+                self.__critic.replace_eligibilities(state)
 
-                td_error = self.critic.td_error(state, next_state, reward)
+                td_error = self.__critic.td_error(state, next_state, reward)
 
-                self.critic.update(state, next_state, reward)
-                self.actor.update(td_error)
+                self.__critic.update(state, next_state, reward)
+                self.__actor.update(td_error)
 
                 state, action = next_state, next_action
 

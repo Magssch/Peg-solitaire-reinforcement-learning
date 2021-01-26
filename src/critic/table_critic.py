@@ -5,6 +5,24 @@ from .critic import Critic
 
 
 class TableCritic(Critic):
+    """
+    Table based Critic
+
+    ...
+
+    Attributes
+    ----------
+
+    Methods
+    -------
+    update(current_state, successor_state, reward):
+        Updates value function, then eligibilities for each state in the episode.
+    reset_eligibilities():
+        Sets all eligibilities to 0.0
+    replace_eligibilities(state, action):
+        Replaces trace e(state) with 1.0
+    """
+    __max_initial_value = 0.2
 
     def __init__(
         self,
@@ -17,13 +35,15 @@ class TableCritic(Critic):
             discount_factor,  # gamma
             trace_decay,  # lambda
         )
-        self.__values = defaultdict(lambda: random.random() * 0.2)  # V(s)
+        self.__values = defaultdict(lambda: random.random() * TableCritic.__max_initial_value)  # V(s)
         self.reset_eligibilities()
 
-    def get_value(self, state) -> float:
+    def _get_value(self, state) -> float:
+        """Value function V(s)"""
         return self.__values[state]
 
     def update(self, current_state, successor_state, reward) -> None:
+        """Updates value function, then eligibilities for each state in the episode."""
         self.__update_values(current_state, successor_state, reward)
         self.__update_eligibilities()
 
@@ -37,7 +57,9 @@ class TableCritic(Critic):
             self.__eligibilities[state] *= self._discount_factor * self._trace_decay
 
     def reset_eligibilities(self) -> None:
+        """Sets all eligibilities to 0.0"""
         self.__eligibilities = defaultdict(float)
 
     def replace_eligibilities(self, state) -> None:
+        """Replaces trace e(state) with 1.0"""
         self.__eligibilities[state] = 1

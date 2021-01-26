@@ -3,6 +3,27 @@ from collections import defaultdict
 
 
 class Actor:
+    """
+    Table-based Actor using the epsilon-greedy strategy
+
+    ...
+
+    Attributes
+    ----------
+
+    Methods
+    -------
+    choose_action(state, possible_actions):
+        Epsilon-greedy action selection function.
+    update(td_error):
+        Updates the policy function, then eligibilities for each state-action
+        pair in the episode based on the td_error from the critic.
+        Also decays the epsilon based on the epsilon decay rate.
+    reset_eligibilities():
+        Sets all eligibilities to 0.0
+    replace_eligibilities(state, action):
+        Replaces trace e(state) with 1.0
+    """
 
     def __init__(
         self,
@@ -23,7 +44,7 @@ class Actor:
         self.reset_eligibilities()
 
     def choose_action(self, state, possible_actions):
-        """Epsilon-greedy action selection"""
+        """Epsilon-greedy action selection function."""
         def choose_uniform(possible_actions):
             return random.choice(possible_actions)
 
@@ -35,6 +56,11 @@ class Actor:
         return choose_greedy(state, possible_actions)
 
     def update(self, td_error):
+        """
+        Updates the policy function, then eligibilities for each state-action
+        pair in the episode based on the td_error from the critic.
+        Also decays the epsilon based on the epsilon decay rate.
+        """
         self.__update_policy(td_error)
         self.__update_eligibilities()
 
@@ -50,7 +76,9 @@ class Actor:
                 self.__eligibilities[state][action] *= self.__discount_factor * self.__trace_decay
 
     def reset_eligibilities(self) -> None:
+        """Sets all eligibilities to 0.0"""
         self.__eligibilities = defaultdict(lambda: defaultdict(float))
 
     def replace_eligibilities(self, state, action) -> None:
-        self.__eligibilities[state][action] = 1
+        """Replaces trace e(state) with 1.0"""
+        self.__eligibilities[state][action] = 1.0

@@ -14,10 +14,11 @@ class Critic(ABC):
         self._trace_decay = trace_decay  # lambda
 
     def td_error(self, current_state, successor_state, reward) -> float:
-        return reward + self._discount_factor * self.get_value(successor_state) - self.get_value(current_state)
+        """Temporal difference (TD) error. Same as lowercase delta"""
+        return reward + self._discount_factor * self._get_value(successor_state) - self._get_value(current_state)
 
     @abstractmethod
-    def get_value(self, state) -> float:
+    def _get_value(self, state) -> float:
         raise NotImplementedError
 
     @abstractmethod

@@ -1,6 +1,6 @@
 import numpy as np
 import tensorflow as tf
-from keras import backend as K
+from keras import backend as K  # noqa
 from keras.layers import Dense, Input
 from keras.models import Sequential
 from keras.optimizers import Adam
@@ -9,6 +9,23 @@ from .critic import Critic
 
 
 class NNCritic(Critic):
+    """
+    Neural network based Critic
+
+    ...
+
+    Attributes
+    ----------
+
+    Methods
+    -------
+    update(current_state, successor_state, reward):
+        Updates eligibilities, then the value function.
+    reset_eligibilities():
+        Sets all eligibilities to 0.0
+    replace_eligibilities(state, action):
+        Not used by NNCritic.
+    """
 
     def __init__(
         self,
@@ -24,11 +41,12 @@ class NNCritic(Critic):
         )
         assert nn_dimensions is not None
         self.__nn_dimensions = nn_dimensions
-        self.__values = self.__build_critic_network(nn_dimensions)  # V(s)
+        self.__values = self.__build_critic_network()  # V(s)
         self.reset_eligibilities()
 
-    def __build_critic_network(self, nn_dimensions: tuple) -> Sequential:
-        input_dim, *hidden_dims, output_dim = nn_dimensions
+    def __build_critic_network(self) -> Sequential:
+        """Builds a neural network model with the provided dimensions and learning rate"""
+        input_dim, *hidden_dims, output_dim = self.__nn_dimensions
 
         assert output_dim == 1
 
@@ -47,10 +65,12 @@ class NNCritic(Critic):
         model.summary()
         return model
 
-    def get_value(self, state) -> float:
+    def _get_value(self, state) -> float:
+        """Value function V(s)"""
         return np.squeeze(self.__values(np.array([state, ])))
 
     def update(self, current_state, successor_state, reward) -> None:
+        """Updates eligibilities, then the value function."""
         successor_state = tf.convert_to_tensor([successor_state], dtype=tf.float32)
         current_state = tf.convert_to_tensor([current_state], dtype=tf.float32)
         reward = tf.convert_to_tensor(reward, dtype=tf.float32)
@@ -72,10 +92,11 @@ class NNCritic(Critic):
         return gradients
 
     def reset_eligibilities(self) -> None:
+        """Sets all eligibilities to 0.0"""
         self.__eligibilities = []
         for weights in self.__values.trainable_weights:
             self.__eligibilities.append(tf.ones(weights.shape))
 
-    # Not used by NNCritic
     def replace_eligibilities(self, _) -> None:
+        """Not used by NNCritic."""
         pass
