@@ -23,6 +23,7 @@ class Actor:
         self.reset_eligibilities()
 
     def choose_action(self, state, possible_actions):
+        """Epsilon-greedy action selection"""
         def choose_uniform(possible_actions):
             return random.choice(possible_actions)
 
@@ -34,6 +35,7 @@ class Actor:
         return choose_greedy(state, possible_actions)
 
     def update_policy(self, td_error) -> None:
+        self.__epsilon *= self.__epsilon_decay
         for state in self.__eligibilities:
             for action, eligibility in self.__eligibilities[state].items():
                 self.__policy[state][action] += self.__learning_rate * td_error * eligibility

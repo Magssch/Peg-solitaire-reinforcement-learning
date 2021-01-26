@@ -29,15 +29,15 @@ class ReinforcementLearner:
             self.actor.reset_eligibilities()
             self.critic.reset_eligibilities()
 
-            state = self.simulated_world.reset()
-            action = self.actor.choose_action(state)
+            state, possible_actions = self.simulated_world.reset()
+            action = self.actor.choose_action(state, possible_actions)
 
             done = False
 
             while not done:
 
-                next_state, reward, done = self.simulated_world.step(action)
-                next_action = self.actor.choose_action(next_state)
+                next_state, reward, done, possible_actions = self.simulated_world.step(action)
+                next_action = self.actor.choose_action(next_state, possible_actions)
 
                 self.actor.replace_eligibilities(state, action)
                 self.critic.replace_eligibilities(state)
