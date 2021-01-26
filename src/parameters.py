@@ -20,6 +20,7 @@ class Parameters:
 
     episodes: int
     visualize_games: bool
+    frame_delay: float
 
     # Simulated World
     board_type: Shape
@@ -31,8 +32,7 @@ class Parameters:
     actor_trace_decay: float
     actor_discount_factor: float
     actor_epsilon: float
-    actor_epsilon_decay_rate: float
-    actor_nn_dimensions: tuple
+    actor_epsilon_decay: float
 
     # Critic
     critic_learning_rate: float

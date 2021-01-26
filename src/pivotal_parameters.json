@@ -1,6 +1,7 @@
 {
   "episodes": 500,
   "visualize_games": false,
+  "frame_delay": 0.3,
   "board_type": 1,
   "size": 5,
   "holes": [],
