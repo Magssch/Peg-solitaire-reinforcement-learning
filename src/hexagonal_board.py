@@ -2,6 +2,8 @@ from abc import ABC
 import enum
 from typing import Tuple
 import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
 
 
 class Action:
@@ -120,3 +122,104 @@ class Triangle(HexagonalBoard):
                 (1, 1),
             ),
         )
+
+
+class DrawBoard(HexagonalBoard):
+    def __init__(self, board_type: Shape, size: int, holes: list(int)):
+        self.graph = nx.Graph()
+        super().__init__(
+            self,
+            board_type,
+            size,
+            holes,
+            board,
+        ),
+    )
+
+    def add_node(self, position):
+        self.graph.add_node(position)
+
+    def add_edge(self, pos1, pos2):
+        self.graph.add_edge(pos1, pos2)
+
+    def get_filled_nodes(self, board):
+        filled_positions = []
+        for i in board:
+            for j in board:
+                if board[i][j] == 1:
+                    filled_positions.append((i,j))
+        return filled_positions
+    
+    def get_empty_nodes(self, board):
+        empty_positions = []
+        for i in board:
+            for j in board:
+                if board[i][j] == 0:
+                    empty_positions.append((i,j))
+        return empty_positions
+
+    def get_legal_positions(self, board):
+        legal_positions = []
+        for i in board:
+            for j in board:
+                if board[i][j] != None:
+                    legal_positions.append((i,j))
+        return legal_positions
+
+
+    
+    def draw_board(self, positions = None, board, board_type, active_nodes = []):
+
+        # List of all node positions currently filled
+        filled_nodes = self.get_filled_nodes()
+        legal_positions = self.get_legal_positions
+
+        # Remove nodes currently active
+        for nodes in active_nodes:
+            filled_nodes.remove(nodes)
+
+        # Creates a Hex Diamon grid
+        if board_type == Diamond:
+            shape = Diamond()
+
+            for i in range(size):
+                for j in range(size):
+                    self.add_node((i,j))
+
+            for pos in legal_positions:
+                for relative_pos in shape.edges:   # USIKKER på hvordan å targete edges i Diamond
+                    neighbor_node = (pos[0] + relative_pos[0], pos[1] + relative_pos[1])
+                    if neighbor_node in legal_positions:
+                        self.add_edge(pos, neighbor_node)
+        
+        # Create a Hex Triangle grid
+        elif board_type == Triangle:
+            shape = Triangle()
+            for i in range(size):
+                for j in range(i + 1):
+                    self.add_node((i,j))
+            
+            for pos in legal_positions:
+                for relative_pos in shape.edges:
+                    neighbor_node = (pos[0] + relative_pos[0], pos[1] + relative_pos[1])
+                    if neighbor_node in legal_positions:
+                        self.add_edge(pos, neighbor_node)
+
+        # Draw the resulting grid
+        nx.draw_networkx_nodes(self.graph, positions, nodelist=self.get_empty_nodes(), node_color='black')
+        nx.draw_networkx_nodes(self.graph, positions, nodelist=filled_nodes, node_color='blue')
+        nx.draw_networkx_nodes(self.graph, positions, nodelist=active_nodes, node_color='green')
+        nx.draw_networkx_edges(self.graph, positions, width=1)
+
+        plt.axis('off')
+        plt.draw()
+        plt.clf()
+        plt.show()
+
+
+        
+
+
+
+
+
