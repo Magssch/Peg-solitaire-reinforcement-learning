@@ -139,8 +139,8 @@ class DrawBoard(HexagonalBoard):
     def add_node(self, position):
         self.graph.add_node(position)
 
-    def add_edge(self, pos1, pos2):
-        self.graph.add_edge(pos1, pos2)
+    def add_edge(self, x, y):
+        self.graph.add_edge(x, y)
 
     def get_filled_nodes(self, board):
         filled_positions = []
@@ -167,7 +167,6 @@ class DrawBoard(HexagonalBoard):
         return legal_positions
 
 
-    
     def draw_board(self, positions = None, board, board_type, active_nodes = []):
 
         # List of all node positions currently filled
@@ -186,11 +185,11 @@ class DrawBoard(HexagonalBoard):
                 for j in range(size):
                     self.add_node((i,j))
 
-            for pos in legal_positions:
-                for relative_pos in shape.edges:   # USIKKER på hvordan å targete edges i Diamond
-                    neighbor_node = (pos[0] + relative_pos[0], pos[1] + relative_pos[1])
+            for position in legal_positions:
+                for neighbor_position in shape.edges:   # USIKKER på hvordan å targete edges i Diamond
+                    neighbor_node = (position[0] + neighbor_position[0], position[1] + neighbor_position[1])
                     if neighbor_node in legal_positions:
-                        self.add_edge(pos, neighbor_node)
+                        self.add_edge(position, neighbor_node)
         
         # Create a Hex Triangle grid
         elif board_type == Triangle:
@@ -199,11 +198,11 @@ class DrawBoard(HexagonalBoard):
                 for j in range(i + 1):
                     self.add_node((i,j))
             
-            for pos in legal_positions:
-                for relative_pos in shape.edges:
-                    neighbor_node = (pos[0] + relative_pos[0], pos[1] + relative_pos[1])
+            for position in legal_positions:
+                for neighbor_position in shape.edges:
+                    neighbor_node = (position[0] + neighbor_position[0], position[1] + neighbor_position[1])
                     if neighbor_node in legal_positions:
-                        self.add_edge(pos, neighbor_node)
+                        self.add_edge(position, neighbor_node)
 
         # Draw the resulting grid
         nx.draw_networkx_nodes(self.graph, positions, nodelist=self.get_empty_nodes(), node_color='black')
