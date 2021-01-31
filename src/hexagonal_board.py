@@ -126,7 +126,7 @@ class Triangle(HexagonalBoard):
 
 class DrawBoard(HexagonalBoard):
     def __init__(self, board_type: Shape, size: int, holes: list(int)):
-        self.graph = nx.Graph()
+        self.G = nx.Graph()
         super().__init__(
             self,
             board_type,
@@ -137,10 +137,10 @@ class DrawBoard(HexagonalBoard):
     )
 
     def add_node(self, position):
-        self.graph.add_node(position)
+        self.G.add_node(position)
 
     def add_edge(self, x, y):
-        self.graph.add_edge(x, y)
+        self.G.add_edge(x, y)
 
     def get_filled_nodes(self, board):
         filled_positions = []
