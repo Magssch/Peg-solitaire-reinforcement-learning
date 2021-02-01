@@ -1,9 +1,7 @@
 from abc import ABC
-import enum
+from enum import Enum
 from typing import Tuple
 import numpy as np
-import networkx as nx
-import matplotlib.pyplot as plt
 
 
 class Action:
@@ -16,7 +14,7 @@ class Action:
         return hash(self.start_coordinates) ^ hash(self.direction_vector)
 
 
-class Shape(enum):
+class Shape(Enum):
     Diamond = 1
     Triangle = 2
 
@@ -26,6 +24,7 @@ class HexagonalBoard(ABC):
     def __init__(self, board_type: Shape, size: int, holes: Tuple[int]):
         self.__board_type = board_type
         self.__size = size
+        self.__holes = holes
         self.__board = None
         self.__set_initial_state()
 
@@ -40,9 +39,11 @@ class HexagonalBoard(ABC):
     def make_move(self, action: Action) -> None:
         if self.__is_legal_action(action):
             self.__board[action.start_coordinates] = 0
-            removed_peg_coordinates = HexagonalBoard.get_coordinates_for_adjacent_cell(action)
+            removed_peg_coordinates = HexagonalBoard.get_coordinates_for_adjacent_cell(
+                action)
             self.__board[removed_peg_coordinates] = 0
-            landing_cell_coordinates = HexagonalBoard.get_coordinates_for_adjacent_cell(Action(removed_peg_coordinates, action.direction_vector))
+            landing_cell_coordinates = HexagonalBoard.get_coordinates_for_adjacent_cell(
+                Action(removed_peg_coordinates, action.direction_vector))
             self.__board[landing_cell_coordinates] = 1
 
     def draw_board(self) -> None:
@@ -80,145 +81,44 @@ class HexagonalBoard(ABC):
                 legal_actions.append(Action(coordinates, direction_vector))
         return tuple(legal_actions)
 
-    def get_all_legal_actions(self) -> Tuple(Action):
+    def get_all_legal_actions(self) -> Tuple[Action]:
         legal_moves = []
         for i in self.__board:
             for j in self.__board:
-                legal_moves.append(self.__get_legal_actions_for_coordinates((i, j)))
+                legal_moves.append(
+                    self.__get_legal_actions_for_coordinates((i, j)))
         return tuple(legal_moves)
 
 
 class Diamond(HexagonalBoard):
-    def __init__(self, board_type: Shape, size: int, holes: list[int]):
+    def __init__(self, board_type: Shape, size: int, holes: Tuple[int]):
         super().__init__(
-            self,
             board_type,
             size,
             holes,
-            edges=(
-                (0, -1),
-                (1, -1),
-                (1, 0),
-                (0, 1),
-                (-1, 1),
-                (-1, 0),
-            ),
         )
+        self.edges = (
+            (0, -1),
+            (1, -1),
+            (1, 0),
+            (0, 1),
+            (-1, 1),
+            (-1, 0),
+        ),
 
 
 class Triangle(HexagonalBoard):
-    def __init__(self, board_type: Shape, size: int, holes: list[int]):
+    def __init__(self, board_type: Shape, size: int, holes: Tuple[int]):
         super().__init__(
-            self,
             board_type,
             size,
             holes,
-            edges=(
-                (0, -1),
-                (-1, -1),
-                (1, 0),
-                (0, 1),
-                (-1, 0),
-                (1, 1),
-            ),
         )
-
-
-class DrawBoard(HexagonalBoard):
-    def __init__(self, board_type: Shape, size: int, holes: list(int)):
-        self.G = nx.Graph()
-        super().__init__(
-            self,
-            board_type,
-            size,
-            holes,
-            board,
+        self.edges = (
+            (0, -1),
+            (-1, -1),
+            (1, 0),
+            (0, 1),
+            (-1, 0),
+            (1, 1),
         ),
-    )
-
-    def add_node(self, position):
-        self.G.add_node(position)
-
-    def add_edge(self, x, y):
-        self.G.add_edge(x, y)
-
-    def get_filled_nodes(self, board):
-        filled_positions = []
-        for i in board:
-            for j in board:
-                if board[i][j] == 1:
-                    filled_positions.append((i,j))
-        return filled_positions
-    
-    def get_empty_nodes(self, board):
-        empty_positions = []
-        for i in board:
-            for j in board:
-                if board[i][j] == 0:
-                    empty_positions.append((i,j))
-        return empty_positions
-
-    def get_legal_positions(self, board):
-        legal_positions = []
-        for i in board:
-            for j in board:
-                if board[i][j] != None:
-                    legal_positions.append((i,j))
-        return legal_positions
-
-
-    def draw_board(self, positions = None, board, board_type, active_nodes = []):
-
-        # List of all node positions currently filled
-        filled_nodes = self.get_filled_nodes()
-        legal_positions = self.get_legal_positions
-
-        # Remove nodes currently active
-        for nodes in active_nodes:
-            filled_nodes.remove(nodes)
-
-        # Creates a Hex Diamon grid
-        if board_type == Diamond:
-            shape = Diamond()
-
-            for i in range(size):
-                for j in range(size):
-                    self.add_node((i,j))
-
-            for position in legal_positions:
-                for neighbor_position in shape.edges:   # USIKKER på hvordan å targete edges i Diamond
-                    neighbor_node = (position[0] + neighbor_position[0], position[1] + neighbor_position[1])
-                    if neighbor_node in legal_positions:
-                        self.add_edge(position, neighbor_node)
-        
-        # Create a Hex Triangle grid
-        elif board_type == Triangle:
-            shape = Triangle()
-            for i in range(size):
-                for j in range(i + 1):
-                    self.add_node((i,j))
-            
-            for position in legal_positions:
-                for neighbor_position in shape.edges:
-                    neighbor_node = (position[0] + neighbor_position[0], position[1] + neighbor_position[1])
-                    if neighbor_node in legal_positions:
-                        self.add_edge(position, neighbor_node)
-
-        # Draw the resulting grid
-        nx.draw_networkx_nodes(self.graph, positions, nodelist=self.get_empty_nodes(), node_color='black')
-        nx.draw_networkx_nodes(self.graph, positions, nodelist=filled_nodes, node_color='blue')
-        nx.draw_networkx_nodes(self.graph, positions, nodelist=active_nodes, node_color='green')
-        nx.draw_networkx_edges(self.graph, positions, width=1)
-
-        plt.axis('off')
-        plt.draw()
-        plt.clf()
-        plt.show()
-
-
-        
-
-
-
-
-
