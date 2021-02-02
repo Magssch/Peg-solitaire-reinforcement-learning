@@ -4,21 +4,25 @@ from typing import Tuple
 from data_classes import Shape
 
 
-def get_parameters():
-    parameters = Parameters()
-    with open('src/pivotal_parameters.json', 'r') as f:
-        pivotal_parameters = json.load(f)
-        for attr, value in pivotal_parameters.items():
-            setattr(parameters, attr, value)
-
-        if parameters.board_type == 1:
-            parameters.board_type = Shape.Diamond
-        else:
-            parameters.board_type = Shape.Triangle
-    return parameters
-
-
 class Parameters:
+
+    __is_init = False
+
+    @classmethod
+    def get_parameters(cls):
+        if cls.__is_init:
+            return cls
+        with open('src/pivotal_parameters.json', 'r') as f:
+            pivotal_parameters = json.load(f)
+            for attr, value in pivotal_parameters.items():
+                setattr(cls, attr, value)
+
+            if cls.board_type == 1:
+                cls.board_type = Shape.Diamond
+            else:
+                cls.board_type = Shape.Triangle
+        cls.__is_init = True
+        return cls
 
     episodes: int
     visualize_games: bool
