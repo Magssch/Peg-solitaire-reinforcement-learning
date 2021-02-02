@@ -10,7 +10,9 @@
 
 from typing import Tuple
 
-from hexagonal_board import Action, Diamond, Shape, Triangle
+from data_classes import Action, Shape
+from hexagonal_board import Diamond, Triangle
+from visualize import Visualize
 
 
 class SimulatedWorld:
@@ -23,6 +25,7 @@ class SimulatedWorld:
 
     def step(self, action: Action) -> Tuple[int]:
         self.__game_board.make_move(action)
+        Visualize.draw_board(self.__game_board, )
         return self.__grid_to_vector(), self.__calculate_reward(), self.__is_final_state(), self.__game_board.get_all_legal_actions()
 
     def reset(self) -> None:
