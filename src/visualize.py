@@ -32,7 +32,7 @@ class Visualize:
         empty_positions = []
         for i in range(board.size):
             for j in range(board.size):
-                if board[i][j] == 0:
+                if board[i][j] == 2:
                     empty_positions.append((i, j))
         return empty_positions
 
@@ -41,7 +41,7 @@ class Visualize:
         legal_positions = []
         for i in range(board.size):
             for j in range(board.size):
-                if board[i][j] is None:
+                if bool(board[i][j]):
                     legal_positions.append((i, j))
         return legal_positions
 
