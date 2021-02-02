@@ -1,6 +1,6 @@
 import json
 
-from simulated_world import Shape
+from data_classes import Shape
 
 
 def get_parameters():

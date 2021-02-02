@@ -13,6 +13,7 @@ class HexagonalBoard(ABC):
         self.__size = size
         self.__holes = holes
         self.__board = None
+        self._edges = []
         self.__set_initial_state()
 
     def __set_initial_state(self) -> None:
@@ -29,9 +30,6 @@ class HexagonalBoard(ABC):
             self.__board[action.start_coordinates] = 0
             self.__board[action.adjacent_coordinates] = 0
             self.__board[action.landing_coordinates] = 1
-
-    def draw_board(self) -> None:
-        pass
 
     def pegs_remaining(self) -> int:
         return (self.__board == 1).sum()
@@ -56,7 +54,7 @@ class HexagonalBoard(ABC):
 
     def __get_legal_actions_for_coordinates(self, coordinates: Tuple[int, int]) -> Action:
         legal_actions = []
-        for direction_vector in self.__edges:
+        for direction_vector in self._edges:
             if self.__is_legal_action(coordinates, direction_vector):
                 legal_actions.append(Action(coordinates, direction_vector))
         return tuple(legal_actions)
@@ -77,7 +75,7 @@ class Diamond(HexagonalBoard):
             size,
             holes,
         )
-        self.edges = (
+        self._edges = (
             (0, -1),
             (1, -1),
             (1, 0),
@@ -94,7 +92,7 @@ class Triangle(HexagonalBoard):
             size,
             holes,
         )
-        self.edges = (
+        self._edges = (
             (0, -1),
             (-1, -1),
             (1, 0),
