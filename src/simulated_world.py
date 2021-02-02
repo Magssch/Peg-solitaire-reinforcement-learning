@@ -10,10 +10,13 @@ class SimulatedWorld:
 
     def __init__(self):
         parameters = get_parameters()
+        self.__board_type = parameters.board_type
         if parameters.board_type == Shape.Diamond:
-            self.__game_board = Diamond(parameters.board_type, parameters.size, parameters.holes)
+            self.__game_board = Diamond(
+                parameters.board_type, parameters.size, parameters.holes)
         else:
-            self.__game_board = Triangle(parameters.board_type, parameters.size, parameters.holes)
+            self.__game_board = Triangle(
+                parameters.board_type, parameters.size, parameters.holes)
         self.__frame_delay = parameters.frame_delay
         self.__peg_history = []
 
@@ -30,11 +33,10 @@ class SimulatedWorld:
             return 0
 
     def __grid_to_vector(self):
-        return tuple([cell for vector in self.__game_board.get_board() for cell in vector])
+        return tuple(self.__game_board.get_board().flatten())
 
     def step(self, action: Action) -> Tuple[Tuple[int], int, bool, Tuple[Action]]:
         self.__game_board.make_move(action)
-        Visualize.draw_board(self.__game_board, action.positions, self.__frame_delay)
         return self.__grid_to_vector(), self.__calculate_reward(), self.__is_final_state(), self.__game_board.get_all_legal_actions()
 
     def reset(self) -> Tuple[Tuple[int], Tuple[Action]]:
