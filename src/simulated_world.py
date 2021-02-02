@@ -2,22 +2,21 @@ from typing import Tuple
 
 from data_classes import Action, Shape
 from hexagonal_board import Diamond, Triangle
-from parameters import get_parameters
+from parameters import Parameters
 from visualize import Visualize
 
 
 class SimulatedWorld:
 
     def __init__(self):
-        parameters = get_parameters()
-        self.__board_type = parameters.board_type
-        if parameters.board_type == Shape.Diamond:
+        self.__board_type = Parameters.board_type
+        if Parameters.board_type == Shape.Diamond:
             self.__game_board = Diamond(
-                parameters.board_type, parameters.size, parameters.holes)
+                Parameters.board_type, Parameters.size, Parameters.holes)
         else:
             self.__game_board = Triangle(
-                parameters.board_type, parameters.size, parameters.holes)
-        self.__frame_delay = parameters.frame_delay
+                Parameters.board_type, Parameters.size, Parameters.holes)
+        self.__frame_delay = Parameters.frame_delay
         self.__peg_history = []
 
     def __is_final_state(self) -> bool:

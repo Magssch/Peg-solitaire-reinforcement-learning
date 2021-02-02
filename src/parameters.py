@@ -1,4 +1,3 @@
-import json
 from typing import Tuple
 
 from data_classes import Shape
@@ -6,43 +5,25 @@ from data_classes import Shape
 
 class Parameters:
 
-    __is_init = False
-
-    @classmethod
-    def get_parameters(cls):
-        if cls.__is_init:
-            return cls
-        with open('src/pivotal_parameters.json', 'r') as f:
-            pivotal_parameters = json.load(f)
-            for attr, value in pivotal_parameters.items():
-                setattr(cls, attr, value)
-
-            if cls.board_type == 1:
-                cls.board_type = Shape.Diamond
-            else:
-                cls.board_type = Shape.Triangle
-        cls.__is_init = True
-        return cls
-
-    episodes: int
-    visualize_games: bool
-    frame_delay: float
+    episodes: int = 500
+    visualize_games: bool = False
+    frame_delay: float = 0.3
 
     # Simulated World
-    board_type: Shape
-    size: int
-    holes: Tuple[int]
+    board_type: Shape = Shape.Diamond
+    size: int = 5
+    holes: Tuple[int] = tuple([0, 1])
 
     # Actor
-    actor_learning_rate: float
-    actor_discount_factor: float
-    actor_trace_decay: float
-    actor_epsilon: float
-    actor_epsilon_decay: float
+    actor_learning_rate: float = 0.1
+    actor_discount_factor: float = 0.9
+    actor_trace_decay: float = 0.8
+    actor_epsilon: float = 0.5
+    actor_epsilon_decay: float = 0.9
 
     # Critic
-    use_table_critic: bool
-    critic_learning_rate: float
-    critic_discount_factor: float
-    critic_trace_decay: float
-    critic_nn_dimensions: tuple
+    use_table_critic: bool = True
+    critic_learning_rate: float = 0.001
+    critic_discount_factor: float = 0.9
+    critic_trace_decay: float = 0.8
+    critic_nn_dimensions: tuple = (15, 20, 30, 5, 1)
