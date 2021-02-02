@@ -46,8 +46,9 @@ class Visualize:
         return legal_positions
 
     @classmethod
-    def initialize_board(cls, board, size, edges, board_type):
+    def initialize_board(cls, board, edges, board_type):
         cls.__graph = nx.Graph()
+        size = len(board)
 
         legal_positions = Visualize.__get_legal_positions(board)
 
@@ -70,12 +71,13 @@ class Visualize:
                     Visualize.__add_edge_to_graph(Visualize.__graph, (x, y), neighbor_node)
 
     @staticmethod
-    def draw_board(board_type, size, board, action_nodes, delay):
+    def draw_board(board_type, board, action_nodes, delay):
 
         # List of all node positions currently filled
         filled_nodes = Visualize.__get_filled_nodes(board)
         empty_nodes = Visualize.__get_empty_nodes(board)
         legal_positions = Visualize.__get_legal_positions(board)
+        size = len(board)
         positions = {}
 
         # Position nodes to shape a Triangle
