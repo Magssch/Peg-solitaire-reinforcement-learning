@@ -2,7 +2,7 @@ from networkx.classes.graph import Graph
 from hexagonal_board import Shape
 import networkx as nx
 import matplotlib.pyplot as plt
-
+import time
 
 class Visualize():
 
@@ -68,7 +68,7 @@ class Visualize():
                     Visualize.add_edge_to_graph(Visualize.graph, (x, y), neighbor_node)
 
     @staticmethod
-    def draw_board(board, action_nodes, positions=None):
+    def draw_board(board, action_nodes, delay, positions=None):
 
         # List of all node positions currently filled
         filled_nodes = Visualize.get_filled_nodes(board)
@@ -85,7 +85,10 @@ class Visualize():
         nx.draw_networkx_nodes(Visualize.graph, positions, nodelist=action_nodes[1], node_color='red')
         nx.draw_networkx_edges(Visualize.graph, positions, width=1)
 
+        # Takes in delay for each move. Delay given in seconds
+        time.sleep(delay*1000)
+
         plt.axis('off')
         plt.draw()
         plt.clf()
-        plt.show()
+ 
