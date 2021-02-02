@@ -13,19 +13,25 @@ from typing import Tuple
 from data_classes import Action, Shape
 from hexagonal_board import Diamond, Triangle
 from visualize import Visualize
+from parameters import get_parameters
 
 
 class SimulatedWorld:
 
-    def __init__(self, board_type: Shape, size: int, holes: Tuple[int]):
-        if board_type == Shape.Diamond:
-            self.__game_board = Diamond(board_type, size, holes)
+    def __init__(self):
+        parameters = get_parameters()
+        if parameters.board_type == Shape.Diamond:
+            self.__game_board = Diamond(
+                parameters.board_type, parameters.size, parameters.holes)
         else:
-            self.__game_board = Triangle(board_type, size, holes)
+            self.__game_board = Triangle(
+                parameters.board_type, parameters.size, parameters.holes)
+        self.__frame_delay = parameters.frame_delay
 
     def step(self, action: Action) -> Tuple[int]:
         self.__game_board.make_move(action)
-        Visualize.draw_board(self.__game_board, )
+        Visualize.draw_board(
+            self.__game_board, action.positions, self.__frame_delay)
         return self.__grid_to_vector(), self.__calculate_reward(), self.__is_final_state(), self.__game_board.get_all_legal_actions()
 
     def reset(self) -> None:
