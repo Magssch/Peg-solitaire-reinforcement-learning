@@ -21,8 +21,8 @@ class Visualize:
     @staticmethod
     def __get_filled_nodes(board):
         filled_positions = []
-        for i in board:
-            for j in board:
+        for i in range(board.size):
+            for j in range(board.size):
                 if board[i][j] == 1:
                     filled_positions.append((i, j))
         return filled_positions
@@ -30,8 +30,8 @@ class Visualize:
     @staticmethod
     def __get_empty_nodes(board):
         empty_positions = []
-        for i in board:
-            for j in board:
+        for i in range(board.size):
+            for j in range(board.size):
                 if board[i][j] == 0:
                     empty_positions.append((i, j))
         return empty_positions
@@ -39,8 +39,8 @@ class Visualize:
     @staticmethod
     def __get_legal_positions(board):
         legal_positions = []
-        for i in board:
-            for j in board:
+        for i in range(board.size):
+            for j in range(board.size):
                 if board[i][j] is None:
                     legal_positions.append((i, j))
         return legal_positions
@@ -48,7 +48,7 @@ class Visualize:
     @classmethod
     def initialize_board(cls, board, edges, board_type):
         cls.__graph = nx.Graph()
-        size = len(board)
+        size = board.size
 
         legal_positions = Visualize.__get_legal_positions(board)
 
@@ -77,7 +77,7 @@ class Visualize:
         filled_nodes = Visualize.__get_filled_nodes(board)
         empty_nodes = Visualize.__get_empty_nodes(board)
         legal_positions = Visualize.__get_legal_positions(board)
-        size = len(board)
+        size = board.size
         positions = {}
 
         # Position nodes to shape a Triangle
