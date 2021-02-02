@@ -1,19 +1,9 @@
-# This is the specialized domain class for Peg Solitaire,
-# it should do the following:
-#
-# - Understands game states and the operators that convert one game state to
-# another.
-# - Produces initial game states.
-# - Generates child states from parent states using the legal operators of the
-#  domain.
-# - Recognizes final (winning, losing and neutral) states
-
 from typing import Tuple
 
 from data_classes import Action, Shape
 from hexagonal_board import Diamond, Triangle
-from visualize import Visualize
 from parameters import get_parameters
+from visualize import Visualize
 
 
 class SimulatedWorld:
@@ -27,17 +17,23 @@ class SimulatedWorld:
             self.__game_board = Triangle(
                 parameters.board_type, parameters.size, parameters.holes)
         self.__frame_delay = parameters.frame_delay
+        self.__peg_history = []
 
-    def step(self, action: Action) -> Tuple[int]:
+    def step(self, action: Action) -> Tuple[Tuple[int], int, bool, Tuple[Action]]:
         self.__game_board.make_move(action)
         Visualize.draw_board(
             self.__game_board, action.positions, self.__frame_delay)
         return self.__grid_to_vector(), self.__calculate_reward(), self.__is_final_state(), self.__game_board.get_all_legal_actions()
 
-    def reset(self) -> None:
+    def reset(self) -> Tuple[Tuple[int], Tuple[Action]]:
         self.__game_board.reset_game()
+        return self.__grid_to_vector(), self.__game_board.get_all_legal_actions()
+
+    def exit(self) -> None:
+        Visualize.plot_training_data(self.__peg_history)
 
     def __is_final_state(self) -> bool:
+        self.__peg_history.append(self.__game_board.pegs_remaining())
         return self.__game_board.pegs_remaining() == 1 or self.__game_board.game_over()
 
     def __calculate_reward(self) -> int:
