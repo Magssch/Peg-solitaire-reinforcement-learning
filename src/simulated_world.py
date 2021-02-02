@@ -9,7 +9,8 @@
 # - Recognizes final (winning, losing and neutral) states
 
 from typing import Tuple
-from hexagonal_board import Action, Shape, Diamond, Triangle
+
+from hexagonal_board import Action, Diamond, Shape, Triangle
 
 
 class SimulatedWorld:

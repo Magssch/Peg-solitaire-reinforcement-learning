@@ -1,11 +1,12 @@
+import numpy as np
+
 from parameters import get_parameters
 from reinforcement_learner import ReinforcementLearner
 from simulated_world import SimulatedWorld
+from visualize import TrainingData
 
 if __name__ == "__main__":
     parameters = get_parameters()
 
-    agent = ReinforcementLearner(parameters)
-    simulated_world = SimulatedWorld(
-        parameters.board_type, parameters.size, parameters.holes)
-    agent.run()
+    training_data = np.random.choice(range(10), parameters.episodes)
+    TrainingData.plot(training_data)
