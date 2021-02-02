@@ -73,9 +73,9 @@ class Visualize:
     def draw_board(board_type, size, board, action_nodes, delay):
 
         # List of all node positions currently filled
-        filled_nodes = Visualize.get_filled_nodes(board)
-        empty_nodes = Visualize.get_empty_nodes(board)
-        legal_positions = Visualize.get_legal_positions(board)
+        filled_nodes = Visualize.__get_filled_nodes(board)
+        empty_nodes = Visualize.__get_empty_nodes(board)
+        legal_positions = Visualize.__get_legal_positions(board)
         positions = {}
 
         # Position nodes to shape a Triangle
