@@ -70,11 +70,23 @@ class Visualize:
                     Visualize.__add_edge_to_graph(Visualize.__graph, (x, y), neighbor_node)
 
     @staticmethod
-    def draw_board(board, action_nodes, delay, positions=None):
+    def draw_board(board_type, size, board, action_nodes, delay):
 
         # List of all node positions currently filled
-        filled_nodes = Visualize.__get_filled_nodes(board)
-        empty_nodes = Visualize.__get_empty_nodes(board)
+        filled_nodes = Visualize.get_filled_nodes(board)
+        empty_nodes = Visualize.get_empty_nodes(board)
+        legal_positions = Visualize.get_legal_positions(board)
+        positions = {}
+
+        # Position nodes to shape a Triangle
+        if board_type == Shape.Triangle:
+            for node in legal_positions:
+                positions[node] = (2 * node[1] - node[0], size - node[0])
+
+        # Position nodes to shape a Diamond
+        elif board_type == Shape.Diamond:
+            for node in legal_positions:
+                positions[node] = ((node[1] - node[0]), (size - node[1] - node[0]))
 
         # Remove nodes currently active
         for nodes in action_nodes:
