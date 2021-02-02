@@ -24,8 +24,8 @@ class HexagonalBoard(ABC):
     def make_move(self, action: Action) -> None:
         if self.__is_legal_action(action):
             self.__board[action.start_coordinates] = 0
-            self.__board[action.adjacent_cell] = 0
-            self.__board[action.landing_cell] = 1
+            self.__board[action.adjacent_coordinates] = 0
+            self.__board[action.landing_coordinates] = 1
 
     def draw_board(self) -> None:
         pass
@@ -38,16 +38,16 @@ class HexagonalBoard(ABC):
 
     def __is_legal_action(self, action: Action) -> bool:
         return self.__action_is_inside_board(action) and \
-            self.__cell_contains_peg(action.adjacent_cell) and \
+            self.__cell_contains_peg(action.adjacent_coordinates) and \
             self.__action_is_inside_board(Action(action.start_coordinates, (action.direction_vector[0] * 2, action.direction_vector[1] * 2))) and \
             not self.__cell_contains_peg(
-                action.landing_cell)
+                action.landing_coordinates)
 
     def __cell_contains_peg(self, coordinates: Tuple[int, int]) -> bool:
         return self.__board[coordinates] == 1
 
     def __action_is_inside_board(self, action: Action) -> bool:
-        adjacent_node = action.adjacent_cell
+        adjacent_node = action.adjacent_coordinates
         return (adjacent_node[0] > 0 and adjacent_node[0] < self.__size and not self.__board(adjacent_node) is None) \
             and (adjacent_node[1] > 0 and adjacent_node[1] < self.__size and not self.__board(adjacent_node) is None)
 

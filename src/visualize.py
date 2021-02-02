@@ -4,6 +4,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import time
 
+
 class Visualize():
 
     graph = nx.Graph()
@@ -53,7 +54,7 @@ class Visualize():
         if board_type == Shape.Diamond:
             for i in range(size):
                 for j in range(size):
-                    Visualize.add_node_to_graph(Visualize.graph, (i,j))
+                    Visualize.add_node_to_graph(Visualize.graph, (i, j))
 
         # Create a Hex Triangle grid
         elif board_type == Shape.Triangle:
@@ -65,7 +66,8 @@ class Visualize():
             for row_offset, column_offset in edges:
                 neighbor_node = (x + row_offset, y + column_offset)
                 if neighbor_node in legal_positions:
-                    Visualize.add_edge_to_graph(Visualize.graph, (x, y), neighbor_node)
+                    Visualize.add_edge_to_graph(
+                        Visualize.graph, (x, y), neighbor_node)
 
     @staticmethod
     def draw_board(board, action_nodes, delay, positions=None):
@@ -79,16 +81,19 @@ class Visualize():
             filled_nodes.remove(nodes)
 
         # Draw the resulting grid
-        nx.draw_networkx_nodes(Visualize.graph, positions, nodelist=empty_nodes, node_color='black')
-        nx.draw_networkx_nodes(Visualize.graph, positions, nodelist=filled_nodes, node_color='blue')
-        nx.draw_networkx_nodes(Visualize.graph, positions, nodelist=action_nodes[0], node_color='green')
-        nx.draw_networkx_nodes(Visualize.graph, positions, nodelist=action_nodes[1], node_color='red')
+        nx.draw_networkx_nodes(Visualize.graph, positions,
+                               nodelist=empty_nodes, node_color='black')
+        nx.draw_networkx_nodes(Visualize.graph, positions,
+                               nodelist=filled_nodes, node_color='blue')
+        nx.draw_networkx_nodes(Visualize.graph, positions,
+                               nodelist=action_nodes[0], node_color='green')
+        nx.draw_networkx_nodes(Visualize.graph, positions,
+                               nodelist=action_nodes[1], node_color='red')
         nx.draw_networkx_edges(Visualize.graph, positions, width=1)
 
         # Takes in delay for each move. Delay given in seconds
-        time.sleep(delay*1000)
+        time.sleep(delay * 1000)
 
         plt.axis('off')
         plt.draw()
         plt.clf()
- 
