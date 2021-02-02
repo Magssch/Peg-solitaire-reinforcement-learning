@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 
 class DrawBoard():
 
+    graph = nx.Graph()
+
     @staticmethod
     def add_node_to_graph(graph, position):
         graph.add_node(position)
@@ -41,44 +43,49 @@ class DrawBoard():
                     legal_positions.append((i, j))
         return legal_positions
 
+    @classmethod
+    def initialize_board(cls, board, size, edges, board_type):
+        cls.graph = nx.Graph()
+
+        legal_positions = DrawBoard.get_legal_positions(board)
+
+        # Creates a Hex Diamon grid
+        if board_type == Shape.Diamond:
+            for i in range(size):
+                for j in range(size):
+                    DrawBoard.add_node_to_graph(DrawBoard.graph, (i,j))
+
+        # Create a Hex Triangle grid
+        elif board_type == Shape.Triangle:
+            for i in range(size):
+                for j in range(i + 1):
+                    DrawBoard.add_node_to_graph(DrawBoard.graph, (i, j))
+
+        for x, y in legal_positions:
+            for row_offset, column_offset in edges:
+                neighbor_node = (x + row_offset, y + column_offset)
+                if neighbor_node in legal_positions:
+                    DrawBoard.add_edge_to_graph(DrawBoard.graph, (x, y), neighbor_node)
+
+
     @staticmethod
-    def draw_board(board, board_type, action_nodes, size, edges, positions=None):
-        graph = nx.Graph()
+    def draw_board(board, action_nodes, positions=None):
 
         # List of all node positions currently filled
         filled_nodes = DrawBoard.get_filled_nodes(board)
         empty_nodes = DrawBoard.get_empty_nodes(board)
-        legal_positions = DrawBoard.get_legal_positions(board)
 
 
         # Remove nodes currently active
         for nodes in action_nodes:
             filled_nodes.remove(nodes)
 
-        # Creates a Hex Diamon grid
-        if board_type == Shape.Diamond:
-            for i in range(size):
-                for j in range(size):
-                    DrawBoard.add_node_to_graph(graph, (i,j))
-
-        # Create a Hex Triangle grid
-        elif board_type == Shape.Triangle:
-            for i in range(size):
-                for j in range(i + 1):
-                    DrawBoard.add_node_to_graph(graph, (i, j))
-
-        for x, y in legal_positions:
-            for row_offset, column_offset in edges:
-                neighbor_node = (x + row_offset, y + column_offset)
-                if neighbor_node in legal_positions:
-                    DrawBoard.add_edge_to_graph(graph, (x, y), neighbor_node)
-
         # Draw the resulting grid
-        nx.draw_networkx_nodes(graph, positions, nodelist=empty_nodes, node_color='black')
-        nx.draw_networkx_nodes(graph, positions, nodelist=filled_nodes, node_color='blue')
-        nx.draw_networkx_nodes(graph, positions, nodelist=action_nodes[0], node_color='green')
-        nx.draw_networkx_nodes(graph, positions, nodelist=action_nodes[1], node_color='red')
-        nx.draw_networkx_edges(graph, positions, width=1)
+        nx.draw_networkx_nodes(DrawBoard.graph, positions, nodelist=empty_nodes, node_color='black')
+        nx.draw_networkx_nodes(DrawBoard.graph, positions, nodelist=filled_nodes, node_color='blue')
+        nx.draw_networkx_nodes(DrawBoard.graph, positions, nodelist=action_nodes[0], node_color='green')
+        nx.draw_networkx_nodes(DrawBoard.graph, positions, nodelist=action_nodes[1], node_color='red')
+        nx.draw_networkx_edges(DrawBoard.graph, positions, width=1)
 
         plt.axis('off')
         plt.draw()
