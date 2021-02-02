@@ -16,6 +16,9 @@ class HexagonalBoard(ABC):
         self._edges = []
         self.__set_initial_state()
 
+    def get_board(self):
+        return self.__board
+
     def __set_initial_state(self) -> None:
         self.__board = np.ones((self.__size, self.__size), dtype=int)
         if self.__board_type == Shape.Triangle:

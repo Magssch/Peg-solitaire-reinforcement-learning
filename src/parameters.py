@@ -1,4 +1,5 @@
 import json
+from typing import Tuple
 
 from data_classes import Shape
 
@@ -26,7 +27,7 @@ class Parameters:
     # Simulated World
     board_type: Shape
     size: int
-    holes: list
+    holes: Tuple[int]
 
     # Actor
     actor_learning_rate: float
