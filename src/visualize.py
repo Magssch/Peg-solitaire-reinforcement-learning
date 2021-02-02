@@ -4,13 +4,13 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 from data_classes import Shape
-from parameters import Parameters
+import parameters
 
 
 class Visualize:
 
     __graph = nx.Graph()
-    __frame_delay = Parameters.frame_delay
+    __frame_delay = parameters.FRAME_DELAY
 
     @staticmethod
     def __add_node_to_graph(graph, position):

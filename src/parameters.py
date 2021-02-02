@@ -1,29 +1,25 @@
-from typing import Tuple
-
 from data_classes import Shape
 
+# General
+EPISODES = int(500)
+VISUALIZE_GAMES = bool(False)
+FRAME_DELAY = 0.3
 
-class Parameters:
+# Simulated World
+BOARD_TYPE = Shape(Shape.Diamond)
+SIZE = 5
+HOLES = tuple((0, 1))
 
-    episodes: int = 500
-    visualize_games: bool = False
-    frame_delay: float = 0.3
+# Actor
+ACTOR_LEARNING_RATE = 0.1
+ACTOR_DISCOUNT_FACTOR = 0.9
+ACTOR_TRACE_DECAY = 0.8
+ACTOR_EPSILON = 0.5
+ACTOR_EPSILON_DECAY = 0.9
 
-    # Simulated World
-    board_type: Shape = Shape.Diamond
-    size: int = 5
-    holes: Tuple[int] = tuple([0, 1])
-
-    # Actor
-    actor_learning_rate: float = 0.1
-    actor_discount_factor: float = 0.9
-    actor_trace_decay: float = 0.8
-    actor_epsilon: float = 0.5
-    actor_epsilon_decay: float = 0.9
-
-    # Critic
-    use_table_critic: bool = True
-    critic_learning_rate: float = 0.001
-    critic_discount_factor: float = 0.9
-    critic_trace_decay: float = 0.8
-    critic_nn_dimensions: tuple = (15, 20, 30, 5, 1)
+# Critic
+USE_TABLE_CRITIC = bool(True)
+CRITIC_LEARNING_RATE = 0.001
+CRITIC_DISCOUNT_FACTOR = 0.9
+CRITIC_TRACE_DECAY = 0.8
+CRITIC_NN_DIMENSIONS = tuple((15, 20, 30, 5, 1))

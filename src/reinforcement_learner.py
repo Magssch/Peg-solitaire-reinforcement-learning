@@ -1,6 +1,6 @@
 from actor import Actor
 from critic.critic_factory import CriticFactory
-from parameters import Parameters
+import parameters
 from simulated_world import SimulatedWorld
 
 
@@ -21,22 +21,22 @@ class ReinforcementLearner:
 
     def __init__(self):
         self.__actor = Actor(
-            Parameters.actor_learning_rate,
-            Parameters.actor_discount_factor,
-            Parameters.actor_trace_decay,
-            Parameters.actor_epsilon,
-            Parameters.actor_epsilon_decay,
+            parameters.ACTOR_LEARNING_RATE,
+            parameters.ACTOR_DISCOUNT_FACTOR,
+            parameters.ACTOR_TRACE_DECAY,
+            parameters.ACTOR_EPSILON,
+            parameters.ACTOR_EPSILON_DECAY,
         )
         self.__critic = CriticFactory.get_critic(
-            Parameters.use_table_critic,
-            Parameters.critic_learning_rate,
-            Parameters.critic_discount_factor,
-            Parameters.critic_trace_decay,
-            Parameters.critic_nn_dimensions,
+            parameters.USE_TABLE_CRITIC,
+            parameters.CRITIC_LEARNING_RATE,
+            parameters.CRITIC_DISCOUNT_FACTOR,
+            parameters.CRITIC_TRACE_DECAY,
+            parameters.CRITIC_NN_DIMENSIONS,
         )
 
         self.__simulated_world = SimulatedWorld()
-        self.__episodes = Parameters.episodes
+        self.__episodes = parameters.EPISODES
 
     def run(self) -> None:
         """Runs all episodes with pivotal parameters"""
