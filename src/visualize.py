@@ -23,8 +23,8 @@ class Visualize:
     @staticmethod
     def __get_filled_nodes(board):
         filled_positions = []
-        for i in range(board.size):
-            for j in range(board.size):
+        for i in range(board.shape[0]):
+            for j in range(board.shape[0]):
                 if board[i][j] == 1:
                     filled_positions.append((i, j))
         return filled_positions
@@ -32,8 +32,8 @@ class Visualize:
     @staticmethod
     def __get_empty_nodes(board):
         empty_positions = []
-        for i in range(board.size):
-            for j in range(board.size):
+        for i in range(board.shape[0]):
+            for j in range(board.shape[0]):
                 if board[i][j] == 2:
                     empty_positions.append((i, j))
         return empty_positions
@@ -41,8 +41,8 @@ class Visualize:
     @staticmethod
     def __get_legal_positions(board):
         legal_positions = []
-        for i in range(board.size):
-            for j in range(board.size):
+        for i in range(board.shape[0]):
+            for j in range(board.shape[0]):
                 if bool(board[i][j]):
                     legal_positions.append((i, j))
         return legal_positions
@@ -50,7 +50,7 @@ class Visualize:
     @classmethod
     def initialize_board(cls, board, edges, board_type):
         cls.__graph = nx.Graph()
-        size = board.size
+        size = board.shape[0]
 
         legal_positions = Visualize.__get_legal_positions(board)
 
@@ -70,7 +70,8 @@ class Visualize:
             for row_offset, column_offset in edges:
                 neighbor_node = (x + row_offset, y + column_offset)
                 if neighbor_node in legal_positions:
-                    Visualize.__add_edge_to_graph(Visualize.__graph, (x, y), neighbor_node)
+                    Visualize.__add_edge_to_graph(
+                        Visualize.__graph, (x, y), neighbor_node)
 
     @staticmethod
     def draw_board(board_type, board, action_nodes):
@@ -79,7 +80,7 @@ class Visualize:
         filled_nodes = Visualize.__get_filled_nodes(board)
         empty_nodes = Visualize.__get_empty_nodes(board)
         legal_positions = Visualize.__get_legal_positions(board)
-        size = board.size
+        size = board.shape[0]
         positions = {}
 
         # Position nodes to shape a Triangle
@@ -90,17 +91,23 @@ class Visualize:
         # Position nodes to shape a Diamond
         elif board_type == Shape.Diamond:
             for node in legal_positions:
-                positions[node] = ((node[1] - node[0]), (size - node[1] - node[0]))
+                positions[node] = ((node[1] - node[0]),
+                                   (size - node[1] - node[0]))
 
         # Remove nodes currently active
         for nodes in action_nodes:
-            filled_nodes.remove(nodes)
+            if nodes in filled_nodes:
+                filled_nodes.remove(nodes)
 
         # Draw the resulting grid
-        nx.draw_networkx_nodes(Visualize.__graph, positions, nodelist=empty_nodes, node_color='black')
-        nx.draw_networkx_nodes(Visualize.__graph, positions, nodelist=filled_nodes, node_color='blue')
-        nx.draw_networkx_nodes(Visualize.__graph, positions, nodelist=action_nodes[0], node_color='green')
-        nx.draw_networkx_nodes(Visualize.__graph, positions, nodelist=action_nodes[1], node_color='red')
+        nx.draw_networkx_nodes(Visualize.__graph, positions,
+                               nodelist=empty_nodes, node_color='black')
+        nx.draw_networkx_nodes(Visualize.__graph, positions,
+                               nodelist=filled_nodes, node_color='blue')
+        nx.draw_networkx_nodes(Visualize.__graph, positions,
+                               nodelist=action_nodes[0], node_color='green')
+        nx.draw_networkx_nodes(Visualize.__graph, positions,
+                               nodelist=action_nodes[1], node_color='red')
         nx.draw_networkx_edges(Visualize.__graph, positions, width=1)
 
         # Takes in delay for each move. Delay given in seconds

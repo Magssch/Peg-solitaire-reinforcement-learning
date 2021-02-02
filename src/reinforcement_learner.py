@@ -53,9 +53,10 @@ class ReinforcementLearner:
             done = False
 
             while not done:
-
-                next_state, reward, done, possible_actions = self.__simulated_world.step(action)
-                next_action = self.__actor.choose_action(next_state, possible_actions)
+                next_state, reward, done, possible_actions = self.__simulated_world.step(
+                    action)
+                next_action = self.__actor.choose_action(
+                    next_state, possible_actions)
 
                 self.__actor.replace_eligibilities(state, action)
                 self.__critic.replace_eligibilities(state)

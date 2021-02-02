@@ -1,3 +1,4 @@
+from typing import Tuple
 from data_classes import Shape
 
 # General
@@ -8,7 +9,10 @@ FRAME_DELAY = 0.3
 # Simulated World
 BOARD_TYPE = Shape(Shape.Diamond)
 SIZE = 5
-HOLES = tuple((0, 1))
+HOLES: Tuple[Tuple[int, int]] = tuple([
+    (0, 1),
+    (2, 1),
+])
 
 # Actor
 ACTOR_LEARNING_RATE = 0.1
@@ -22,4 +26,4 @@ USE_TABLE_CRITIC = bool(True)
 CRITIC_LEARNING_RATE = 0.001
 CRITIC_DISCOUNT_FACTOR = 0.9
 CRITIC_TRACE_DECAY = 0.8
-CRITIC_NN_DIMENSIONS = tuple((15, 20, 30, 5, 1))
+CRITIC_NN_DIMENSIONS: Tuple[int, ...] = (15, 20, 30, 5, 1)

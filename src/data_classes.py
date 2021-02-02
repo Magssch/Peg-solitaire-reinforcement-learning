@@ -10,11 +10,11 @@ class Action:
 
     @property
     def adjacent_coordinates(self) -> Tuple[int, int]:
-        return self.start_coordinates[0] + self.direction_vector[0], self.start_coordinates[1] + self.direction_vector[1]
+        return (self.start_coordinates[0] + self.direction_vector[0]), (self.start_coordinates[1] + self.direction_vector[1])
 
     @property
     def landing_coordinates(self) -> Tuple[int, int]:
-        return self.start_coordinates[0] + (self.direction_vector[0] * 2), self.start_coordinates[1] + (self.direction_vector[1] * 2)
+        return (self.start_coordinates[0] + (self.direction_vector[0] * 2)), (self.start_coordinates[1] + (self.direction_vector[1] * 2))
 
     @property
     def positions(self) -> Tuple[Tuple[int, int], Tuple[int, int]]:
