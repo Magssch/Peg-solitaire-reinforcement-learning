@@ -1,5 +1,5 @@
 from networkx.classes.graph import Graph
-from hexagonal_board import Shape
+from data_classes import Shape
 import networkx as nx
 import matplotlib.pyplot as plt
 import time
