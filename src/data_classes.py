@@ -1,5 +1,5 @@
-from typing import Tuple
 from enum import Enum
+from typing import Tuple
 
 
 class Action:
@@ -9,12 +9,16 @@ class Action:
         self.direction_vector = direction_vector
 
     @property
-    def adjacent_cell(self) -> Tuple[int, int]:
+    def adjacent_coordinates(self) -> Tuple[int, int]:
         return self.start_coordinates[0] + self.direction_vector[0], self.start_coordinates[1] + self.direction_vector[1]
 
     @property
-    def landing_cell(self) -> Tuple[int, int]:
+    def landing_coordinates(self) -> Tuple[int, int]:
         return self.start_coordinates[0] + (self.direction_vector[0] * 2), self.start_coordinates[1] + (self.direction_vector[1] * 2)
+
+    @property
+    def positions(self) -> Tuple[Tuple[int, int], Tuple[int, int]]:
+        return self.start_coordinates, self.landing_coordinates
 
     def __hash__(self):
         return hash(self.start_coordinates) ^ hash(self.direction_vector)

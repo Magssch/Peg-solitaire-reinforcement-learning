@@ -1,7 +1,9 @@
 from abc import ABC
 from typing import Tuple
-from data_classes import Action, Shape
+
 import numpy as np
+
+from data_classes import Action, Shape
 
 
 class HexagonalBoard(ABC):
@@ -11,12 +13,14 @@ class HexagonalBoard(ABC):
         self.__size = size
         self.__holes = holes
         self.__board = None
+        self._edges = []
         self.__set_initial_state()
 
     def __set_initial_state(self) -> None:
-        self.__board = np.ones((self.__size, self.__size))
+        self.__board = np.ones((self.__size, self.__size), dtype=int)
         if self.__board_type == Shape.Triangle:
-            self.__board = np.triu(np.full((self.__size, self.__size), None), 1)
+            self.__board = np.triu(
+                np.full((self.__size, self.__size), None, dtype=int), 1, dtype=int)
 
     def reset_game(self) -> None:
         self.__set_initial_state()
@@ -24,11 +28,8 @@ class HexagonalBoard(ABC):
     def make_move(self, action: Action) -> None:
         if self.__is_legal_action(action):
             self.__board[action.start_coordinates] = 0
-            self.__board[action.adjacent_cell] = 0
-            self.__board[action.landing_cell] = 1
-
-    def draw_board(self) -> None:
-        pass
+            self.__board[action.adjacent_coordinates] = 0
+            self.__board[action.landing_coordinates] = 1
 
     def pegs_remaining(self) -> int:
         return (self.__board == 1).sum()
@@ -38,22 +39,22 @@ class HexagonalBoard(ABC):
 
     def __is_legal_action(self, action: Action) -> bool:
         return self.__action_is_inside_board(action) and \
-            self.__cell_contains_peg(action.adjacent_cell) and \
+            self.__cell_contains_peg(action.adjacent_coordinates) and \
             self.__action_is_inside_board(Action(action.start_coordinates, (action.direction_vector[0] * 2, action.direction_vector[1] * 2))) and \
             not self.__cell_contains_peg(
-                action.landing_cell)
+                action.landing_coordinates)
 
     def __cell_contains_peg(self, coordinates: Tuple[int, int]) -> bool:
         return self.__board[coordinates] == 1
 
     def __action_is_inside_board(self, action: Action) -> bool:
-        adjacent_node = action.adjacent_cell
+        adjacent_node = action.adjacent_coordinates
         return (adjacent_node[0] > 0 and adjacent_node[0] < self.__size and not self.__board(adjacent_node) is None) \
             and (adjacent_node[1] > 0 and adjacent_node[1] < self.__size and not self.__board(adjacent_node) is None)
 
     def __get_legal_actions_for_coordinates(self, coordinates: Tuple[int, int]) -> Action:
         legal_actions = []
-        for direction_vector in self.__edges:
+        for direction_vector in self._edges:
             if self.__is_legal_action(coordinates, direction_vector):
                 legal_actions.append(Action(coordinates, direction_vector))
         return tuple(legal_actions)
@@ -74,7 +75,7 @@ class Diamond(HexagonalBoard):
             size,
             holes,
         )
-        self.edges = (
+        self._edges = (
             (0, -1),
             (1, -1),
             (1, 0),
@@ -91,7 +92,7 @@ class Triangle(HexagonalBoard):
             size,
             holes,
         )
-        self.edges = (
+        self._edges = (
             (0, -1),
             (-1, -1),
             (1, 0),
