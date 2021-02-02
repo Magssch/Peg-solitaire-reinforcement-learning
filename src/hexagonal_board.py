@@ -1,9 +1,9 @@
 from abc import ABC
 from typing import Tuple
 
-from data_classes import Action, Shape
-
 import numpy as np
+
+from data_classes import Action, Shape
 
 
 class HexagonalBoard(ABC):
