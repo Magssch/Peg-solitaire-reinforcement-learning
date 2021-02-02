@@ -10,6 +10,12 @@ class Action:
         self.start_coordinates = start_coordinates
         self.direction_vector = direction_vector
 
+    def get_coordinates_for_adjacent_cell(self) -> Tuple[int, int]:
+        return self.start_coordinates[0] + self.direction_vector[0], self.start_coordinates[1] + self.direction_vector[1]
+
+    def get_coordinates_for_landing_cell(self) -> Tuple[int, int]:
+        return self.start_coordinates[0] + (self.direction_vector[0] * 2), self.start_coordinates[1] + (self.direction_vector[1] * 2)
+
     def __hash__(self):
         return hash(self.start_coordinates) ^ hash(self.direction_vector)
 
@@ -39,12 +45,8 @@ class HexagonalBoard(ABC):
     def make_move(self, action: Action) -> None:
         if self.__is_legal_action(action):
             self.__board[action.start_coordinates] = 0
-            removed_peg_coordinates = HexagonalBoard.get_coordinates_for_adjacent_cell(
-                action)
-            self.__board[removed_peg_coordinates] = 0
-            landing_cell_coordinates = HexagonalBoard.get_coordinates_for_adjacent_cell(
-                Action(removed_peg_coordinates, action.direction_vector))
-            self.__board[landing_cell_coordinates] = 1
+            self.__board[action.get_coordinates_for_adjacent_cell()] = 0
+            self.__board[action.get_coordinates_for_landing_cell()] = 1
 
     def draw_board(self) -> None:
         pass
@@ -66,13 +68,9 @@ class HexagonalBoard(ABC):
         return self.__board[coordinates] == 1
 
     def __action_is_inside_board(self, action: Action) -> bool:
-        adjacent_node = HexagonalBoard.get_coordinates_for_adjacent_cell(action)
+        adjacent_node = action.get_coordinates_for_adjacent_cell()
         return (adjacent_node[0] > 0 and adjacent_node[0] < self.__size and not self.__board(adjacent_node) is None) \
             and (adjacent_node[1] > 0 and adjacent_node[1] < self.__size and not self.__board(adjacent_node) is None)
-
-    @staticmethod
-    def get_coordinates_for_adjacent_cell(action: Action) -> Tuple[int, int]:
-        return action.start_coordinates[0] + action.direction_vector[0], action.start_coordinates[1] + action.direction_vector[1]
 
     def __get_legal_actions_for_coordinates(self, coordinates: Tuple[int, int]) -> Action:
         legal_actions = []
