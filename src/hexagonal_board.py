@@ -31,9 +31,6 @@ class HexagonalBoard(ABC):
             self.__board[action.adjacent_coordinates] = 0
             self.__board[action.landing_coordinates] = 1
 
-    def draw_board(self) -> None:
-        pass
-
     def pegs_remaining(self) -> int:
         return (self.__board == 1).sum()
 
