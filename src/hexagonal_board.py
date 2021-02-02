@@ -16,9 +16,10 @@ class HexagonalBoard(ABC):
         self.__set_initial_state()
 
     def __set_initial_state(self) -> None:
-        self.__board = np.ones((self.__size, self.__size))
+        self.__board = np.ones((self.__size, self.__size), dtype=int)
         if self.__board_type == Shape.Triangle:
-            self.__board = np.triu(np.full((self.__size, self.__size), None), 1)
+            self.__board = np.triu(
+                np.full((self.__size, self.__size), None, dtype=int), 1, dtype=int)
 
     def reset_game(self) -> None:
         self.__set_initial_state()

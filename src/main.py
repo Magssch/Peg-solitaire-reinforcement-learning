@@ -10,3 +10,6 @@ if __name__ == "__main__":
 
     training_data = np.random.choice(range(10), parameters.episodes)
     TrainingData.plot(training_data)
+    agent = ReinforcementLearner(parameters)
+    simulated_world = SimulatedWorld()
+    agent.run()
