@@ -83,7 +83,7 @@ class HexagonalBoard(ABC):
         return tuple(legal_moves)
 
     def __str__(self):
-        return self.__board
+        return str(self.__board)
 
 
 class Diamond(HexagonalBoard):
