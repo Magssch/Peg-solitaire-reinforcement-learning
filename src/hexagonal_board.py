@@ -84,7 +84,7 @@ class HexagonalBoard(ABC):
 
 
 class Diamond(HexagonalBoard):
-    def __init__(self, board_type: Shape, size: int, holes: Tuple[Tuple[int, int]]):
+    def __init__(self, board_type: Shape, size: int, holes: Set[Tuple[int, int]]):
         super().__init__(
             board_type,
             size,
@@ -101,7 +101,7 @@ class Diamond(HexagonalBoard):
 
 
 class Triangle(HexagonalBoard):
-    def __init__(self, board_type: Shape, size: int, holes: Tuple[Tuple[int, int]]):
+    def __init__(self, board_type: Shape, size: int, holes: Set[Tuple[int, int]]):
         super().__init__(
             board_type,
             size,
