@@ -53,7 +53,6 @@ class HexagonalBoard(ABC):
     def __is_legal_action(self, action: Action) -> bool:
         return self.__action_is_inside_board(action) \
             and self.__cell_contains_peg(action.adjacent_coordinates) \
-            and self.__action_is_inside_board(Action(action.start_coordinates, (action.direction_vector[0] * 2, action.direction_vector[1] * 2))) \
             and not self.__cell_contains_peg(
             action.landing_coordinates)
 
@@ -61,10 +60,11 @@ class HexagonalBoard(ABC):
         return self.__board[coordinates] == 1
 
     def __action_is_inside_board(self, action: Action) -> bool:
-        adjacent_node = action.adjacent_coordinates
-        return (adjacent_node[0] >= 0 and adjacent_node[0] < self.__size) \
-            and (adjacent_node[1] >= 0 and adjacent_node[1] < self.__size) \
-            and self.__board[adjacent_node] != 0 and self.__board[adjacent_node] != 0
+        return (action.adjacent_coordinates[0] >= 0 and action.adjacent_coordinates[0] < self.__size) \
+            and (action.adjacent_coordinates[1] >= 0 and action.adjacent_coordinates[1] < self.__size) \
+            and (action.landing_coordinates[0] >= 0 and action.landing_coordinates[0] < self.__size) \
+            and (action.landing_coordinates[1] >= 0 and action.landing_coordinates[1] < self.__size) \
+            and self.__board[action.adjacent_coordinates] != 0 and self.__board[action.landing_coordinates] != 0
 
     def __get_legal_actions_for_coordinates(self, coordinates: Tuple[int, int]) -> Tuple[Action]:
         legal_actions = []
