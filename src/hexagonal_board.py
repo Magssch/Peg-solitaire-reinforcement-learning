@@ -9,7 +9,7 @@ from visualize import Visualize
 
 class HexagonalBoard(ABC):
 
-    def __init__(self, board_type: Shape, size: int, holes: Tuple[Tuple[int, int]]):
+    def __init__(self, board_type: Shape, size: int, holes: Set[Tuple[int, int]]):
         self.__board_type = board_type
         self.__size: int = size
         self.__holes = holes
