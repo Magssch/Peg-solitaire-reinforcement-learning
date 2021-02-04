@@ -9,7 +9,7 @@ from visualize import Visualize
 
 class HexagonalBoard(ABC):
 
-    def __init__(self, board_type: Shape, size: int, holes: Tuple[Tuple[int, int]]):
+    def __init__(self, board_type: Shape, size: int, holes: Set[Tuple[int, int]]):
         self.__board_type = board_type
         self.__size: int = size
         self.__holes = holes
@@ -27,7 +27,7 @@ class HexagonalBoard(ABC):
                 np.full((self.__size, self.__size), 0, dtype=np.int8), 1)
 
         for hole in self.__holes:
-            if self.__board[hole]:
+            if hole[0] >= 0 and hole[0] < self.__board.shape[0] and hole[1] >= 0 and hole[1] < self.__board.shape[0]:
                 self.__board[hole] = 2
 
     def reset_game(self) -> None:
