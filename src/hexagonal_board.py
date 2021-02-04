@@ -27,7 +27,7 @@ class HexagonalBoard(ABC):
                 np.full((self.__size, self.__size), 0, dtype=np.int8), 1)
 
         for hole in self.__holes:
-            if self.__board[hole]:
+            if hole[0] >= 0 and hole[0] < self.__board.shape[0] and hole[1] >= 0 and hole[1] < self.__board.shape[0]:
                 self.__board[hole] = 2
 
     def reset_game(self) -> None:
@@ -78,8 +78,7 @@ class HexagonalBoard(ABC):
         legal_moves: List[Action] = []
         for i in range(self.__board.shape[0]):
             for j in range(self.__board.shape[0]):
-                legal_actions_for_position = self.__get_legal_actions_for_coordinates(
-                    (i, j))
+                legal_actions_for_position = self.__get_legal_actions_for_coordinates((i, j))
                 if len(legal_actions_for_position) > 0:
                     legal_moves += legal_actions_for_position
         return tuple(legal_moves)
