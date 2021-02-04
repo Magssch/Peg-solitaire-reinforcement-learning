@@ -42,7 +42,7 @@ class ReinforcementLearner:
         """Runs all episodes with pivotal parameters"""
         for episode in range(self.__episodes):
 
-            print('Episode: ', episode, end='')
+            print('Episode:', episode)
 
             self.__actor.reset_eligibilities()
             self.__critic.reset_eligibilities()
@@ -53,21 +53,21 @@ class ReinforcementLearner:
             done = False
 
             while not done:
-                next_state, reward, done, possible_actions = self.__simulated_world.step(
-                    action)
-                next_action = self.__actor.choose_action(
-                    next_state, possible_actions)
+                next_state, reward, done, possible_actions = self.__simulated_world.step(action)
 
                 self.__actor.replace_eligibilities(state, action)
                 self.__critic.replace_eligibilities(state)
 
                 td_error = self.__critic.td_error(state, next_state, reward)
-                print(f' - td_error={td_error:.4f}')
+                print(f'  td_error={td_error:>7.4f}')
 
                 self.__critic.update(state, next_state, reward)
                 self.__actor.update(td_error)
 
-                state, action = next_state, next_action
+                if done:
+                    break
+
+                state, action = next_state, self.__actor.choose_action(next_state, possible_actions)
 
         self.__simulated_world.exit()
 

@@ -2,14 +2,14 @@ from typing import Tuple
 from data_classes import Shape
 
 # General
-EPISODES = int(500)
-VISUALIZE_GAMES = bool(False)
+EPISODES = 500
+VISUALIZE_GAMES = False
 FRAME_DELAY = 0.3
 
 # Simulated World
-BOARD_TYPE = Shape(Shape.Diamond)
+BOARD_TYPE = Shape.Diamond
 SIZE = 5
-HOLES: Tuple[Tuple[int, int]] = tuple([
+HOLES = set([
     (0, 1),
     (2, 1),
 ])
@@ -22,7 +22,7 @@ ACTOR_EPSILON = 0.5
 ACTOR_EPSILON_DECAY = 0.9
 
 # Critic
-USE_TABLE_CRITIC = bool(True)
+USE_TABLE_CRITIC = True
 CRITIC_LEARNING_RATE = 0.001
 CRITIC_DISCOUNT_FACTOR = 0.9
 CRITIC_TRACE_DECAY = 0.8
