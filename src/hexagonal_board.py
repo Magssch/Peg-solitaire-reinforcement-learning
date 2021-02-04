@@ -34,8 +34,7 @@ class HexagonalBoard(ABC):
         self.__set_initial_state()
 
     def __draw_board(self, action: Action) -> None:
-        Visualize.draw_board(self.__board_type, self.__board,
-                             action.positions)
+        Visualize.draw_board(self.__board_type, self.__board, action.positions)
 
     def make_move(self, action: Action) -> None:
         if self.__is_legal_action(action):

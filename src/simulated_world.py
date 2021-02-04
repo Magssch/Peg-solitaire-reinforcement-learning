@@ -24,10 +24,10 @@ class SimulatedWorld:
         return self.__game_board.pegs_remaining() == 1 or self.__game_board.game_over()
 
     def __calculate_reward(self) -> int:
-        if self.__game_board.game_over():
-            return -1
-        elif self.__game_board.pegs_remaining() == 1:
+        if self.__game_board.pegs_remaining() == 1:
             return 1
+        elif self.__game_board.game_over():
+            return -1
         else:
             return 0
 
