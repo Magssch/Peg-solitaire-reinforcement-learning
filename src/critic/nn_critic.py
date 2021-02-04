@@ -67,7 +67,7 @@ class NNCritic(Critic):
 
     def _get_value(self, state) -> float:
         """Value function V(s)"""
-        return np.squeeze(self.__values(np.array([state, ])))
+        return np.squeeze(self.__values(np.array([state])))
 
     def update(self, current_state, successor_state, reward) -> None:
         """Updates eligibilities, then the value function."""
