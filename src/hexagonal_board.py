@@ -82,6 +82,9 @@ class HexagonalBoard(ABC):
                     legal_moves += legal_actions_for_position
         return tuple(legal_moves)
 
+    def __str__(self):
+        return self.__board
+
 
 class Diamond(HexagonalBoard):
     def __init__(self, board_type: Shape, size: int, holes: Set[Tuple[int, int]]):
