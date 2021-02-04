@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Set, Tuple
+from typing import List, Set, Tuple
 
 import numpy as np
 
@@ -67,7 +67,7 @@ class HexagonalBoard(ABC):
             and self.__board[action.adjacent_coordinates] != 0 and self.__board[action.landing_coordinates] != 0
 
     def __get_legal_actions_for_coordinates(self, coordinates: Tuple[int, int]) -> Tuple[Action]:
-        legal_actions = []
+        legal_actions: List[Action] = []
         for direction_vector in self._edges:
             action = Action(coordinates, direction_vector)
             if self.__is_legal_action(action):
@@ -75,13 +75,13 @@ class HexagonalBoard(ABC):
         return tuple(legal_actions)
 
     def get_all_legal_actions(self) -> Tuple[Action]:
-        legal_moves = []
+        legal_moves: List[Action] = []
         for i in range(self.__board.shape[0]):
             for j in range(self.__board.shape[0]):
                 legal_actions_for_position = self.__get_legal_actions_for_coordinates(
                     (i, j))
                 if len(legal_actions_for_position) > 0:
-                    legal_moves.append(legal_actions_for_position)
+                    legal_moves += legal_actions_for_position
         return tuple(legal_moves)
 
 
