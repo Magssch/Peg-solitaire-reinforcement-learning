@@ -76,7 +76,7 @@ class NNCritic(Critic):
         reward = tf.convert_to_tensor(reward, dtype=tf.float32)
 
         with tf.GradientTape(persistent=True) as tape:
-            target = reward + tf.multiply(self._discount_factor, self.__values(successor_state))
+            target = reward + self._discount_factor * self.__values(successor_state)
             prediction = tf.convert_to_tensor([self.__values(current_state)])
             loss = self.__values.compiled_loss(target, prediction)
             td_error = target - prediction

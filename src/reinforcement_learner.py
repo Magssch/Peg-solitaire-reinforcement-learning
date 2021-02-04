@@ -59,7 +59,6 @@ class ReinforcementLearner:
                 self.__critic.replace_eligibilities(state)
 
                 td_error = self.__critic.td_error(state, next_state, reward)
-                print(f'  td_error={td_error:>7.4f}')
 
                 self.__critic.update(state, next_state, reward)
                 self.__actor.update(td_error)
