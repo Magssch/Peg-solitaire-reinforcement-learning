@@ -74,7 +74,7 @@ class Visualize:
                         Visualize.__graph, (x, y), neighbor_node)
 
     @staticmethod
-    def draw_board(board_type, board, action_nodes):
+    def draw_board(board_type, board, action_nodes, positions=None):
 
         # List of all node positions currently filled
         filled_nodes = Visualize.__get_filled_nodes(board)
@@ -91,8 +91,7 @@ class Visualize:
         # Position nodes to shape a Diamond
         elif board_type == Shape.Diamond:
             for node in legal_positions:
-                positions[node] = ((node[1] - node[0]),
-                                   (size - node[1] - node[0]))
+                positions[node] = (node[1] - node[0], size - node[1] - node[0])
 
         # Remove nodes currently active
         for nodes in action_nodes:
@@ -100,14 +99,10 @@ class Visualize:
                 filled_nodes.remove(nodes)
 
         # Draw the resulting grid
-        nx.draw_networkx_nodes(Visualize.__graph, positions,
-                               nodelist=empty_nodes, node_color='black')
-        nx.draw_networkx_nodes(Visualize.__graph, positions,
-                               nodelist=filled_nodes, node_color='blue')
-        nx.draw_networkx_nodes(Visualize.__graph, positions,
-                               nodelist=action_nodes[0], node_color='green')
-        nx.draw_networkx_nodes(Visualize.__graph, positions,
-                               nodelist=action_nodes[1], node_color='red')
+        nx.draw_networkx_nodes(Visualize.__graph, positions, nodelist=empty_nodes, node_color='black')
+        nx.draw_networkx_nodes(Visualize.__graph, positions, nodelist=filled_nodes, node_color='blue')
+        nx.draw_networkx_nodes(Visualize.__graph, positions, nodelist=action_nodes[0], node_color='green')
+        nx.draw_networkx_nodes(Visualize.__graph, positions, nodelist=action_nodes[1], node_color='red')
         nx.draw_networkx_edges(Visualize.__graph, positions, width=1)
 
         # Takes in delay for each move. Delay given in seconds
