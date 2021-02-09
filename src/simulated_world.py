@@ -32,7 +32,7 @@ class SimulatedWorld:
             return 0
 
     def __grid_to_vector(self):
-        return tuple(self.__game_board.get_board().flatten())
+        return tuple(filter(lambda cell: bool(cell), self.__game_board.get_board().flatten()))
 
     def step(self, action: Action, visualize: bool) -> Tuple[Tuple[int], int, bool, Tuple[Action]]:
         self.__game_board.make_move(action, visualize)

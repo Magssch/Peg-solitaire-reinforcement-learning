@@ -98,38 +98,24 @@ class Visualize:
                 filled_nodes.remove(nodes)
 
         # Draw first move
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=empty_nodes, node_color='white')
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=filled_nodes, node_color='black')
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[0]], node_color='green')
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[1]], node_color='red')
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[2]], node_color='red')
-        nx.draw_networkx_edges(Visualize.__graph, pos=positions, alpha=0.5, width=1)
+        Visualize.plot_graph(Visualize.__graph, positions, empty_nodes, filled_nodes, action_nodes, action_colors=['green','black','white'])
+        Visualize.plot_graph(Visualize.__graph, positions, empty_nodes, filled_nodes, action_nodes, action_colors=['green','red','white'])
+        Visualize.plot_graph(Visualize.__graph, positions, empty_nodes, filled_nodes, action_nodes, action_colors=['white','red','green'])
+        Visualize.plot_graph(Visualize.__graph, positions, empty_nodes, filled_nodes, action_nodes, action_colors=['white' , 'white','green'])
 
-        # Takes in delay for each move. Delay given in seconds
-        plt.axis('off')
-        plt.draw()
-        plt.pause(Visualize.__frame_delay)
-        plt.clf()
-
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=empty_nodes, node_color='white')
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=filled_nodes, node_color='black')
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[0]], node_color='green')
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[1]], node_color='red')
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[2]], node_color='red')
-        nx.draw_networkx_edges(Visualize.__graph, pos=positions, alpha=0.5, width=1)
+    @staticmethod
+    def plot_graph(graph, positions, empty_nodes, filled_nodes, action_nodes, action_colors):
+        nx.draw_networkx_nodes(graph, pos=positions, nodelist=empty_nodes, node_color='white')
+        nx.draw_networkx_nodes(graph, pos=positions, nodelist=filled_nodes, node_color='black')
+        nx.draw_networkx_nodes(graph, pos=positions, nodelist=[action_nodes[0]], node_color=action_colors[0])
+        nx.draw_networkx_nodes(graph, pos=positions, nodelist=[action_nodes[1]], node_color=action_colors[1])
+        nx.draw_networkx_nodes(graph, pos=positions, nodelist=[action_nodes[2]], node_color=action_colors[2])
+        nx.draw_networkx_edges(graph, pos=positions, alpha=0.5, width=1, edge_color='grey')
 
         plt.axis('off')
         plt.draw()
         plt.pause(Visualize.__frame_delay)
         plt.clf()
-
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=empty_nodes, node_color='white')
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=filled_nodes, node_color='black')
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[0]], node_color='green')
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[1]], node_color='red')
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[2]], node_color='red')
-        nx.draw_networkx_edges(Visualize.__graph, pos=positions, alpha=0.5, width=1)
-
 
     @staticmethod
     def plot_training_data(training_data):
