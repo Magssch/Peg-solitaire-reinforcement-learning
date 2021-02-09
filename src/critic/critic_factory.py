@@ -34,12 +34,14 @@ class CriticFactory:
         Critic
         """
         if use_table_critic:
+            print('Using table-based critic.')
             return TableCritic(
                 critic_learning_rate,
                 critic_discount_factor,
                 critic_trace_decay,
             )
         else:
+            print('Using NN-based critic.')
             return NNCritic(
                 critic_learning_rate,
                 critic_discount_factor,

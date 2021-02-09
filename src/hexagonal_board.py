@@ -36,12 +36,14 @@ class HexagonalBoard(ABC):
     def __draw_board(self, action: Action) -> None:
         Visualize.draw_board(self.__board_type, self.__board, action.positions)
 
-    def make_move(self, action: Action) -> None:
+    def make_move(self, action: Action, visualize: bool) -> None:
         if self.__is_legal_action(action):
             self.__board[action.start_coordinates] = 2
             self.__board[action.adjacent_coordinates] = 2
             self.__board[action.landing_coordinates] = 1
-            self.__draw_board(action)
+
+            if visualize:
+                self.__draw_board(action)
 
     def pegs_remaining(self) -> int:
         return (self.__board == 1).sum()

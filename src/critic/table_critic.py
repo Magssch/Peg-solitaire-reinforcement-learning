@@ -22,7 +22,7 @@ class TableCritic(Critic):
     replace_eligibilities(state, action):
         Replaces trace e(state) with 1.0
     """
-    __max_initial_value = 0.2
+    __max_initial_value = 0.1
 
     def __init__(
         self,

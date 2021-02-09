@@ -33,8 +33,8 @@ class SimulatedWorld:
     def __grid_to_vector(self):
         return tuple(self.__game_board.get_board().flatten())
 
-    def step(self, action: Action) -> Tuple[Tuple[int], int, bool, Tuple[Action]]:
-        self.__game_board.make_move(action)
+    def step(self, action: Action, visualize: bool) -> Tuple[Tuple[int], int, bool, Tuple[Action]]:
+        self.__game_board.make_move(action, visualize)
         return self.__grid_to_vector(), self.__calculate_reward(), self.__is_final_state(), self.__game_board.get_all_legal_actions()
 
     def reset(self) -> Tuple[Tuple[int], Tuple[Action]]:

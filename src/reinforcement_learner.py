@@ -38,36 +38,44 @@ class ReinforcementLearner:
         self.__simulated_world = SimulatedWorld()
         self.__episodes = parameters.EPISODES
 
+    def __run_one_episode(self, visualize=False) -> None:
+        self.__actor.reset_eligibilities()
+        self.__critic.reset_eligibilities()
+
+        state, possible_actions = self.__simulated_world.reset()
+        action = self.__actor.choose_action(state, possible_actions)
+
+        done = False
+
+        while not done:
+            next_state, reward, done, possible_actions = self.__simulated_world.step(action, visualize)
+
+            self.__actor.replace_eligibilities(state, action)
+            self.__critic.replace_eligibilities(state)
+
+            td_error = self.__critic.td_error(state, next_state, reward)
+
+            self.__critic.update(state, next_state, reward)
+            self.__actor.update(td_error)
+
+            if done:
+                break
+
+            state, action = next_state, self.__actor.choose_action(next_state, possible_actions)
+
     def run(self) -> None:
-        """Runs all episodes with pivotal parameters"""
+        """
+        Runs all episodes with pivotal parameters.
+        Visualizes one round at the end.
+        """
         for episode in range(self.__episodes):
-
-            print('Episode:', episode)
-
-            self.__actor.reset_eligibilities()
-            self.__critic.reset_eligibilities()
-
-            state, possible_actions = self.__simulated_world.reset()
-            action = self.__actor.choose_action(state, possible_actions)
-
-            done = False
-
-            while not done:
-                next_state, reward, done, possible_actions = self.__simulated_world.step(action)
-
-                self.__actor.replace_eligibilities(state, action)
-                self.__critic.replace_eligibilities(state)
-
-                td_error = self.__critic.td_error(state, next_state, reward)
-
-                self.__critic.update(state, next_state, reward)
-                self.__actor.update(td_error)
-
-                if done:
-                    break
-
-                state, action = next_state, self.__actor.choose_action(next_state, possible_actions)
+            print('Episode:', episode + 1)
+            self.__run_one_episode()
 
         self.__simulated_world.exit()
+        print('Training completed.')
 
-        print('Session completed.')
+        if parameters.VISUALIZE_GAMES:
+            print('Showing one episode with the greedy strategy.')
+            parameters.ACTOR_EPSILON = 0
+            self.__run_one_episode(True)
