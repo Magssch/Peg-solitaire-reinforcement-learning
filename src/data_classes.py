@@ -17,8 +17,8 @@ class Action:
         return (self.start_coordinates[0] + (self.direction_vector[0] * 2)), (self.start_coordinates[1] + (self.direction_vector[1] * 2))
 
     @property
-    def positions(self) -> Tuple[Tuple[int, int], Tuple[int, int]]:
-        return self.start_coordinates, self.landing_coordinates
+    def positions(self) -> Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]:
+        return self.start_coordinates, self.adjacent_coordinates, self.landing_coordinates
 
     def __hash__(self):
         return hash(self.start_coordinates) ^ hash(self.direction_vector)

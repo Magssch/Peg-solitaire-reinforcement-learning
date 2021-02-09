@@ -80,41 +80,57 @@ class Visualize:
         legal_positions = Visualize.__get_legal_positions(board)
         size = board.shape[0]
         positions = {}
-        node_labels = {}
-        node_label_pos = {}
+
 
         # Position nodes to shape a Triangle
         if board_type == Shape.Triangle:
             for node in legal_positions:
-                node_labels[node] = str(node)
-                node_label_pos[node] = (node[1], size - node[0])
                 positions[node] = (2 * node[1] - node[0], size - node[0])
 
         # Position nodes to shape a Diamond
         elif board_type == Shape.Diamond:
             for node in legal_positions:
-                node_labels[node] = str(node)
-                node_label_pos[node] = (node[1], size - node[0])
-                positions[node] = (node[1] - node[0], size - node[1] - node[0])
+                positions[node] = (node[0] - node[1], 2*size - node[1] - node[0])
 
         # Remove nodes currently active
         for nodes in action_nodes:
             if nodes in filled_nodes:
                 filled_nodes.remove(nodes)    
 
-        # Draw the resulting grid
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=empty_nodes, node_color='black')
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=filled_nodes, node_color='blue')
+        # Draw first move
+        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=empty_nodes, node_color='white')
+        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=filled_nodes, node_color='black')
         nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[0]], node_color='green')
         nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[1]], node_color='red')
+        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[2]], node_color='red')
         nx.draw_networkx_edges(Visualize.__graph, pos=positions, alpha=0.5, width=1)
-        #nx.draw_networkx_labels(Visualize.__graph, node_label_pos, labels=node_labels)
 
         # Takes in delay for each move. Delay given in seconds
         plt.axis('off')
         plt.draw()
+        print(action_nodes)
         plt.pause(Visualize.__frame_delay)
         plt.clf()
+
+        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=empty_nodes, node_color='white')
+        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=filled_nodes, node_color='black')
+        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[0]], node_color='green')
+        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[1]], node_color='red')
+        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[2]], node_color='red')
+        nx.draw_networkx_edges(Visualize.__graph, pos=positions, alpha=0.5, width=1)
+
+        plt.axis('off')
+        plt.draw()
+        print(action_nodes)
+        plt.pause(Visualize.__frame_delay)
+        plt.clf()
+
+        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=empty_nodes, node_color='white')
+        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=filled_nodes, node_color='black')
+        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[0]], node_color='green')
+        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[1]], node_color='red')
+        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[2]], node_color='red')
+        nx.draw_networkx_edges(Visualize.__graph, pos=positions, alpha=0.5, width=1)
 
 
     @staticmethod
