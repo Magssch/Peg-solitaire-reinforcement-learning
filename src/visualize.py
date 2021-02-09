@@ -95,7 +95,7 @@ class Visualize:
         # Remove nodes currently active
         for nodes in action_nodes:
             if nodes in filled_nodes:
-                filled_nodes.remove(nodes)    
+                filled_nodes.remove(nodes)
 
         # Draw first move
         Visualize.plot_graph(Visualize.__graph, positions, empty_nodes, filled_nodes, action_nodes, action_colors=['green','black','white'])
