@@ -3,7 +3,7 @@ from data_classes import Shape
 # General
 EPISODES = 20
 VISUALIZE_GAMES = True
-FRAME_DELAY = 10
+FRAME_DELAY = 0.6
 
 # Simulated World
 BOARD_TYPE = Shape.Diamond
