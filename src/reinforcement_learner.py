@@ -45,6 +45,9 @@ class ReinforcementLearner:
         self.__critic.reset_eligibilities()
 
         state, possible_actions = self.__simulated_world.reset()
+        if bool(possible_actions):
+            print('No possible actions from start position.')
+            return
         action = self.__actor.choose_action(state, possible_actions)
 
         done = False
