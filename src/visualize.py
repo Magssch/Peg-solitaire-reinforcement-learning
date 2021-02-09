@@ -101,7 +101,7 @@ class Visualize:
         Visualize.plot_graph(Visualize.__graph, positions, empty_nodes, filled_nodes, action_nodes, action_colors=['green','black','white'])
         Visualize.plot_graph(Visualize.__graph, positions, empty_nodes, filled_nodes, action_nodes, action_colors=['green','red','white'])
         Visualize.plot_graph(Visualize.__graph, positions, empty_nodes, filled_nodes, action_nodes, action_colors=['white','red','green'])
-        Visualize.plot_graph(Visualize.__graph, positions, empty_nodes, filled_nodes, action_nodes, action_colors=['white','white','green'])
+        Visualize.plot_graph(Visualize.__graph, positions, empty_nodes, filled_nodes, action_nodes, action_colors=['white' , 'white','green'])
 
     @staticmethod
     def plot_graph(graph, positions, empty_nodes, filled_nodes, action_nodes, action_colors):
@@ -110,7 +110,7 @@ class Visualize:
         nx.draw_networkx_nodes(graph, pos=positions, nodelist=[action_nodes[0]], node_color=action_colors[0])
         nx.draw_networkx_nodes(graph, pos=positions, nodelist=[action_nodes[1]], node_color=action_colors[1])
         nx.draw_networkx_nodes(graph, pos=positions, nodelist=[action_nodes[2]], node_color=action_colors[2])
-        nx.draw_networkx_edges(graph, pos=positions, alpha=0.5, width=1)
+        nx.draw_networkx_edges(graph, pos=positions, alpha=0.5, width=1, edge_color='grey')
 
         plt.axis('off')
         plt.draw()
