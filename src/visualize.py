@@ -1,5 +1,3 @@
-import time
-
 import matplotlib.pyplot as plt
 import networkx as nx
 
@@ -101,17 +99,16 @@ class Visualize:
 
         # Remove nodes currently active
         for nodes in action_nodes:
-            if nodes in legal_positions:
-                filled_nodes.remove(nodes)
-     
+            if nodes in filled_nodes:
+                filled_nodes.remove(nodes)    
 
         # Draw the resulting grid
         nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=empty_nodes, node_color='black')
         nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=filled_nodes, node_color='blue')
         nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[0]], node_color='green')
         nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[1]], node_color='red')
-        nx.draw_networkx_edges(Visualize.__graph, pos=positions, width=1)
-        nx.draw_networkx_labels(Visualize.__graph, node_label_pos, labels=node_labels)
+        nx.draw_networkx_edges(Visualize.__graph, pos=positions, alpha=0.5, width=1)
+        #nx.draw_networkx_labels(Visualize.__graph, node_label_pos, labels=node_labels)
 
         # Takes in delay for each move. Delay given in seconds
         plt.axis('off')

@@ -1,9 +1,9 @@
 from data_classes import Shape
 
 # General
-EPISODES = 500
-VISUALIZE_GAMES = False
-FRAME_DELAY = 0.3
+EPISODES = 100
+VISUALIZE_GAMES = True
+FRAME_DELAY = 1
 
 # Simulated World
 BOARD_TYPE = Shape.Diamond
