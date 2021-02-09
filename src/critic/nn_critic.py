@@ -39,7 +39,7 @@ class NNCritic(Critic):
             discount_factor,  # gamma
             trace_decay,  # lambda
         )
-        assert nn_dimensions is not None
+        assert nn_dimensions is not None, 'nn_dimensions cannot be None when using NN-based critic'
         self.__nn_dimensions = nn_dimensions
         self.__values = self.__build_critic_network()  # V(s)
         self.reset_eligibilities()
@@ -48,7 +48,7 @@ class NNCritic(Critic):
         """Builds a neural network model with the provided dimensions and learning rate"""
         input_dim, *hidden_dims, output_dim = self.__nn_dimensions
 
-        assert output_dim == 1
+        assert output_dim == 1, 'Output dimension must be 1'
 
         model = Sequential()
         model.add(Input(shape=(input_dim,)))

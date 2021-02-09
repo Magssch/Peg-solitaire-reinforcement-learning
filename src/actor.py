@@ -1,5 +1,8 @@
 import random
+from keras import activations
+import tensorflow as tf
 from collections import defaultdict
+import numpy as np
 
 
 class Actor:
@@ -45,6 +48,13 @@ class Actor:
 
     def choose_action(self, state, possible_actions):
         """Epsilon-greedy action selection function."""
+        assert bool(possible_actions) is True, 'Possible actions cannot be empty'
+
+        def choose_boltzman(state, possible_actions):
+            action_values = [self.__policy[state][action] for action in possible_actions]
+            action_distribution = activations.softmax(tf.constant([action_values])).numpy()[0]
+            return np.random.choice(possible_actions, 1, p=action_distribution)[0]
+
         def choose_uniform(possible_actions):
             return random.choice(possible_actions)
 
@@ -52,7 +62,7 @@ class Actor:
             return max(possible_actions, key=lambda action: self.__policy[state][action])
 
         if random.random() < self.__epsilon:
-            return choose_uniform(possible_actions)
+            return choose_boltzman(state, possible_actions)
         return choose_greedy(state, possible_actions)
 
     def update(self, td_error):
