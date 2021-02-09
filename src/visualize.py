@@ -95,7 +95,7 @@ class Visualize:
         # Remove nodes currently active
         for nodes in action_nodes:
             if nodes in filled_nodes:
-                filled_nodes.remove(nodes)    
+                filled_nodes.remove(nodes)
 
         # Draw first move
         nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=empty_nodes, node_color='white')
@@ -108,7 +108,6 @@ class Visualize:
         # Takes in delay for each move. Delay given in seconds
         plt.axis('off')
         plt.draw()
-        print(action_nodes)
         plt.pause(Visualize.__frame_delay)
         plt.clf()
 
@@ -121,7 +120,6 @@ class Visualize:
 
         plt.axis('off')
         plt.draw()
-        print(action_nodes)
         plt.pause(Visualize.__frame_delay)
         plt.clf()
 

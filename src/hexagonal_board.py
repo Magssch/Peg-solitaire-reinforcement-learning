@@ -25,7 +25,6 @@ class HexagonalBoard(ABC):
         if self.__board_type == Shape.Triangle:
             self.__board = np.tril(
                 np.full((self.__size, self.__size), 1, dtype=np.int8), 0)
-            print(self.__board)
 
         for hole in self.__holes:
             if hole[0] >= 0 and hole[0] < self.__board.shape[0] and hole[1] >= 0 and hole[1] < self.__board.shape[0]:
