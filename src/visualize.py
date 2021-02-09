@@ -90,7 +90,7 @@ class Visualize:
         # Position nodes to shape a Diamond
         elif board_type == Shape.Diamond:
             for node in legal_positions:
-                positions[node] = (node[1] - node[0], size - node[1] - node[0])
+                positions[node] = (node[0] - node[1], 2*size - node[1] - node[0])
 
         # Remove nodes currently active
         for nodes in action_nodes:
@@ -98,8 +98,8 @@ class Visualize:
                 filled_nodes.remove(nodes)    
 
         # Draw the resulting grid
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=empty_nodes, node_color='black')
-        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=filled_nodes, node_color='blue')
+        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=empty_nodes, node_color='white')
+        nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=filled_nodes, node_color='black')
         nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[0]], node_color='green')
         nx.draw_networkx_nodes(Visualize.__graph, pos=positions, nodelist=[action_nodes[1]], node_color='red')
         nx.draw_networkx_edges(Visualize.__graph, pos=positions, alpha=0.5, width=1)
@@ -108,6 +108,7 @@ class Visualize:
         # Takes in delay for each move. Delay given in seconds
         plt.axis('off')
         plt.draw()
+        print(action_nodes)
         plt.pause(Visualize.__frame_delay)
         plt.clf()
 
