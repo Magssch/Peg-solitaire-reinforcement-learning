@@ -6,7 +6,7 @@ VISUALIZE_GAMES = True
 FRAME_DELAY = 1
 
 # Simulated World
-BOARD_TYPE = Shape.Triangle
+BOARD_TYPE = Shape.Diamond
 SIZE = 5
 HOLES = set([
     (3, 2),

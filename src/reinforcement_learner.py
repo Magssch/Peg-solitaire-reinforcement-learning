@@ -39,15 +39,10 @@ class ReinforcementLearner:
         self.__episodes = parameters.EPISODES
 
     def __run_one_episode(self, visualize=False) -> None:
-        self.__actor.set_epsilon(parameters.ACTOR_EPSILON)
-
         self.__actor.reset_eligibilities()
         self.__critic.reset_eligibilities()
 
         state, possible_actions = self.__simulated_world.reset()
-        if bool(possible_actions):
-            print('No possible actions from start position.')
-            return
         action = self.__actor.choose_action(state, possible_actions)
 
         done = False

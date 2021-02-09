@@ -43,9 +43,6 @@ class Actor:
         self.__policy = defaultdict(lambda: defaultdict(float))  # Pi(s, a)
         self.reset_eligibilities()
 
-    def set_epsilon(self, epsilon):
-        self.__epsilon = epsilon
-
     def choose_action(self, state, possible_actions):
         """Epsilon-greedy action selection function."""
         def choose_uniform(possible_actions):
