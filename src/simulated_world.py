@@ -16,15 +16,16 @@ class SimulatedWorld:
         else:
             self.__game_board = Triangle(parameters.BOARD_TYPE, parameters.SIZE, parameters.HOLES)
             Visualize.initialize_board(self.__game_board.get_board(), self.__game_board._edges, self.__board_type)
-        self.__frame_delay = parameters.FRAME_DELAY
         self.__peg_history = []
+        print('Initial board:')
+        print(self.__game_board)
 
     def __is_final_state(self) -> bool:
         return self.__game_board.pegs_remaining() == 1 or self.__game_board.game_over()
 
     def __calculate_reward(self) -> int:
         if self.__game_board.pegs_remaining() == 1:
-            return 1
+            return 10
         elif self.__game_board.game_over():
             return -1
         else:
