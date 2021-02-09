@@ -54,8 +54,7 @@ class HexagonalBoard(ABC):
     def __is_legal_action(self, action: Action) -> bool:
         return self.__action_is_inside_board(action) \
             and self.__cell_contains_peg(action.adjacent_coordinates) \
-            and not self.__cell_contains_peg(
-            action.landing_coordinates)
+            and not self.__cell_contains_peg(action.landing_coordinates)
 
     def __cell_contains_peg(self, coordinates: Tuple[int, int]) -> bool:
         return self.__board[coordinates] == 1
@@ -79,9 +78,10 @@ class HexagonalBoard(ABC):
         legal_moves: List[Action] = []
         for i in range(self.__board.shape[0]):
             for j in range(self.__board.shape[0]):
-                legal_actions_for_position = self.__get_legal_actions_for_coordinates((i, j))
-                if len(legal_actions_for_position) > 0:
-                    legal_moves += legal_actions_for_position
+                if self.__cell_contains_peg((i, j)):
+                    legal_actions_for_position = self.__get_legal_actions_for_coordinates((i, j))
+                    if len(legal_actions_for_position) > 0:
+                        legal_moves += legal_actions_for_position
         return tuple(legal_moves)
 
     def __str__(self):

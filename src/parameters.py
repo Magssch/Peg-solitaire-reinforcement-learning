@@ -2,8 +2,8 @@ from data_classes import Shape
 
 # General
 EPISODES = 100
-VISUALIZE_GAMES = False
-FRAME_DELAY = 0.3
+VISUALIZE_GAMES = True
+FRAME_DELAY = 1
 
 # Simulated World
 BOARD_TYPE = Shape.Triangle
