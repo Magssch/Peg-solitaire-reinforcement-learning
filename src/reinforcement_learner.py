@@ -39,8 +39,6 @@ class ReinforcementLearner:
         self.__episodes = parameters.EPISODES
 
     def __run_one_episode(self, visualize=False) -> None:
-        self.__actor.set_epsilon(parameters.ACTOR_EPSILON)
-
         self.__actor.reset_eligibilities()
         self.__critic.reset_eligibilities()
 

@@ -11,11 +11,11 @@ class SimulatedWorld:
     def __init__(self):
         self.__board_type = parameters.BOARD_TYPE
         if parameters.BOARD_TYPE == Shape.Diamond:
-            self.__game_board = Diamond(
-                parameters.BOARD_TYPE, parameters.SIZE, parameters.HOLES)
+            self.__game_board = Diamond(parameters.BOARD_TYPE, parameters.SIZE, parameters.HOLES)
+            Visualize.initialize_board(self.__game_board.get_board(), self.__game_board._edges, self.__board_type)
         else:
-            self.__game_board = Triangle(
-                parameters.BOARD_TYPE, parameters.SIZE, parameters.HOLES)
+            self.__game_board = Triangle(parameters.BOARD_TYPE, parameters.SIZE, parameters.HOLES)
+            Visualize.initialize_board(self.__game_board.get_board(), self.__game_board._edges, self.__board_type)
         self.__frame_delay = parameters.FRAME_DELAY
         self.__peg_history = []
 
