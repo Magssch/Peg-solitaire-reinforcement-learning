@@ -140,3 +140,15 @@ class Visualize:
         plt.tight_layout()
         plt.savefig('src/results/epsilon.png')
         plt.close()
+
+    @staticmethod
+    def plot_td_error(td_error_history):
+        plt.title('TD error')
+        plt.xlabel('Time steps')
+        plt.ylabel('$\delta$')
+
+        plt.plot(td_error_history, color='tab:blue')
+
+        plt.tight_layout()
+        plt.savefig('src/results/td_error.png')
+        plt.close()
