@@ -1,6 +1,6 @@
+import parameters
 from actor import Actor
 from critic.critic_factory import CriticFactory
-import parameters
 from simulated_world import SimulatedWorld
 
 

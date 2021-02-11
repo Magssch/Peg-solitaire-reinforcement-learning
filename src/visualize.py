@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 
-from data_classes import Shape
 import parameters
+from data_classes import Shape
 
 
 class Visualize:

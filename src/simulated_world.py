@@ -1,8 +1,8 @@
 from typing import Tuple
 
+import parameters
 from data_classes import Action, Shape
 from hexagonal_board import Diamond, Triangle
-import parameters
 from visualize import Visualize
 
 

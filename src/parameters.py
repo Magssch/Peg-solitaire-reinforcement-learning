@@ -1,6 +1,5 @@
 from data_classes import Shape
 
-
 # General
 EPISODES = 1000
 VISUALIZE_GAMES = True
