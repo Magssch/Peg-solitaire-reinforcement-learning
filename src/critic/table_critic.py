@@ -1,6 +1,8 @@
 import random
 from collections import defaultdict
 
+from visualize import Visualize
+
 from .critic import Critic
 
 
@@ -35,6 +37,7 @@ class TableCritic(Critic):
             trace_decay,  # lambda
         )
         self.__values = defaultdict(lambda: (random.random() - 0.5) * 0.02)  # V(s)
+        self.__value_history = []
         self.reset_eligibilities()
 
     def _get_value(self, state) -> float:
@@ -57,8 +60,13 @@ class TableCritic(Critic):
 
     def reset_eligibilities(self) -> None:
         """Sets all eligibilities to 0.0"""
+        if len(self.__values) != 0:
+            self.__value_history.append(self.__values[max(self.__values, key=lambda state: abs(self._get_value(state)))])
         self.__eligibilities = defaultdict(float)
 
     def replace_eligibilities(self, state) -> None:
         """Replaces trace e(state) with 1.0"""
         self.__eligibilities[state] = 1
+
+    def plot_training_data(self) -> None:
+        Visualize.plot_value_history(self.__value_history)

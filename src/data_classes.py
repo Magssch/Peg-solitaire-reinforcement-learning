@@ -21,7 +21,10 @@ class Action:
         return self.start_coordinates, self.adjacent_coordinates, self.landing_coordinates
 
     def __hash__(self):
-        return hash(self.start_coordinates) ^ hash(self.direction_vector)
+        return hash(self.start_coordinates) ^ hash(self.landing_coordinates)
+
+    def __eq__(self, other):
+        return (self.start_coordinates == other.start_coordinates) and (self.direction_vector == other.direction_vector)
 
 
 class Shape(Enum):

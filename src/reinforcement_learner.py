@@ -72,8 +72,10 @@ class ReinforcementLearner:
             print('Episode:', episode + 1)
             self.__run_one_episode()
 
-        self.__simulated_world.exit()
         print('Training completed.')
+        self.__simulated_world.plot_training_data()
+        self.__actor.plot_training_data()
+        self.__critic.plot_training_data()
 
         if parameters.VISUALIZE_GAMES:
             print('Showing one episode with the greedy strategy.')

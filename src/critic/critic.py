@@ -15,7 +15,7 @@ class Critic(ABC):
 
     def td_error(self, current_state, successor_state, reward) -> float:
         """Temporal difference (TD) error. Same as lowercase delta"""
-        return reward + self._discount_factor * self._get_value(successor_state) - self._get_value(current_state)
+        return reward + self._discount_factor * (self._get_value(successor_state) if reward != 1 else 0) - self._get_value(current_state)
 
     @abstractmethod
     def _get_value(self, state) -> float:
@@ -31,4 +31,7 @@ class Critic(ABC):
 
     @abstractmethod
     def replace_eligibilities(self, state) -> None:
+        raise NotImplementedError
+
+    def plot_training_data(self):
         raise NotImplementedError

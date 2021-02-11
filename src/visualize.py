@@ -122,7 +122,6 @@ class Visualize:
         plt.title('Training data')
         plt.xlabel('Episode')
         plt.ylabel('Remaining Pegs')
-
         plt.plot(training_data, color='tab:blue')
 
         plt.tight_layout()
@@ -151,4 +150,16 @@ class Visualize:
 
         plt.tight_layout()
         plt.savefig('src/results/td_error.png')
+        plt.close()
+
+    @staticmethod
+    def plot_value_history(value_history):
+        plt.title('Max value')
+        plt.xlabel('Episode')
+        plt.ylabel('$\max_s V(s)$')
+
+        plt.plot(value_history, color='tab:blue')
+
+        plt.tight_layout()
+        plt.savefig('src/results/value_history.png')
         plt.close()

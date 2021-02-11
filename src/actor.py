@@ -1,6 +1,8 @@
 import random
 from collections import defaultdict
+from typing import Tuple
 
+from data_classes import Action
 from visualize import Visualize
 
 
@@ -34,7 +36,7 @@ class Actor:
         trace_decay: float,
         epsilon: float,
         epsilon_decay: float,
-    ):
+    ) -> None:
         self.__learning_rate = learning_rate  # alpha
         self.__discount_factor = discount_factor  # gamma
         self.__trace_decay = trace_decay  # lambda
@@ -47,26 +49,24 @@ class Actor:
         self.__td_error_history = []
         self.reset_eligibilities()
 
-    def set_epsilon(self, epsilon):
-        Visualize.plot_epsilon(self.__epsilon_history)
-        Visualize.plot_td_error(self.__td_error_history)
+    def set_epsilon(self, epsilon) -> None:
         self.__epsilon = epsilon
 
-    def choose_action(self, state, possible_actions):
+    def choose_action(self, state, possible_actions: Tuple[Action]) -> Action:
         """Epsilon-greedy action selection function."""
         assert bool(possible_actions) is True, 'Possible actions cannot be empty'
 
-        def choose_uniform(possible_actions):
+        def choose_uniform(possible_actions) -> Action:
             return random.choice(possible_actions)
 
-        def choose_greedy(state, possible_actions):
+        def choose_greedy(state, possible_actions) -> Action:
             return max(possible_actions, key=lambda action: self.__policy[state][action])
 
         if random.random() < self.__epsilon:
             return choose_uniform(possible_actions)
         return choose_greedy(state, possible_actions)
 
-    def update(self, td_error):
+    def update(self, td_error) -> None:
         """
         Updates the policy function, then eligibilities for each state-action
         pair in the episode based on the td_error from the critic.
@@ -95,3 +95,7 @@ class Actor:
     def replace_eligibilities(self, state, action) -> None:
         """Replaces trace e(state) with 1.0"""
         self.__eligibilities[state][action] = 1.0
+
+    def plot_training_data(self) -> None:
+        Visualize.plot_epsilon(self.__epsilon_history)
+        Visualize.plot_td_error(self.__td_error_history)

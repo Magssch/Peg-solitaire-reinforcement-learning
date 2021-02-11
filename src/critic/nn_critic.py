@@ -101,3 +101,7 @@ class NNCritic(Critic):
     def replace_eligibilities(self, _) -> None:
         """Not used by NNCritic."""
         pass
+
+    def plot_training_data(self):
+        """Not used by NNCritic."""
+        pass

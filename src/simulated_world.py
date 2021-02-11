@@ -43,6 +43,6 @@ class SimulatedWorld:
         self.__game_board.reset_game()
         return self.__grid_to_vector(), self.__game_board.get_all_legal_actions()
 
-    def exit(self) -> None:
+    def plot_training_data(self) -> None:
         self.__peg_history.append(self.__game_board.pegs_remaining())
         Visualize.plot_training_data(self.__peg_history[1:])
