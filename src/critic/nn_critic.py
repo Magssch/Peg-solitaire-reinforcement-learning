@@ -3,7 +3,7 @@ import tensorflow as tf
 from keras import backend as K  # noqa
 from keras.layers import Dense, Input
 from keras.models import Sequential
-from keras.optimizers import Adam
+from keras.optimizers import SGD
 
 from .critic import Critic
 
@@ -59,7 +59,7 @@ class NNCritic(Critic):
         model.add(Dense(units=1, activation='linear'))
 
         model.compile(
-            optimizer=Adam(learning_rate=self._learning_rate),
+            optimizer=SGD(learning_rate=self._learning_rate),
             loss='mean_squared_error'
         )
         model.summary()
@@ -87,8 +87,9 @@ class NNCritic(Critic):
 
     def __modify_gradients(self, gradients, td_error):
         for gradient, eligibility in zip(gradients, self.__eligibilities):
+            gradient *= 1 / (2 * td_error)
             eligibility = self._discount_factor * self._trace_decay * eligibility + gradient
-            gradient += td_error * eligibility
+            gradient = td_error * eligibility
         return gradients
 
     def reset_eligibilities(self) -> None:

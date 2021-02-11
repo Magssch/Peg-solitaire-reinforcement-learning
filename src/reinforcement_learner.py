@@ -77,5 +77,5 @@ class ReinforcementLearner:
 
         if parameters.VISUALIZE_GAMES:
             print('Showing one episode with the greedy strategy.')
-            parameters.ACTOR_EPSILON = 0
+            self.__actor.set_epsilon(0)
             self.__run_one_episode(True)

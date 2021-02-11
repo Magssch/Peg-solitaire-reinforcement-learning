@@ -1,8 +1,7 @@
 import random
-from keras import activations
-import tensorflow as tf
 from collections import defaultdict
-import numpy as np
+
+from visualize import Visualize
 
 
 class Actor:
@@ -44,16 +43,16 @@ class Actor:
         self.__epsilon_decay = epsilon_decay
 
         self.__policy = defaultdict(lambda: defaultdict(float))  # Pi(s, a)
+        self.__epsilon_history = []
         self.reset_eligibilities()
+
+    def set_epsilon(self, epsilon):
+        Visualize.plot_epsilon(self.__epsilon_history)
+        self.__epsilon = epsilon
 
     def choose_action(self, state, possible_actions):
         """Epsilon-greedy action selection function."""
         assert bool(possible_actions) is True, 'Possible actions cannot be empty'
-
-        def choose_boltzman(state, possible_actions):
-            action_values = [self.__policy[state][action] for action in possible_actions]
-            action_distribution = activations.softmax(tf.constant([action_values])).numpy()[0]
-            return np.random.choice(possible_actions, 1, p=action_distribution)[0]
 
         def choose_uniform(possible_actions):
             return random.choice(possible_actions)
@@ -62,7 +61,7 @@ class Actor:
             return max(possible_actions, key=lambda action: self.__policy[state][action])
 
         if random.random() < self.__epsilon:
-            return choose_boltzman(state, possible_actions)
+            return choose_uniform(possible_actions)
         return choose_greedy(state, possible_actions)
 
     def update(self, td_error):
@@ -75,6 +74,7 @@ class Actor:
         self.__update_eligibilities()
 
     def __update_policy(self, td_error) -> None:
+        self.__epsilon_history.append(self.__epsilon)
         self.__epsilon *= self.__epsilon_decay
         for state in self.__eligibilities:
             for action, eligibility in self.__eligibilities[state].items():

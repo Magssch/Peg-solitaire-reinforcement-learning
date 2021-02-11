@@ -22,7 +22,6 @@ class TableCritic(Critic):
     replace_eligibilities(state, action):
         Replaces trace e(state) with 1.0
     """
-    __max_initial_value = 0.1
 
     def __init__(
         self,
@@ -35,7 +34,7 @@ class TableCritic(Critic):
             discount_factor,  # gamma
             trace_decay,  # lambda
         )
-        self.__values = defaultdict(lambda: random.random() * TableCritic.__max_initial_value)  # V(s)
+        self.__values = defaultdict(lambda: (random.random() - 0.5) * 0.02)  # V(s)
         self.reset_eligibilities()
 
     def _get_value(self, state) -> float:

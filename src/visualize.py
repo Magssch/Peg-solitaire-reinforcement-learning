@@ -128,3 +128,15 @@ class Visualize:
         plt.tight_layout()
         plt.savefig('src/results/training_data.png')
         plt.close()
+
+    @staticmethod
+    def plot_epsilon(epsilon_history):
+        plt.title('Epsilon')
+        plt.xlabel('Time steps')
+        plt.ylabel('$\epsilon$')
+
+        plt.plot(epsilon_history, color='tab:blue')
+
+        plt.tight_layout()
+        plt.savefig('src/results/epsilon.png')
+        plt.close()
