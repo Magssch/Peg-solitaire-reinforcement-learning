@@ -21,7 +21,7 @@ class SimulatedWorld:
         print(self.__game_board)
 
     def __is_final_state(self) -> bool:
-        return self.__game_board.pegs_remaining() == 1 or self.__game_board.game_over()
+        return self.__game_board.game_over()
 
     def __calculate_reward(self) -> int:
         if self.__game_board.pegs_remaining() == 1:
@@ -39,7 +39,7 @@ class SimulatedWorld:
         return self.__grid_to_vector(), self.__calculate_reward(), self.__is_final_state(), self.__game_board.get_all_legal_actions()
 
     def reset(self) -> Tuple[Tuple[int], Tuple[Action]]:
-        self.__peg_history.append(self.__game_board.pegs_remaining())
+        self.__peg_history.append(self.__game_board.pegs_remaining())  # Used for plotting
         self.__game_board.reset_game()
         return self.__grid_to_vector(), self.__game_board.get_all_legal_actions()
 
