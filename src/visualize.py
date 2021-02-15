@@ -15,8 +15,8 @@ class Visualize:
         graph.add_node(position)
 
     @staticmethod
-    def __add_edge_to_graph(graph, u, v):
-        graph.add_edge(u, v)
+    def __add_edge_to_graph(graph, u_position, v_position):
+        graph.add_edge(u_position, v_position)
 
     @staticmethod
     def __get_filled_nodes(board):
@@ -47,7 +47,6 @@ class Visualize:
 
     @classmethod
     def initialize_board(cls, board, edges, board_type):
-        cls.__graph = nx.Graph()
         size = board.shape[0]
 
         legal_positions = Visualize.__get_legal_positions(board)
