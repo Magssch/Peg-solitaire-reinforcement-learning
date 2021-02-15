@@ -17,6 +17,7 @@ class SimulatedWorld:
             self.__game_board = Triangle(parameters.BOARD_TYPE, parameters.SIZE, parameters.HOLES)
             Visualize.initialize_board(self.__game_board.get_board(), self.__game_board._edges, self.__board_type)
         self.__peg_history = []
+        self.__memoized_legal_actions = {}
         print('Initial board:')
         print(self.__game_board)
 
@@ -37,7 +38,7 @@ class SimulatedWorld:
     def step(self, action: Union[Action, None], visualize: bool) -> Tuple[Tuple[int], int, bool, Tuple[Action]]:
         assert action is not None, 'No actions found. Cannot play game.'
         self.__game_board.make_move(action, visualize)
-        return self.__grid_to_vector(), self.__calculate_reward(), self.__is_final_state(), self.__game_board.get_all_legal_actions()
+        return self.__grid_to_vector(), self.__calculate_reward(), self.__is_final_state(), self.__memoize_legal_actions()
 
     def reset(self) -> Tuple[Tuple[int], Tuple[Action]]:
         self.__peg_history.append(self.__game_board.pegs_remaining())  # Used for plotting
@@ -47,3 +48,12 @@ class SimulatedWorld:
     def plot_training_data(self) -> None:
         self.__peg_history.append(self.__game_board.pegs_remaining())
         Visualize.plot_training_data(self.__peg_history[1:])
+
+    def __memoize_legal_actions(self):
+        grid_to_vector = self.__grid_to_vector()
+        if grid_to_vector not in self.__memoized_legal_actions:
+            all_legal_actions = self.__game_board.get_all_legal_actions()
+            self.__memoized_legal_actions[grid_to_vector] = all_legal_actions
+            return all_legal_actions
+        else:
+            return self.__memoized_legal_actions[grid_to_vector]
