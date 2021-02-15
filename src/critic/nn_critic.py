@@ -1,6 +1,5 @@
 from typing import Tuple
 
-import numpy as np
 import tensorflow as tf
 from keras import backend as K  # noqa
 from keras.layers import Dense, Input
@@ -56,7 +55,7 @@ class NNCritic(Critic):
         model.add(Input(shape=(input_dim,)))
 
         for dimension in hidden_dims:
-            model.add(Dense(dimension, activation='relu'))
+            model.add(Dense(dimension, activation='swish'))
 
         model.add(Dense(units=1, activation='linear'))
 
@@ -69,7 +68,7 @@ class NNCritic(Critic):
 
     def _get_value(self, state: Tuple[int]) -> float:
         """Value function V(s)"""
-        return np.squeeze(self.__values(np.array([state])))
+        return float(self.__values(tf.convert_to_tensor([state])))  # type: ignore
 
     def update(self, reward: float, successor_state: Tuple[int], current_state: Tuple[int]) -> None:
         """Updates eligibilities, then the value function."""
@@ -85,7 +84,7 @@ class NNCritic(Critic):
 
         gradients = tape.gradient(loss, self.__values.trainable_weights)
         gradients = self.__modify_gradients(gradients, td_error)
-        self.__values.optimizer.apply_gradients(zip(gradients, self.__values.trainable_weights))
+        self.__values.optimizer.apply_gradients(zip(gradients, self.__values.trainable_weights))  # type: ignore
 
     def __modify_gradients(self, gradients, td_error):
         for gradient, eligibility in zip(gradients, self.__eligibilities):
