@@ -3,11 +3,11 @@ from data_classes import Shape
 # General
 EPISODES = 600
 VISUALIZE_GAMES = True
-FRAME_DELAY = 1
+FRAME_DELAY = 0.4
 
 # Simulated World
 BOARD_TYPE = Shape.Triangle
-SIZE = 4
+SIZE = 5
 HOLES = set([
     (1, 1),
 ])
@@ -26,4 +26,4 @@ CRITIC_DISCOUNT_FACTOR = 0.85
 CRITIC_TRACE_DECAY = 0.85
 
 USE_TABLE_CRITIC = True
-CRITIC_NN_DIMENSIONS = (10, 20, 1)
+CRITIC_NN_DIMENSIONS = (15, 20, 1)

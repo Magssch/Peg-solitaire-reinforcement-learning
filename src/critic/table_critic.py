@@ -1,5 +1,6 @@
 import random
 from collections import defaultdict
+from typing import Tuple
 
 from visualize import Visualize
 
@@ -49,8 +50,8 @@ class TableCritic(Critic):
         self.__update_values(current_state, successor_state, reward)
         self.__update_eligibilities()
 
-    def __update_values(self, current_state, successor_state, reward) -> None:
-        td_error = self.td_error(current_state, successor_state, reward)
+    def __update_values(self, reward: float, successor_state: Tuple[int], current_state: Tuple[int]) -> None:
+        td_error = self.td_error(reward, successor_state, current_state)
         for state, eligibility in self.__eligibilities.items():
             self.__values[state] += self._learning_rate * td_error * eligibility
 
@@ -60,11 +61,13 @@ class TableCritic(Critic):
 
     def reset_eligibilities(self) -> None:
         """Sets all eligibilities to 0.0"""
-        if len(self.__values) != 0:
-            self.__value_history.append(self.__values[max(self.__values, key=lambda state: abs(self._get_value(state)))])
         self.__eligibilities = defaultdict(float)
 
-    def replace_eligibilities(self, state) -> None:
+        # Used for plotting:
+        if len(self.__values) != 0:
+            self.__value_history.append(self.__values[max(self.__values, key=lambda state: abs(self._get_value(state)))])
+
+    def replace_eligibilities(self, state: Tuple[int]) -> None:
         """Replaces trace e(state) with 1.0"""
         self.__eligibilities[state] = 1
 

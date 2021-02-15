@@ -96,7 +96,7 @@ class NNCritic(Critic):
         """Sets all eligibilities to 0.0"""
         self.__eligibilities = []
         for weights in self.__values.trainable_weights:
-            self.__eligibilities.append(tf.ones(weights.shape))
+            self.__eligibilities.append(tf.zeros(weights.shape))
 
     def replace_eligibilities(self, _) -> None:
         """Not used by NNCritic."""

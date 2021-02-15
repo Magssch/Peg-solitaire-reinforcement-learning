@@ -1,6 +1,6 @@
 import random
 from collections import defaultdict
-from typing import Tuple
+from typing import Tuple, Union
 
 from data_classes import Action
 from visualize import Visualize
@@ -49,36 +49,41 @@ class Actor:
         self.__td_error_history = []
         self.reset_eligibilities()
 
-    def set_epsilon(self, epsilon) -> None:
+    def set_epsilon(self, epsilon: float) -> None:
         self.__epsilon = epsilon
 
-    def choose_action(self, state, possible_actions: Tuple[Action]) -> Action:
+    def choose_action(self, state: Tuple[int], possible_actions: Tuple[Action]) -> Union[Action, None]:
         """Epsilon-greedy action selection function."""
-        assert bool(possible_actions) is True, 'Possible actions cannot be empty'
 
-        def choose_uniform(possible_actions) -> Action:
+        if not bool(possible_actions):
+            return None
+
+        def choose_uniform(possible_actions: Tuple[Action]) -> Action:
             return random.choice(possible_actions)
 
-        def choose_greedy(state, possible_actions) -> Action:
+        def choose_greedy(state: Tuple[int], possible_actions: Tuple[Action]) -> Action:
             return max(possible_actions, key=lambda action: self.__policy[state][action])
 
         if random.random() < self.__epsilon:
             return choose_uniform(possible_actions)
         return choose_greedy(state, possible_actions)
 
-    def update(self, td_error) -> None:
+    def update(self, td_error: float) -> None:
         """
         Updates the policy function, then eligibilities for each state-action
         pair in the episode based on the td_error from the critic.
         Also decays the epsilon based on the epsilon decay rate.
         """
-        self.__td_error_history.append(td_error)
+        self.__epsilon_history.append(self.__epsilon)  # Used for plotting
+        self.__epsilon *= self.__epsilon_decay
+
         self.__update_policy(td_error)
         self.__update_eligibilities()
 
-    def __update_policy(self, td_error) -> None:
-        self.__epsilon_history.append(self.__epsilon)
-        self.__epsilon *= self.__epsilon_decay
+        # Used for plotting:
+        self.__td_error_history.append(td_error)
+
+    def __update_policy(self, td_error: float) -> None:
         for state in self.__eligibilities:
             for action, eligibility in self.__eligibilities[state].items():
                 self.__policy[state][action] += self.__learning_rate * td_error * eligibility
@@ -92,7 +97,7 @@ class Actor:
         """Sets all eligibilities to 0.0"""
         self.__eligibilities = defaultdict(lambda: defaultdict(float))
 
-    def replace_eligibilities(self, state, action) -> None:
+    def replace_eligibilities(self, state: Tuple[int], action: Union[Action, None]) -> None:
         """Replaces trace e(state) with 1.0"""
         self.__eligibilities[state][action] = 1.0
 

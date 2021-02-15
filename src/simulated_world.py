@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Union
 
 import parameters
 from data_classes import Action, Shape
@@ -34,7 +34,8 @@ class SimulatedWorld:
     def __grid_to_vector(self):
         return tuple(filter(lambda cell: bool(cell), self.__game_board.get_board().flatten()))
 
-    def step(self, action: Action, visualize: bool) -> Tuple[Tuple[int], int, bool, Tuple[Action]]:
+    def step(self, action: Union[Action, None], visualize: bool) -> Tuple[Tuple[int], int, bool, Tuple[Action]]:
+        assert action is not None, 'No actions found. Cannot play game.'
         self.__game_board.make_move(action, visualize)
         return self.__grid_to_vector(), self.__calculate_reward(), self.__is_final_state(), self.__game_board.get_all_legal_actions()
 

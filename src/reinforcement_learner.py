@@ -38,7 +38,7 @@ class ReinforcementLearner:
         self.__simulated_world = SimulatedWorld()
         self.__episodes = parameters.EPISODES
 
-    def __run_one_episode(self, visualize=False) -> None:
+    def __run_one_episode(self, visualize: bool = False) -> None:
         self.__actor.reset_eligibilities()
         self.__critic.reset_eligibilities()
 
@@ -49,19 +49,17 @@ class ReinforcementLearner:
 
         while not done:
             next_state, reward, done, possible_actions = self.__simulated_world.step(action, visualize)
+            next_action = self.__actor.choose_action(next_state, possible_actions)
 
             self.__actor.replace_eligibilities(state, action)
             self.__critic.replace_eligibilities(state)
 
-            td_error = self.__critic.td_error(state, next_state, reward)
+            td_error = self.__critic.td_error(reward, next_state, state)
 
-            self.__critic.update(state, next_state, reward)
+            self.__critic.update(reward, next_state, state)
             self.__actor.update(td_error)
 
-            if done:
-                break
-
-            state, action = next_state, self.__actor.choose_action(next_state, possible_actions)
+            state, action = next_state, next_action
 
     def run(self) -> None:
         """
