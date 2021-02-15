@@ -75,14 +75,14 @@ class HexagonalBoard(ABC):
         return tuple(legal_actions)
 
     def get_all_legal_actions(self) -> Tuple[Action]:
-        legal_moves: List[Action] = []
+        legal_actions: List[Action] = []
         for i in range(self.__board.shape[0]):
             for j in range(self.__board.shape[0]):
                 if self.__cell_contains_peg((i, j)):
                     legal_actions_for_position = self.__get_legal_actions_for_coordinates((i, j))
                     if len(legal_actions_for_position) > 0:
-                        legal_moves += legal_actions_for_position
-        return tuple(legal_moves)
+                        legal_actions += legal_actions_for_position
+        return tuple(legal_actions)
 
     def __str__(self):
         return str(self.__board)
