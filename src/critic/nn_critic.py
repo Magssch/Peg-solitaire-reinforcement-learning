@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import numpy as np
 import tensorflow as tf
 from keras import backend as K  # noqa
@@ -65,15 +67,15 @@ class NNCritic(Critic):
         model.summary()
         return model
 
-    def _get_value(self, state) -> float:
+    def _get_value(self, state: Tuple[int]) -> float:
         """Value function V(s)"""
         return np.squeeze(self.__values(np.array([state])))
 
-    def update(self, current_state, successor_state, reward) -> None:
+    def update(self, reward: float, successor_state: Tuple[int], current_state: Tuple[int]) -> None:
         """Updates eligibilities, then the value function."""
+        reward = tf.convert_to_tensor(reward, dtype=tf.float32)
         successor_state = tf.convert_to_tensor([successor_state], dtype=tf.float32)
         current_state = tf.convert_to_tensor([current_state], dtype=tf.float32)
-        reward = tf.convert_to_tensor(reward, dtype=tf.float32)
 
         with tf.GradientTape(persistent=True) as tape:
             target = reward + self._discount_factor * self.__values(successor_state)

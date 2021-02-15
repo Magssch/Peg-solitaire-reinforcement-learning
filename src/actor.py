@@ -45,9 +45,9 @@ class Actor:
         self.__epsilon_decay = epsilon_decay
 
         self.__policy = defaultdict(lambda: defaultdict(float))  # Pi(s, a)
+        self.__eligibilities = defaultdict(lambda: defaultdict(float))
         self.__epsilon_history = []
         self.__td_error_history = []
-        self.reset_eligibilities()
 
     def set_epsilon(self, epsilon: float) -> None:
         self.__epsilon = epsilon
@@ -72,25 +72,17 @@ class Actor:
         """
         Updates the policy function, then eligibilities for each state-action
         pair in the episode based on the td_error from the critic.
-        Also decays the epsilon based on the epsilon decay rate.
+        Also decays epsilon based on the epsilon decay rate.
         """
-        self.__epsilon_history.append(self.__epsilon)  # Used for plotting
-        self.__epsilon *= self.__epsilon_decay
-
-        self.__update_policy(td_error)
-        self.__update_eligibilities()
-
         # Used for plotting:
         self.__td_error_history.append(td_error)
+        self.__epsilon_history.append(self.__epsilon)
 
-    def __update_policy(self, td_error: float) -> None:
+        self.__epsilon *= self.__epsilon_decay
+
         for state in self.__eligibilities:
             for action, eligibility in self.__eligibilities[state].items():
                 self.__policy[state][action] += self.__learning_rate * td_error * eligibility
-
-    def __update_eligibilities(self) -> None:
-        for state in self.__eligibilities:
-            for action in self.__eligibilities[state]:
                 self.__eligibilities[state][action] *= self.__discount_factor * self.__trace_decay
 
     def reset_eligibilities(self) -> None:

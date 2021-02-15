@@ -38,25 +38,20 @@ class TableCritic(Critic):
             trace_decay,  # lambda
         )
         self.__values = defaultdict(lambda: (random.random() - 0.5) * 0.02)  # V(s)
+        self.__eligibilities = defaultdict(float)
         self.__value_history = []
-        self.reset_eligibilities()
 
-    def _get_value(self, state) -> float:
+    def _get_value(self, state: Tuple[int]) -> float:
         """Value function V(s)"""
         return self.__values[state]
 
-    def update(self, current_state, successor_state, reward) -> None:
+    def update(self, reward: float, successor_state: Tuple[int], current_state: Tuple[int]) -> None:
         """Updates value function, then eligibilities for each state in the episode."""
-        self.__update_values(current_state, successor_state, reward)
-        self.__update_eligibilities()
 
-    def __update_values(self, reward: float, successor_state: Tuple[int], current_state: Tuple[int]) -> None:
         td_error = self.td_error(reward, successor_state, current_state)
+
         for state, eligibility in self.__eligibilities.items():
             self.__values[state] += self._learning_rate * td_error * eligibility
-
-    def __update_eligibilities(self) -> None:
-        for state in self.__eligibilities:
             self.__eligibilities[state] *= self._discount_factor * self._trace_decay
 
     def reset_eligibilities(self) -> None:
