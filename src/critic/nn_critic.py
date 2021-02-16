@@ -72,13 +72,10 @@ class NNCritic(Critic):
 
     def update(self, reward: float, successor_state: Tuple[int], current_state: Tuple[int]) -> None:
         """Updates eligibilities, then the value function."""
-        reward = tf.convert_to_tensor(reward, dtype=tf.float32)
-        successor_state = tf.convert_to_tensor([successor_state], dtype=tf.float32)
-        current_state = tf.convert_to_tensor([current_state], dtype=tf.float32)
 
         with tf.GradientTape(persistent=True) as tape:
-            target = reward + self._discount_factor * self.__values(successor_state)
-            prediction = tf.convert_to_tensor([self.__values(current_state)])
+            target = reward + self._discount_factor * self.__values(tf.convert_to_tensor([successor_state]))  # type: ignore
+            prediction = self.__values(tf.convert_to_tensor([current_state]))
             loss = self.__values.compiled_loss(target, prediction)
             td_error = target - prediction
 
