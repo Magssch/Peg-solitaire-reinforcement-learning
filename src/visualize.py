@@ -123,31 +123,33 @@ class Visualize:
         plt.ylabel('Remaining Pegs')
         plt.plot(training_data, color='tab:blue')
 
-        plt.tight_layout()
         plt.savefig('src/results/training_data.png')
         plt.close()
 
     @staticmethod
     def plot_epsilon(epsilon_history):
         plt.title('Epsilon')
-        plt.xlabel('Time steps')
+        plt.xlabel('Time step')
         plt.ylabel('$\epsilon$')
 
-        plt.plot(epsilon_history, color='tab:blue')
+        x = [i for i in range(len(epsilon_history))]
+        explore_history = [y for y in epsilon_history if y > 0.5]
+        expolit_history = [y for y in epsilon_history if y <= 0.5]
 
-        plt.tight_layout()
+        plt.plot(x[:len(explore_history)], explore_history, color='tab:cyan')
+        plt.plot(x[len(explore_history):], expolit_history, color='tab:blue')
+
         plt.savefig('src/results/epsilon.png')
         plt.close()
 
     @staticmethod
     def plot_td_error(td_error_history):
         plt.title('TD error')
-        plt.xlabel('Time steps')
+        plt.xlabel('Time step')
         plt.ylabel('$\delta$')
 
         plt.plot(td_error_history, color='tab:blue')
 
-        plt.tight_layout()
         plt.savefig('src/results/td_error.png')
         plt.close()
 
@@ -159,6 +161,5 @@ class Visualize:
 
         plt.plot(value_history, color='tab:blue')
 
-        plt.tight_layout()
         plt.savefig('src/results/value_history.png')
         plt.close()
