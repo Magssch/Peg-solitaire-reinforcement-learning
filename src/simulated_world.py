@@ -50,7 +50,7 @@ class SimulatedWorld:
         self.__peg_history.append(self.__game_board.pegs_remaining())
         Visualize.plot_training_data(self.__peg_history[1:])
 
-    def __memoize_legal_actions(self, grid_to_vector: Tuple[bool]):
+    def __memoize_legal_actions(self, grid_to_vector: Tuple[bool]) -> Tuple[Action]:
         if grid_to_vector not in self.__memoized_legal_actions:
             all_legal_actions = self.__game_board.get_all_legal_actions()
             self.__memoized_legal_actions[grid_to_vector] = all_legal_actions
