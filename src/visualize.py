@@ -134,11 +134,12 @@ class Visualize:
 
         x = [i for i in range(len(epsilon_history))]
         explore_history = [y for y in epsilon_history if y > 0.5]
-        expolit_history = [y for y in epsilon_history if y <= 0.5]
+        exploit_history = [y for y in epsilon_history if y <= 0.5]
 
-        plt.plot(x[:len(explore_history)], explore_history, color='tab:cyan')
-        plt.plot(x[len(explore_history):], expolit_history, color='tab:blue')
+        plt.plot(x[:len(explore_history)], explore_history, label='Explorative', color='tab:cyan')
+        plt.plot(x[len(explore_history):], exploit_history, label='Exploitative', color='tab:blue')
 
+        plt.legend()
         plt.savefig('src/results/epsilon.png')
         plt.close()
 
