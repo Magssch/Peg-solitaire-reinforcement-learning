@@ -61,7 +61,7 @@ class ReinforcementLearner:
 
             state, action = next_state, next_action
 
-    def run(self) -> None:
+    def run(self, batch_number: int = 0) -> None:
         """
         Runs all episodes with pivotal parameters.
         Visualizes one round at the end.
@@ -73,7 +73,7 @@ class ReinforcementLearner:
         print('Training completed.')
         self.__actor.plot_training_data()
         self.__critic.plot_training_data()
-        self.__simulated_world.plot_training_data()
+        self.__simulated_world.plot_training_data(batch_number)
 
         if parameters.VISUALIZE_GAMES:
             print('Showing one episode with the greedy strategy.')

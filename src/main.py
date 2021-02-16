@@ -1,5 +1,7 @@
 from reinforcement_learner import ReinforcementLearner
+import parameters
 
 if __name__ == "__main__":
-    agent = ReinforcementLearner()
-    agent.run()
+    for batch_number in range(parameters.BATCHES):
+        agent = ReinforcementLearner()
+        agent.run(batch_number)

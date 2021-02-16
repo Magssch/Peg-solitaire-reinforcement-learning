@@ -117,13 +117,13 @@ class Visualize:
         plt.clf()
 
     @staticmethod
-    def plot_training_data(training_data):
+    def plot_training_data(training_data, batch_number):
         plt.title('Training data')
         plt.xlabel('Episode')
         plt.ylabel('Remaining Pegs')
         plt.plot(training_data, color='tab:blue')
 
-        plt.savefig('src/results/training_data.png')
+        plt.savefig(f'src/results/training_data_{batch_number}.png')
         plt.close()
 
     @staticmethod
