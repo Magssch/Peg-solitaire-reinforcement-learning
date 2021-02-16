@@ -1,13 +1,13 @@
 from data_classes import Shape
 
 # General
-EPISODES = 250
+EPISODES = 150
 VISUALIZE_GAMES = True
 FRAME_DELAY = 0.15
 
 # Simulated World
 BOARD_TYPE = Shape.Triangle
-SIZE = 7
+SIZE = 6
 HOLES = set([
     # (1, 1), Not solvable
     (1, 1),  # C_a
@@ -31,5 +31,5 @@ CRITIC_DISCOUNT_FACTOR = 0.85
 CRITIC_TRACE_DECAY = 0.85
 
 USE_TABLE_CRITIC = False
-INPUT_DIMENSION = SIZE**2 if BOARD_TYPE == Shape.Diamond else (SIZE * (SIZE + 1)) / 2
+INPUT_DIMENSION = SIZE**2 if BOARD_TYPE == Shape.Diamond else int((SIZE * (SIZE + 1)) / 2)
 CRITIC_NN_DIMENSIONS = (INPUT_DIMENSION, 20, 30, 5, 1)
