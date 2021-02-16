@@ -1,16 +1,20 @@
 from data_classes import Shape
 
 # General
-EPISODES = 175
+EPISODES = 250
 VISUALIZE_GAMES = True
 FRAME_DELAY = 0.15
 
 # Simulated World
 BOARD_TYPE = Shape.Diamond
-SIZE = 4
+SIZE = 6
 HOLES = set([
     # (1, 1), Not solvable
-    # (1, 2),  # C_a
+    (1, 1),  # C_a
+    (5, 1),  # C_a
+    (3, 2),  # C_a
+    (2, 3),  # C_a
+    (0, 0),  # C_a
     # (2, 1),  # C_b
     # (2, 2), Not solvable
 ])
