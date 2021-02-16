@@ -6,10 +6,10 @@ VISUALIZE_GAMES = True
 FRAME_DELAY = 0.15
 
 # Simulated World
-BOARD_TYPE = Shape.Diamond
-SIZE = 4
+BOARD_TYPE = Shape.Triangle
+SIZE = 5
 HOLES = set([
-    (1, 2),  # C_a
+    (2, 1),
 ])
 
 # Actor
@@ -25,5 +25,5 @@ CRITIC_LEARNING_RATE = 0.001
 CRITIC_DISCOUNT_FACTOR = 0.85
 CRITIC_TRACE_DECAY = 0.85
 
-USE_TABLE_CRITIC = True
-CRITIC_NN_DIMENSIONS = (16, 20, 30, 5, 1)
+USE_TABLE_CRITIC = False
+CRITIC_NN_DIMENSIONS = (15, 20, 30, 5, 1)

@@ -9,7 +9,10 @@ FRAME_DELAY = 0.15
 BOARD_TYPE = Shape.Diamond
 SIZE = 4
 HOLES = set([
-    (1, 2),  # C_a
+    # (1, 1), Not solvable
+    # (1, 2),  # C_a
+    # (2, 1),  # C_b
+    # (2, 2), Not solvable
 ])
 
 # Actor
