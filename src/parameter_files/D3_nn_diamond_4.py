@@ -1,7 +1,7 @@
 from data_classes import Shape
 
 # General
-EPISODES = 300
+EPISODES = 175
 VISUALIZE_GAMES = True
 FRAME_DELAY = 0.15
 
