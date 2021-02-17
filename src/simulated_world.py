@@ -28,9 +28,9 @@ class SimulatedWorld:
         if self.__game_board.pegs_remaining() == 1:
             return parameters.WINNING_REWARD
         elif self.__game_board.game_over():
-            return -1
+            return parameters.LOSING_REWARD
         else:
-            return 0
+            return parameters.STEP_REWARD
 
     def __grid_to_vector(self) -> Tuple[bool]:
         return tuple(filter(lambda cell: bool(cell), self.__game_board.get_board().flatten()))
