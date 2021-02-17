@@ -14,6 +14,8 @@ HOLES = set([
     # (3, 2),
 ])
 WINNING_REWARD = 1
+LOSING_REWARD = -1
+STEP_REWARD = 0
 
 # Actor
 ACTOR_LEARNING_RATE = 0.001
