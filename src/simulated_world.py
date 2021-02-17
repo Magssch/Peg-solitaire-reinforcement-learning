@@ -26,7 +26,7 @@ class SimulatedWorld:
 
     def __calculate_reward(self) -> int:
         if self.__game_board.pegs_remaining() == 1:
-            return 1
+            return 10
         elif self.__game_board.game_over():
             return -1
         else:
@@ -46,9 +46,9 @@ class SimulatedWorld:
         self.__game_board.reset_game()
         return self.__grid_to_vector(), self.__game_board.get_all_legal_actions()
 
-    def plot_training_data(self, batch_number: int = 0) -> None:
+    def plot_training_data(self) -> None:
         self.__peg_history.append(self.__game_board.pegs_remaining())
-        Visualize.plot_training_data(self.__peg_history[1:], batch_number)
+        Visualize.plot_training_data(self.__peg_history[1:])
 
     def __memoize_legal_actions(self, grid_to_vector: Tuple[bool]) -> Tuple[Action]:
         if grid_to_vector not in self.__memoized_legal_actions:
