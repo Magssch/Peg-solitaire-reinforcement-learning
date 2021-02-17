@@ -9,12 +9,9 @@ FRAME_DELAY = 0.15
 BOARD_TYPE = Shape.Triangle
 SIZE = 6
 HOLES = set([
-    # (1, 1), Not solvable
-    (1, 1),  # C_a
-    (5, 1),  # C_a
-    (3, 2),  # C_a
-    # (2, 1),  # C_b
-    # (2, 2), Not solvable
+    (1, 1),  
+    (5, 1),  
+    (3, 2),  
 ])
 WINNING_REWARD = 1
 LOSING_REWARD = -1
