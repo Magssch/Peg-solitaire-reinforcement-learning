@@ -2,16 +2,16 @@ from data_classes import Shape
 
 # General
 EPISODES = 150
-VISUALIZE_GAMES = True
+VISUALIZE_GAMES = False
 FRAME_DELAY = 0.15
 
 # Simulated World
 BOARD_TYPE = Shape.Triangle
 SIZE = 6
 HOLES = set([
-    (1, 1),  
-    (5, 1),  
-    (3, 2),  
+    (1, 1),
+    (5, 1),
+    (3, 2),
 ])
 WINNING_REWARD = 1
 LOSING_REWARD = -1

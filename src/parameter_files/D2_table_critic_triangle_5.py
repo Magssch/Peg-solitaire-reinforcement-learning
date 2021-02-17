@@ -1,7 +1,6 @@
 from data_classes import Shape
 
 # General
-BATCHES = 10
 EPISODES = 400
 VISUALIZE_GAMES = False
 FRAME_DELAY = 0.15
