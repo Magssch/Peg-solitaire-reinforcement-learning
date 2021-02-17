@@ -16,6 +16,7 @@ HOLES = set([
     # (2, 1),  # C_b
     # (2, 2), Not solvable
 ])
+WINNING_REWARD = 1
 
 # Actor
 ACTOR_LEARNING_RATE = 0.8

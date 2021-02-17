@@ -13,6 +13,7 @@ HOLES = set([
     # (3, 1),
     # (3, 2),
 ])
+WINNING_REWARD = 1
 
 # Actor
 ACTOR_LEARNING_RATE = 0.001
