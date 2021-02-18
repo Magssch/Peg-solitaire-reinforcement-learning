@@ -2,7 +2,7 @@ from data_classes import Shape
 
 # General
 EPISODES = 600
-VISUALIZE_GAMES = False
+VISUALIZE_GAMES = True
 FRAME_DELAY = 0.15
 
 # Simulated World

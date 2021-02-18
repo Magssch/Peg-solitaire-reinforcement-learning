@@ -1,35 +1,3 @@
-from data_classes import Shape
+from parameter_files.D2_nn_critic_triangle_5 import *
 
-# General
-EPISODES = 400
-VISUALIZE_GAMES = False
-FRAME_DELAY = 0.15
-
-# Simulated World
-BOARD_TYPE = Shape.Triangle
-SIZE = 5
-HOLES = set([
-    (2, 1),
-    # (3, 1),
-    # (3, 2),
-])
-WINNING_REWARD = 1
-LOSING_REWARD = -1
-STEP_REWARD = 0
-
-# Actor
-ACTOR_LEARNING_RATE = 0.4
-ACTOR_DISCOUNT_FACTOR = 0.88
-ACTOR_TRACE_DECAY = 0.8
-
-ACTOR_EPSILON = 1.0
-ACTOR_EPSILON_DECAY = 0.999
-
-# Critic
-CRITIC_LEARNING_RATE = 0.001
-CRITIC_DISCOUNT_FACTOR = 0.88
-CRITIC_TRACE_DECAY = 0.8
-
-USE_TABLE_CRITIC = True
-INPUT_DIMENSION = SIZE ** 2 if BOARD_TYPE == Shape.Diamond else int((SIZE * (SIZE + 1)) / 2)
-CRITIC_NN_DIMENSIONS = (INPUT_DIMENSION, 20, 30, 15, 1)
+print(__file__)
